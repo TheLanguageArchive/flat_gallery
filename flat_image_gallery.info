@@ -1,0 +1,7 @@
+name = "Flat Image Gallery"
+description = "A FLAT module to display image gallery for bundles with images"
+dependencies[] = flat_deposit
+package = FLAT
+core = 7.x
+version = 7.x-dev
+configure = admin/flat_deposit/flat_image_gallery

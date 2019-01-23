@@ -1,0 +1,79 @@
+<?php
+/**
+ * Image gallery
+ *
+ * @param AbstractObject $object
+ * @param string|null    $image_id
+ *
+ * @return string
+ */
+function flat_image_gallery($object, $image_id = null) {
+
+    module_load_include('inc', 'flat_image_gallery', 'includes/FlatImageGallery');
+    module_load_include('inc', 'islandora', 'includes/authtokens');
+    module_load_include('inc', 'islandora', 'includes/solution_packs');
+
+    drupal_add_css(drupal_get_path('module', 'flat_image_gallery') . '/css/flat-image-gallery-app.css');
+
+    $gallery  = new FlatImageGallery($object, $image_id);
+    $images   = $gallery->getImages();
+    $current  = $gallery->getCurrentImage();
+    $links    = $gallery->getNavigationLinks();
+
+    return theme('flat_image_gallery_overview', [
+
+        'images'          => $images,
+        'current'         => $current,
+        'navigationLinks' => $links,
+    ]);
+}
+
+/**
+ * Image Gallery Menu
+ *
+ * @return array
+ */
+function flat_image_gallery_menu() {
+
+    return [
+
+        'islandora/object/%islandora_object/ig' => [
+
+            'title'            => 'Image Gallery',
+            'type'             => MENU_LOCAL_TASK,
+            'page callback'    => 'flat_image_gallery',
+            'page arguments'   => [2],
+            'access callback'  => 'flat_image_gallery_menu_access',
+        ],
+    ];
+}
+
+/**
+ * Always allow image gallery menu access
+ *
+ * @return boolean
+ */
+function flat_image_gallery_menu_access() {
+    return true;
+}
+
+
+/**
+ * hook_theme implementation
+ *
+ * @param array  $existing
+ * @param string $type
+ * @param string $theme
+ * @param string $path
+ *
+ * @return array
+ */
+function flat_image_gallery_theme($existing, $type, $theme, $path) {
+
+    return [
+
+        'flat_image_gallery_overview' => [
+            'template' => 'theme/flat-image-gallery-overview',
+        ],
+    ];
+}

@@ -1,0 +1,31 @@
+.islandora-sp-ig-thumbnail {
+
+    display: block;
+    padding: 4px;
+    margin-bottom: 21px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border: 1px solid #ecf0f1;
+    border-radius: 4px;
+    transition: border 0.2s ease-in-out;
+}
+.islandora-sp-ig-thumbnail > img,
+.islandora-sp-ig-thumbnail a > img {
+  margin-right: auto;
+  margin-left: auto;
+}
+a.islandora-sp-ig-thumbnail:hover,
+a.islandora-sp-ig-thumbnail:focus,
+a.islandora-sp-ig-thumbnail.active {
+  border-color: #18bc9c;
+}
+.islandora-sp-ig-thumbnail .islandora-sp-ig-caption {
+  padding: 9px;
+  color: #2c3e50;
+}
+.islandora-sp-ig-thumbnail > img,
+.islandora-sp-ig-thumbnail a > img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
