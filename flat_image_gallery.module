@@ -28,6 +28,24 @@ function flat_image_gallery($object, $image_id = null) {
     ]);
 }
 
+function flat_image_gallery_ajax($page_callback_result) {
+
+    $content = drupal_render($page_callback_result);
+    $html    = '<html><head><title></title>' . drupal_get_css() . drupal_get_js() . '</head></body class="jquery-ajax-load">' . $content . '</body></html>';
+
+    print $html;
+
+    drupal_page_footer();
+}
+
+function flat_image_gallery_islandora_compoundCModel_islandora_view_object($object) {
+
+    drupal_add_js(drupal_get_path('module', 'flat_image_gallery') . '/js/flat-image-gallery-app.js');
+    drupal_add_css(drupal_get_path('module', 'flat_image_gallery') . '/css/flat-image-gallery-app.css');
+
+    return theme('flat_image_gallery_modal', ['url' => url('islandora/object/' . $object->id . '/ig')]);
+}
+
 /**
  * Image Gallery Menu
  *
@@ -35,17 +53,19 @@ function flat_image_gallery($object, $image_id = null) {
  */
 function flat_image_gallery_menu() {
 
-    return [
+    $items = [];
 
-        'islandora/object/%islandora_object/ig' => [
+    $items['islandora/object/%islandora_object/ig'] = [
 
-            'title'            => 'Image Gallery',
-            'type'             => MENU_LOCAL_TASK,
-            'page callback'    => 'flat_image_gallery',
-            'page arguments'   => [2],
-            'access callback'  => 'flat_image_gallery_menu_access',
-        ],
+        'title'             => 'Image Gallery',
+        'type'              => MENU_CALLBACK,
+        'page callback'     => 'flat_image_gallery',
+        'page arguments'    => [2],
+        'access callback'   => 'flat_image_gallery_menu_access',
+        'delivery callback' => 'flat_image_gallery_ajax',
     ];
+
+    return $items;
 }
 
 /**
@@ -56,7 +76,6 @@ function flat_image_gallery_menu() {
 function flat_image_gallery_menu_access() {
     return true;
 }
-
 
 /**
  * hook_theme implementation
@@ -74,6 +93,10 @@ function flat_image_gallery_theme($existing, $type, $theme, $path) {
 
         'flat_image_gallery_overview' => [
             'template' => 'theme/flat-image-gallery-overview',
+        ],
+
+        'flat_image_gallery_modal' => [
+            'template' => 'theme/flat-image-gallery-modal',
         ],
     ];
 }

@@ -4,11 +4,11 @@
  * Islandora SP Image Gallery overview template.
  */
 ?>
-<div class="islandora-sp-ig-thumbnail">
+<div class="flat-image-gallery-thumbnail">
     <?php if (false !== $current) : ?>
         <?php echo $current['viewer']; ?>
         <?php if ($current['label']) : ?>
-            <div class="islandora-sp-ig-caption">
+            <div class="flat-image-gallery-caption">
                 <h3><?php echo $current['label']; ?></h3>
             </div>
         <?php endif;?>
@@ -28,10 +28,10 @@
         <div class="row">
             <?php foreach ($images as $image) : ?>
             <div class="col-lg-3">
-                <a href="<?php echo $image['url']; ?>" class="islandora-sp-ig-thumbnail <?php echo $current['pid'] === $image['pid'] ? 'active' : ''; ?>">
+                <a href="<?php echo $image['url']; ?>" class="flat-image-gallery-thumbnail <?php echo $current['pid'] === $image['pid'] ? 'active' : ''; ?>">
                     <img style="height: 100px;" src="<?php echo $image['thumbnail']; ?>" />
                     <?php if ($image['label']) : ?>
-                        <div class="islandora-sp-ig-caption">
+                        <div class="flat-image-gallery-caption">
                             <small><?php echo $image['label']; ?></small>
                         </div>
                     <?php endif; ?>

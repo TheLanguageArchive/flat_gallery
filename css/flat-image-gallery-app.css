@@ -1,4 +1,4 @@
-.islandora-sp-ig-thumbnail {
+.flat-image-gallery-thumbnail {
 
     display: block;
     padding: 4px;
@@ -9,23 +9,52 @@
     border-radius: 4px;
     transition: border 0.2s ease-in-out;
 }
-.islandora-sp-ig-thumbnail > img,
-.islandora-sp-ig-thumbnail a > img {
+.flat-image-gallery-thumbnail > img,
+.flat-image-gallery-thumbnail a > img {
   margin-right: auto;
   margin-left: auto;
 }
-a.islandora-sp-ig-thumbnail:hover,
-a.islandora-sp-ig-thumbnail:focus,
-a.islandora-sp-ig-thumbnail.active {
+a.flat-image-gallery-thumbnail:hover,
+a.flat-image-gallery-thumbnail:focus,
+a.flat-image-gallery-thumbnail.active {
   border-color: #18bc9c;
 }
-.islandora-sp-ig-thumbnail .islandora-sp-ig-caption {
+.flat-image-gallery-thumbnail .flat-image-gallery-caption {
   padding: 9px;
   color: #2c3e50;
 }
-.islandora-sp-ig-thumbnail > img,
-.islandora-sp-ig-thumbnail a > img {
+.flat-image-gallery-thumbnail > img,
+.flat-image-gallery-thumbnail a > img {
   display: block;
   max-width: 100%;
   height: auto;
+}
+.flat-image-gallery-modal,
+.flat-image-gallery-modal-overlay,
+.flat-image-gallery-modal-content-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 500;
+  height: 100%;
+  width: 100%;
+}
+.flat-image-gallery-modal-overlay {
+  background: transparent url(/flat/modules/overlay/images/background.png) repeat;
+}
+.flat-image-gallery-modal-content-container {
+  display: table;
+  margin: 0 auto;
+  min-height: 100px;
+  min-width: 700px;
+  position: relative;
+  padding: 0.2em;
+  padding-bottom: 2em;
+  padding-right: 26px;
+  width: 88%;
+}
+.flat-image-gallery-modal-content {
+  background: white;
+  padding: 0.5em 1em;
+  position: relative;
 }
