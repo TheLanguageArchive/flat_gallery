@@ -37,6 +37,13 @@ function flat_image_gallery($object, $image_id = null) {
     ]);
 }
 
+/**
+ * Ajax callback method
+ *
+ * @param string $page_callback_result
+ *
+ * @return void
+ */
 function flat_image_gallery_ajax($page_callback_result) {
 
     // Add CSS and JS files, add some markup
@@ -56,7 +63,7 @@ function flat_image_gallery_ajax($page_callback_result) {
  */
 function flat_image_gallery_preprocess_block(&$variables) {
 
-    if (isset($variables['block_html_id']) && $variables['block_html_id'] === 'block-system-main') {
+    if (isset($variables['block_html_id']) && $variables['block_html_id'] === 'block-islandora-compound-object-compound-navigation') {
 
         module_load_include('inc', 'flat_image_gallery', 'includes/FlatImageGallerySolr');
 

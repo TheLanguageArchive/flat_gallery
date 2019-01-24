@@ -245,6 +245,7 @@ class FlatImageGallery
 
                     'id'           => $currentImage['id'],
                     'pid'          => $current->id,
+                    'filename'     => $currentImage['filename'],
                     'viewer'       => $viewer,
                     'descriptions' => $currentImage['descriptions'],
                 ];
@@ -257,6 +258,7 @@ class FlatImageGallery
 
                     'id'           => $currentImage['id'],
                     'pid'          => $currentImage['pid'],
+                    'filename'     => $currentImage['filename'],
                     'viewer'       => '<img class="flat-image-gallery-basic-image" src="' . url('islandora/object/' . $currentImage['pid'] . '/datastream/OBJ/view') . '" />',
                     'descriptions' => $currentImage['descriptions'],
                 ];

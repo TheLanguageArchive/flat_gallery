@@ -105,3 +105,12 @@ a.flat-image-gallery-thumbnail.active {
   width: 100%;
   height: 500px;
 }
+.flat-image-gallery-caption-filename {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.flat-image-gallery-viewer.flat-image-gallery-caption-filename {
+  font-size: 10px;
+}
