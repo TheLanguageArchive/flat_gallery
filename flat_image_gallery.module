@@ -30,11 +30,11 @@ function flat_image_gallery($object, $image_id = null) {
 
 function flat_image_gallery_ajax($page_callback_result) {
 
-    $content = drupal_render($page_callback_result);
-    $html    = '<html><head><title></title>' . drupal_get_css() . drupal_get_js() . '</head></body class="jquery-ajax-load">' . $content . '</body></html>';
-
+    // Add CSS and JS files, add some markup
+    $html = '<html><head><title></title>' . drupal_get_css() . drupal_get_js() . '</head><body>' . $page_callback_result . '</body></html>';
     print $html;
 
+    // Perform end-of-request tasks.
     drupal_page_footer();
 }
 
