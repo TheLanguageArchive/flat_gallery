@@ -13,6 +13,16 @@ class FlatImageGallery
     private $object;
 
     /**
+     * @var FlatImageGallerySolr
+     */
+    private $solr;
+
+    /**
+     * @var int
+     */
+    private $total;
+
+    /**
      * @var array
      */
     private $images;
@@ -35,12 +45,14 @@ class FlatImageGallery
     /**
      * Constructor
      *
-     * @param AbstractObject $object
-     * @param string|null    $imageId
+     * @param AbstractObject       $object
+     * @param FlatImageGallerySolr $solr
+     * @param string|null          $imageId
      */
-    public function __construct(AbstractObject $object, $imageId = null)
+    public function __construct(AbstractObject $object, FlatImageGallerySolr $solr, $imageId = null)
     {
         $this->object  = $object;
+        $this->solr    = $solr;
         $this->imageId = (int)$imageId;
     }
 
@@ -53,17 +65,14 @@ class FlatImageGallery
     {
         if (null === $this->images) {
 
-            $this->images = [];
-
-            module_load_include('inc', 'flat_image_gallery', 'includes/FlatImageGallerySolr');
-
-            $solr    = new FlatImageGallerySolr();
-            $results = $solr->getImages($this->object->id);
-
             $id      = 0;
+            $results = $this->solr->getImages($this->object->id);
             $labels  = $this->getLabels();
 
-            foreach ($results as $result) {
+            $this->total  = $results['total'];
+            $this->images = [];
+
+            foreach ($results['results'] as $result) {
 
                 $thumbnail = false;
                 $model     = false;
@@ -86,6 +95,7 @@ class FlatImageGallery
 
                     'id'           => $id,
                     'pid'          => $result['pid'],
+                    'filename'     => $result['filename'],
                     'thumbnail'    => $thumbnail,
                     'model'        => $model,
                     'url'          => url('islandora/object/' . $this->object->id . '/ig/' . $id),
@@ -110,14 +120,14 @@ class FlatImageGallery
             return $this->labels;
         }
 
-        if (!isset($this->object['CMD']) || !($cmd = $this->object['CMD']->content)) {
+        if (!isset($this->object['CMD']) || !$this->object['CMD']->content) {
 
             $this->labels = [];
             return $this->labels;
         }
 
         $input  = new DOMDocument();
-        $loaded = $input->loadXML($cmd);
+        $loaded = $input->loadXML($this->object['CMD']->content);
         $labels = [];
 
         if ($loaded) {
@@ -220,6 +230,7 @@ class FlatImageGallery
 
                 $this->current = [
 
+                    'id'           => $currentImage['id'],
                     'pid'          => $current->id,
                     'viewer'       => $viewer,
                     'descriptions' => $currentImage['descriptions'],
@@ -229,6 +240,7 @@ class FlatImageGallery
 
                 $this->current = [
 
+                    'id'           => $currentImage['id'],
                     'pid'          => $currentImage['pid'],
                     'viewer'       => '<img src="' . url('islandora/object/' . $currentImage['pid'] . '/datastream/OBJ/view') . '" />',
                     'descriptions' => $currentImage['descriptions'],
@@ -296,11 +308,41 @@ class FlatImageGallery
      *
      * @param string       $label
      * @param string|false $image
+     * @param array        $params
      *
      * @return string
      */
-    public function generateNavigationLink(string $label, $image = false): string
+    public function generateNavigationLink(string $label, $image = false, $params = []): string
     {
-        return (false === $image ? $label : l($label, 'islandora/object/' . $this->object->id . '/ig/' . $image['id']));
+        return (false === $image ? $label : l(decode_entities($label), 'islandora/object/' . $this->object->id . '/ig/' . $image['id'], ['query' => $params]));
+    }
+
+    /**
+     * Pagination links
+     *
+     * @return array
+     */
+    public function getPaginationLinks()
+    {
+        $images       = $this->getImages();
+        $currentImage = $this->getCurrentImage();
+        $params       = $this->solr->paginationParams();
+
+        $pages = (int)ceil($this->total / $params['per_page']);
+        $links = [];
+
+        if ($params['page'] > $pages) {
+            $params['page'] = $pages;
+        }
+
+        $links[] = $this->generateNavigationLink('&laquo;', ($params['page'] === 0 ? false : ($params['page'] - 1)), ['page' => ($params['page'] - 1)]);
+
+        for ($page = 0; $page < $pages; $page++) {
+            $links[] = $this->generateNavigationLink($page + 1, ($page === $params['page'] ? false : $currentImage), ['page' => $page]);
+        }
+
+        $links[] = $this->generateNavigationLink('&raquo;', ($params['page'] === ($pages - 1) ? false : ($params['page'] + 1)), ['page' => ($params['page'] + 1)]);
+
+        return $links;
     }
 }

@@ -10,12 +10,15 @@
 function flat_image_gallery($object, $image_id = null) {
 
     module_load_include('inc', 'flat_image_gallery', 'includes/FlatImageGallery');
+    module_load_include('inc', 'flat_image_gallery', 'includes/FlatImageGallerySolr');
     module_load_include('inc', 'islandora', 'includes/authtokens');
     module_load_include('inc', 'islandora', 'includes/solution_packs');
 
     drupal_add_css(drupal_get_path('module', 'flat_image_gallery') . '/css/flat-image-gallery-app.css');
 
-    $gallery  = new FlatImageGallery($object, $image_id);
+    $solr     = new FlatImageGallerySolr();
+    $gallery  = new FlatImageGallery($object, $solr, $image_id);
+
     $images   = $gallery->getImages();
     $current  = $gallery->getCurrentImage();
 
@@ -26,13 +29,13 @@ function flat_image_gallery($object, $image_id = null) {
         ]);
     }
 
-    $links    = $gallery->getNavigationLinks();
-
     return theme('flat_image_gallery_overview', [
 
-        'images'          => $images,
-        'current'         => $current,
-        'navigationLinks' => $links,
+        'islandora_object' => $object,
+        'images'           => $images,
+        'current'          => $current,
+        'navigationLinks'  => $gallery->getNavigationLinks(),
+        'paginationLinks'  => $gallery->getPaginationLinks(),
     ]);
 }
 

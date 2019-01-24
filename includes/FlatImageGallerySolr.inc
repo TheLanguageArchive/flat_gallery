@@ -11,6 +11,11 @@ class FlatImageGallerySolr
     private $solr;
 
     /**
+     * @var array
+     */
+    private $pagination;
+
+    /**
      * Connect to apache solr
      *
      * @return Apache_Solr_Service
@@ -42,7 +47,10 @@ class FlatImageGallerySolr
         $this->connect();
 
         try {
-            $results = $this->solr->search($query, 0, 1000, $params);
+
+            $pagination = $this->paginationParams();
+            $results    = $this->solr->search($query, $pagination['start'], $pagination['per_page'], $params);
+
         } catch (Exception $e) {
 
             drupal_set_message(check_plain(t('Error searching Solr index')) . ' ' . $e->getMessage(), 'error');
@@ -62,18 +70,24 @@ class FlatImageGallerySolr
     public function getImages($parent)
     {
         $data   = $this->query($this->childrenQuery($parent), $this->childrenParams($parent));
-        $models = [];
+        $images = [];
 
         foreach ($data['response']['docs'] as $doc) {
 
-            $models[$doc['PID']] = [
+            $images[$doc['PID']] = [
 
-                'pid'    => $doc['PID'],
-                'models' => $doc['RELS_EXT_hasModel_uri_ms'],
+                'pid'      => $doc['PID'],
+                'models'   => $doc['RELS_EXT_hasModel_uri_ms'],
+                'filename' => $doc['fgs_label_s'],
             ];
         }
 
-        return $models;
+        return [
+
+            'results' => $images,
+            'total'   => $data['response']['numFound'],
+            'start'   => $data['response']['start'],
+        ];
     }
 
     /**
@@ -117,10 +131,41 @@ class FlatImageGallerySolr
             $params['fq'][] = 'OR RELS_EXT_isViewableByRole_literal_ms:"' . $role . '"';
         }
 
-        $params['fl'][] = 'PID, RELS_EXT_hasModel_uri_ms';
-        $params['fq']   = implode(' ', $params['fq']);
-        $params['sort'] = variable_get('islandora_solr_object_label_field', 'fgs_label_s') . ' asc';
+        $params['fl'][]  = 'PID, fgs_label_s, RELS_EXT_hasModel_uri_ms';
+        $params['fq']    = implode(' ', $params['fq']);
+        $params['sort']  = variable_get('islandora_solr_object_label_field', 'fgs_label_s') . ' asc';
 
         return $params;
+    }
+
+    /**
+     * Getting pagination params
+     *
+     * @return array
+     */
+    public function paginationParams()
+    {
+        if (null === $this->pagination) {
+
+            $params   = drupal_get_query_parameters();
+            $per_page = variable_get('flat_image_gallery_per_page', 6);
+            $start    = 0;
+            $page     = 0;
+
+            if (isset($params['page']) && $params['page'] > 0) {
+
+                $page  = (int)$params['page'];
+                $start = $params['page'] * $per_page;
+            }
+
+            $this->pagination = [
+
+                'page'     => ($page < 0 ? 0 : $page),
+                'per_page' => $per_page,
+                'start'    => $start,
+            ];
+        }
+
+        return $this->pagination;
     }
 }
