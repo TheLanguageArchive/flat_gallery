@@ -314,14 +314,36 @@ class FlatImageGallery
         }
 
         $next   = next($images);
-        $links  = [];
         $params = $this->solr->paginationParams();
 
-        return [
+        if (false !== $previous) {
+            $links['previous'] = $this->generateNavigationLink('Previous', $previous['id'], ['page' => $params['page']]);
+        }
 
-            'previous' => $this->generateNavigationLink('Previous', $previous['id'], ['page' => $params['page']]),
-            'next'     => $this->generateNavigationLink('Next', $next['id'], ['page' => $params['page']]),
-        ];
+        if (false !== $next) {
+            $links['next'] = $this->generateNavigationLink('Previous', $next['id'], ['page' => $params['page']]);
+        }
+
+        if (false === $previous && $params['page'] > 0) {
+
+            // first image on the page, let's use the link to go the previous page
+            $links['previous'] = $this->generateNavigationLink('Previous', 0, ['page' => $params['page'] - 1]);
+        }
+
+        if (false === $next) {
+
+            // last image on the page, let's use the link to go the next page
+            $pagination = $this->getPaginationLinks();
+            $pages      = (int)ceil($this->total / $params['per_page']);
+
+            if ($params['page'] < ($pages - 1)) {
+
+                // we have a next page
+                $links['next'] = $this->generateNavigationLink('Next', 0, ['page' => $params['page'] + 1]);
+            }
+        }
+
+        return $links;
     }
 
     /**
@@ -358,8 +380,8 @@ class FlatImageGallery
 
         // if current page is 0, disable previous link
         // or else link to first image on the previous page
-        $previous = $params['page'] === 0 ? false : 0;
-        $links[]  = $this->generateNavigationLink('&laquo;', $previous, ['page' => ($params['page'] - 1)]);
+        $previous          = $params['page'] === 0 ? false : 0;
+        $links['previous'] = $this->generateNavigationLink('&laquo;', $previous, ['page' => ($params['page'] - 1)]);
 
         for ($page = 0; $page < $pages; $page++) {
 
@@ -371,8 +393,8 @@ class FlatImageGallery
 
         // if current page equals total pages - 1 (start from 0)
         // disable link or else link to first image on next page
-        $next    = $params['page'] === ($pages - 1) ? false : 0;
-        $links[] = $this->generateNavigationLink('&raquo;', $next, ['page' => ($params['page'] + 1)]);
+        $next          = $params['page'] === ($pages - 1) ? false : 0;
+        $links['next'] = $this->generateNavigationLink('&raquo;', $next, ['page' => ($params['page'] + 1)]);
 
         return $links;
     }
