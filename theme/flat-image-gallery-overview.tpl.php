@@ -5,13 +5,12 @@
  */
 ?>
 <div class="flat-image-gallery-container">
-    <h1>Image Gallery</h1>
     <div class="flat-image-gallery-thumbnail">
         <?php if (false !== $current) : ?>
             <?php echo $current['viewer']; ?>
             <?php if ($current['label']) : ?>
                 <div class="flat-image-gallery-caption">
-                    <h3><?php echo $current['label']; ?></h3>
+                    <h4><?php echo $current['label']; ?></h4>
                 </div>
             <?php endif;?>
         <?php endif; ?>

@@ -18,6 +18,14 @@ function flat_image_gallery($object, $image_id = null) {
     $gallery  = new FlatImageGallery($object, $image_id);
     $images   = $gallery->getImages();
     $current  = $gallery->getCurrentImage();
+
+    if (false === $current) {
+
+        return theme('flat_image_gallery_out_of_bounds', [
+            'url' => url('islandora/object/' . $object->id),
+        ]);
+    }
+
     $links    = $gallery->getNavigationLinks();
 
     return theme('flat_image_gallery_overview', [
@@ -97,6 +105,10 @@ function flat_image_gallery_theme($existing, $type, $theme, $path) {
 
         'flat_image_gallery_modal' => [
             'template' => 'theme/flat-image-gallery-modal',
+        ],
+
+        'flat_image_gallery_out_of_bounds' => [
+            'template' => 'theme/flat-image-gallery-out-of-bounds',
         ],
     ];
 }

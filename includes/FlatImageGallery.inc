@@ -20,7 +20,7 @@ class FlatImageGallery
     /**
      * @var array
      */
-    private $models;
+    private $labels;
 
     /**
      * @var string|null
@@ -41,7 +41,7 @@ class FlatImageGallery
     public function __construct(AbstractObject $object, $imageId = null)
     {
         $this->object  = $object;
-        $this->imageId = $imageId;
+        $this->imageId = (int)$imageId;
     }
 
     /**
@@ -49,17 +49,54 @@ class FlatImageGallery
      *
      * @return array
      */
-    public function getModels()
+    public function getImages()
     {
-        if (null === $this->models) {
+        if (null === $this->images) {
+
+            $this->images = [];
 
             module_load_include('inc', 'flat_image_gallery', 'includes/FlatImageGallerySolr');
 
-            $solr         = new FlatImageGallerySolr();
-            $this->models = $solr->models($this->object->id);
+            $solr    = new FlatImageGallerySolr();
+            $results = $solr->getImages($this->object->id);
+
+            $id      = 0;
+            $labels  = $this->getLabels();
+
+            foreach ($results as $result) {
+
+                $thumbnail = false;
+                $model     = false;
+
+                if (is_array($result['models']) && in_array('islandora:sp_large_image_cmodel', $result['models'])) {
+
+                    $thumbnail = url('islandora/object/' . $result['pid'] . '/datastream/JPG/view');
+                    $model     = 'islandora:sp_large_image_cmodel';
+
+                } elseif (is_array($result['models']) && in_array('info:fedora/islandora:sp_basic_image', $result['models'])) {
+
+                    $thumbnail = url('islandora/object/' . $result['pid'] . '/datastream/MEDIUM_SIZE/view');
+                    $model     = 'info:fedora/islandora:sp_basic_image';
+
+                } else {
+                    continue;
+                }
+
+                $this->images[$id] = [
+
+                    'id'        => $id,
+                    'pid'       => $result['pid'],
+                    'thumbnail' => $thumbnail,
+                    'model'     => $model,
+                    'url'       => url('islandora/object/' . $this->object->id . '/ig/' . $id),
+                    'label'     => (isset($labels[$result['pid']]) ? $labels[$result['pid']]['label'] : false),
+                ];
+
+                $id += 1;
+            }
         }
 
-        return $this->models;
+        return $this->images;
     }
 
     /**
@@ -67,64 +104,66 @@ class FlatImageGallery
      *
      * @return XML
      */
-    public function getImages()
+    public function getLabels()
     {
-        if ($this->images !== null) {
-            return $this->images;
+        if ($this->labels !== null) {
+            return $this->labels;
         }
 
         if (!isset($this->object['CMD']) || !($cmd = $this->object['CMD']->content)) {
 
-            $this->images = [];
-            return $this->images;
+            $this->labels = [];
+            return $this->labels;
         }
 
         $input  = new DOMDocument();
         $loaded = $input->loadXML($cmd);
-        $images = [];
+        $labels = [];
 
         if ($loaded) {
 
             $xpath  = new DOMXPath($input);
             $xpath->registerNamespace('cmd', 'http://www.clarin.eu/cmd/');
-            $items  = $xpath->query('/cmd:CMD/cmd:Resources/cmd:ResourceProxyList/cmd:ResourceProxy/cmd:ResourceType[starts-with(@mimetype, "image/")]/parent::node()');
-            $models = $this->getModels();
+
+            $items = $xpath->query('/cmd:CMD/cmd:Resources/cmd:ResourceProxyList/cmd:ResourceProxy/cmd:ResourceType[starts-with(@mimetype, "image/")]/parent::node()');
+            $map   = [];
 
             foreach ($items as $item) {
 
-                $id        = $item->attributes->getNamedItem('id')->value;
-                $pid       = $item->getElementsByTagName('ResourceRef')[0]->attributes->getNamedItem('flatURI')->value;
-                $thumbnail = false;
+                $id  = $item->attributes->getNamedItem('id')->value;
+                $pid = $item->getElementsByTagName('ResourceRef')[0]->attributes->getNamedItem('flatURI')->value;
 
-                if (isset($models[$pid]) && in_array('islandora:sp_large_image_cmodel', $models[$pid]['models'])) {
-                    $thumbnail = url('islandora/object/' . $pid . '/datastream/JPG/view');
-                } elseif (isset($models[$pid]) && in_array('info:fedora/islandora:sp_basic_image', $models[$pid]['models'])) {
-                    $thumbnail = url('islandora/object/' . $pid . '/datastream/MEDIUM_SIZE/view');
-                } else {
-                    continue;
-                }
+                $map[$id] = $pid;
+            }
 
-                $descriptions = $xpath->query('//*[@ref="' . $id . '"]')[0]->getElementsByTagName('Description');
+            $items  = $xpath->query('//*[@ref]');
+            $labels = [];
+
+            foreach ($items as $item) {
+
+                $id           = $item->attributes->getNamedItem('ref')->value;
                 $label        = false;
+                $descriptions = $item->getElementsByTagName('Description');
 
                 if ($descriptions->length > 0) {
                     $label = $descriptions[0]->textContent;
                 }
 
-                $images[$id] = [
+                if (isset($map[$id]) && false !== $label) {
 
-                    'pid'       => $pid,
-                    'id'        => $id,
-                    'label'     => $label,
-                    'url'       => url('islandora/object/' . $this->object->id . '/ig/' . $id),
-                    'thumbnail' => $thumbnail,
-                ];
+                    $labels[$map[$id]] = [
+
+                        'id'    => $id,
+                        'pid'   => $map[$id],
+                        'label' => $label,
+                    ];
+                }
             }
         }
 
-        $this->images = $images;
+        $this->labels = $labels;
 
-        return $this->images;
+        return $this->labels;
     }
 
     /**
@@ -144,19 +183,6 @@ class FlatImageGallery
     }
 
     /**
-     * Getting current pid
-     *
-     * @return string
-     */
-    public function getCurrentPid()
-    {
-        $images    = $this->getImages();
-        $currentId = $this->getCurrentId();
-
-        return isset($images[$currentId]) ? $images[$currentId]['pid'] : current($images)['pid'];
-    }
-
-    /**
      * Getting current image
      *
      * @return string
@@ -166,14 +192,19 @@ class FlatImageGallery
         if ($this->current === null) {
 
             $images  = $this->getImages();
-            $models  = $this->getModels();
             $id      = $this->getCurrentId();
-            $pid     = $this->getCurrentPid();
-            $label   = isset($images[$id]) ? $images[$id]['label'] : false;
 
-            if (isset($models[$pid]) && in_array('islandora:sp_large_image_cmodel', $models[$pid]['models'])) {
+            if (!isset($images[$id])) {
 
-                $current = islandora_object_load($pid);
+                $this->current = false;
+                return false;
+            }
+
+            $currentImage = $images[$id];
+
+            if ($currentImage['model'] === 'islandora:sp_large_image_cmodel') {
+
+                $current = islandora_object_load($currentImage['pid']);
                 $token   = islandora_get_object_token($current->id, 'JP2', 2);
                 $params  = [
 
@@ -188,16 +219,16 @@ class FlatImageGallery
 
                     'pid'    => $current->id,
                     'viewer' => $viewer,
-                    'label'  => $label,
+                    'label'  => $currentImage['label'],
                 ];
 
-            } elseif (isset($models[$pid]) && in_array('info:fedora/islandora:sp_basic_image', $models[$pid]['models'])) {
+            } elseif ($currentImage['model'] === 'info:fedora/islandora:sp_basic_image') {
 
                 $this->current = [
 
-                    'pid'    => $pid,
-                    'viewer' => '<img src="' . url('islandora/object/' . $pid . '/datastream/OBJ/view') . '" />',
-                    'label'  => $label,
+                    'pid'    => $currentImage['pid'],
+                    'viewer' => '<img src="' . url('islandora/object/' . $currentImage['pid'] . '/datastream/OBJ/view') . '" />',
+                    'label'  => $currentImage['label'],
                 ];
 
             } else {

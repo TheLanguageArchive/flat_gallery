@@ -53,13 +53,13 @@ class FlatImageGallerySolr
     }
 
     /**
-     * Fetching models
+     * Fetching images
      *
      * @param string $parent
      *
      * @return array
      */
-    public function models($parent)
+    public function getImages($parent)
     {
         $data   = $this->query($this->childrenQuery($parent), $this->childrenParams($parent));
         $models = [];
