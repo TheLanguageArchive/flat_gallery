@@ -286,10 +286,6 @@ class FlatImageGallery
         $previous  = false;
         $next      = false;
 
-        if (count($images) < 2) {
-            return false;
-        }
-
         // first resetting pointer
         reset($images);
 
@@ -315,19 +311,30 @@ class FlatImageGallery
 
         $next   = next($images);
         $params = $this->solr->paginationParams();
+        $links  = [];
 
         if (false !== $previous) {
-            $links['previous'] = $this->generateNavigationLink('Previous', $previous['id'], ['page' => $params['page']]);
-        }
 
-        if (false !== $next) {
-            $links['next'] = $this->generateNavigationLink('Previous', $next['id'], ['page' => $params['page']]);
+            // we found a previous image
+            $links['previous'] = $this->generateNavigationLink('Previous', $previous['id'], ['page' => $params['page']]);
         }
 
         if (false === $previous && $params['page'] > 0) {
 
             // first image on the page, let's use the link to go the previous page
             $links['previous'] = $this->generateNavigationLink('Previous', 0, ['page' => $params['page'] - 1]);
+        }
+
+        if (!isset($links['previous'])) {
+
+            // no previous link found, let's create an empty link
+            $links['previous'] = 'Previous';
+        }
+
+        if (false !== $next) {
+
+            // next image found
+            $links['next'] = $this->generateNavigationLink('Next', $next['id'], ['page' => $params['page']]);
         }
 
         if (false === $next) {
@@ -341,6 +348,12 @@ class FlatImageGallery
                 // we have a next page
                 $links['next'] = $this->generateNavigationLink('Next', 0, ['page' => $params['page'] + 1]);
             }
+        }
+
+        if (!isset($links['next'])) {
+
+            // no next link found, display empty link
+            $links['next'] = 'Next';
         }
 
         return $links;
