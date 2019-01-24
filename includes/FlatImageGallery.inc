@@ -1,4 +1,7 @@
 <?php
+module_load_include('inc', 'islandora', 'includes/authtokens');
+module_load_include('inc', 'islandora', 'includes/solution_packs');
+
 /**
  * Image gallery class
  *
@@ -67,6 +70,7 @@ class FlatImageGallery
 
             $id      = 0;
             $results = $this->solr->getImages($this->object->id);
+            $params  = $this->solr->paginationParams();
             $labels  = $this->getLabels();
 
             $this->total  = $results['total'];
@@ -98,7 +102,7 @@ class FlatImageGallery
                     'filename'     => $result['filename'],
                     'thumbnail'    => $thumbnail,
                     'model'        => $model,
-                    'url'          => url('islandora/object/' . $this->object->id . '/ig/' . $id),
+                    'url'          => url('islandora/object/' . $this->object->id . '/ig/' . $id, ['query' => ['page' => $params['page']]]),
                     'descriptions' => (isset($labels[$result['pid']]) ? $labels[$result['pid']]['descriptions'] : []),
                 ];
 
@@ -132,9 +136,11 @@ class FlatImageGallery
 
         if ($loaded) {
 
+            // loading cmd to allow xpath
             $xpath  = new DOMXPath($input);
             $xpath->registerNamespace('cmd', 'http://www.clarin.eu/cmd/');
 
+            // fetching id and pid to create a mapping array
             $items = $xpath->query('/cmd:CMD/cmd:Resources/cmd:ResourceProxyList/cmd:ResourceProxy/cmd:ResourceType[starts-with(@mimetype, "image/")]/parent::node()');
             $map   = [];
 
@@ -146,14 +152,16 @@ class FlatImageGallery
                 $map[$id] = $pid;
             }
 
+            // getting the descriptions, grouped by id
+            // and using mapping array above to connect the two
             $items  = $xpath->query('//*[@ref]');
             $labels = [];
 
             foreach ($items as $item) {
 
                 $id           = $item->attributes->getNamedItem('ref')->value;
-                $descriptions = [];
                 $rows         = $item->getElementsByTagName('Description');
+                $descriptions = [];
 
                 foreach ($rows as $row) {
 
@@ -162,6 +170,7 @@ class FlatImageGallery
                     }
                 }
 
+                // only add the descriptions if we have a mapping
                 if (isset($map[$id])) {
 
                     $labels[$map[$id]] = [
@@ -180,7 +189,9 @@ class FlatImageGallery
     }
 
     /**
-     * Get current Id
+     * Get current id, since the gallery is connected
+     * to the compound object, if no imageId was injected
+     * use the current image in the resultset
      *
      * @return string
      */
@@ -196,7 +207,8 @@ class FlatImageGallery
     }
 
     /**
-     * Getting current image
+     * Getting current image, either from the url
+     * or the first one in the resultset
      *
      * @return string
      */
@@ -217,6 +229,7 @@ class FlatImageGallery
 
             if ($currentImage['model'] === 'islandora:sp_large_image_cmodel') {
 
+                // if model is a large image, load openseadragon
                 $current = islandora_object_load($currentImage['pid']);
                 $token   = islandora_get_object_token($current->id, 'JP2', 2);
                 $params  = [
@@ -238,15 +251,19 @@ class FlatImageGallery
 
             } elseif ($currentImage['model'] === 'info:fedora/islandora:sp_basic_image') {
 
+                // if basic image just display the contents of the object
+                // and load it into a html img tag
                 $this->current = [
 
                     'id'           => $currentImage['id'],
                     'pid'          => $currentImage['pid'],
-                    'viewer'       => '<img src="' . url('islandora/object/' . $currentImage['pid'] . '/datastream/OBJ/view') . '" />',
+                    'viewer'       => '<img class="flat-image-gallery-basic-image" src="' . url('islandora/object/' . $currentImage['pid'] . '/datastream/OBJ/view') . '" />',
                     'descriptions' => $currentImage['descriptions'],
                 ];
 
             } else {
+
+                // no large or basic image, so do not display object
                 $this->current = false;
             }
         }
@@ -263,6 +280,7 @@ class FlatImageGallery
     {
         $images    = $this->getImages();
         $currentId = $this->getCurrentId();
+
         $previous  = false;
         $next      = false;
 
@@ -293,28 +311,29 @@ class FlatImageGallery
             next($images);
         }
 
-        $next  = next($images);
-        $links = [];
+        $next   = next($images);
+        $links  = [];
+        $params = $this->solr->paginationParams();
 
         return [
 
-            'previous' => $this->generateNavigationLink('Previous', $previous),
-            'next'     => $this->generateNavigationLink('Next', $next),
+            'previous' => $this->generateNavigationLink('Previous', $previous['id'], ['page' => $params['page']]),
+            'next'     => $this->generateNavigationLink('Next', $next['id'], ['page' => $params['page']]),
         ];
     }
 
     /**
      * Generate navigation link
      *
-     * @param string       $label
-     * @param string|false $image
-     * @param array        $params
+     * @param string    $label
+     * @param int|false $id
+     * @param array     $params
      *
      * @return string
      */
-    public function generateNavigationLink(string $label, $image = false, $params = []): string
+    public function generateNavigationLink(string $label, $id = false, $params = []): string
     {
-        return (false === $image ? $label : l(decode_entities($label), 'islandora/object/' . $this->object->id . '/ig/' . $image['id'], ['query' => $params]));
+        return (false === $id ? $label : l(decode_entities($label), 'islandora/object/' . $this->object->id . '/ig/' . $id, ['query' => $params]));
     }
 
     /**
@@ -335,13 +354,23 @@ class FlatImageGallery
             $params['page'] = $pages;
         }
 
-        $links[] = $this->generateNavigationLink('&laquo;', ($params['page'] === 0 ? false : ($params['page'] - 1)), ['page' => ($params['page'] - 1)]);
+        // if current page is 0, disable previous link
+        // or else link to first image on the previous page
+        $previous = $params['page'] === 0 ? false : 0;
+        $links[]  = $this->generateNavigationLink('&laquo;', $previous, ['page' => ($params['page'] - 1)]);
 
         for ($page = 0; $page < $pages; $page++) {
-            $links[] = $this->generateNavigationLink($page + 1, ($page === $params['page'] ? false : $currentImage), ['page' => $page]);
+
+            // if current page equals page selected
+            // disable link or else link to first image on page selected
+            $current = $page === $params['page'] ? false : 0;
+            $links[] = $this->generateNavigationLink($page + 1, $current, ['page' => $page]);
         }
 
-        $links[] = $this->generateNavigationLink('&raquo;', ($params['page'] === ($pages - 1) ? false : ($params['page'] + 1)), ['page' => ($params['page'] + 1)]);
+        // if current page equals total pages - 1 (start from 0)
+        // disable link or else link to first image on next page
+        $next    = $params['page'] === ($pages - 1) ? false : 0;
+        $links[] = $this->generateNavigationLink('&raquo;', $next, ['page' => ($params['page'] + 1)]);
 
         return $links;
     }

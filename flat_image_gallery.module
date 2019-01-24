@@ -11,8 +11,6 @@ function flat_image_gallery($object, $image_id = null) {
 
     module_load_include('inc', 'flat_image_gallery', 'includes/FlatImageGallery');
     module_load_include('inc', 'flat_image_gallery', 'includes/FlatImageGallerySolr');
-    module_load_include('inc', 'islandora', 'includes/authtokens');
-    module_load_include('inc', 'islandora', 'includes/solution_packs');
 
     drupal_add_css(drupal_get_path('module', 'flat_image_gallery') . '/css/flat-image-gallery-app.css');
 
@@ -25,7 +23,7 @@ function flat_image_gallery($object, $image_id = null) {
     if (false === $current) {
 
         return theme('flat_image_gallery_out_of_bounds', [
-            'url' => url('islandora/object/' . $object->id),
+            'url' => url('islandora/object/' . $object->id . '/ig'),
         ]);
     }
 
@@ -49,12 +47,32 @@ function flat_image_gallery_ajax($page_callback_result) {
     drupal_page_footer();
 }
 
-function flat_image_gallery_islandora_compoundCModel_islandora_view_object($object) {
+/**
+ * Preprocessor to add link to gallery at the top of the block
+ *
+ * @param array $variables
+ *
+ * @return void
+ */
+function flat_image_gallery_preprocess_block(&$variables) {
 
-    drupal_add_js(drupal_get_path('module', 'flat_image_gallery') . '/js/flat-image-gallery-app.js');
-    drupal_add_css(drupal_get_path('module', 'flat_image_gallery') . '/css/flat-image-gallery-app.css');
+    if (isset($variables['block_html_id']) && $variables['block_html_id'] === 'block-system-main') {
 
-    return theme('flat_image_gallery_modal', ['url' => url('islandora/object/' . $object->id . '/ig')]);
+        module_load_include('inc', 'flat_image_gallery', 'includes/FlatImageGallerySolr');
+
+        $pid     = arg(2);
+        $solr    = new FlatImageGallerySolr();
+        $results = $solr->getImages($pid);
+
+        if ($results['total'] > 0) {
+
+            drupal_add_js(drupal_get_path('module', 'flat_image_gallery') . '/js/flat-image-gallery-app.js');
+            drupal_add_css(drupal_get_path('module', 'flat_image_gallery') . '/css/flat-image-gallery-app.css');
+
+            $content              = theme('flat_image_gallery_modal', ['url' => url('islandora/object/' . $pid . '/ig')]);
+            $variables['content'] = $content . $variables['content'];
+        }
+    }
 }
 
 /**

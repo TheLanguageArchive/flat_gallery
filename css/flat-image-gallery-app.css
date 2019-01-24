@@ -100,3 +100,8 @@ a.flat-image-gallery-thumbnail.active {
   position: absolute;
   right: 0;
 }
+.flat-image-gallery-thumbnail > img.flat-image-gallery-basic-image {
+  display: block;
+  width: 100%;
+  height: 500px;
+}
