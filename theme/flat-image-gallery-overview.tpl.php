@@ -8,9 +8,11 @@
     <div class="flat-image-gallery-thumbnail">
         <?php if (false !== $current) : ?>
             <?php echo $current['viewer']; ?>
-            <?php if ($current['label']) : ?>
+            <?php if (count($current['descriptions']) > 0) : ?>
                 <div class="flat-image-gallery-caption">
-                    <h4><?php echo $current['label']; ?></h4>
+                    <?php foreach ($current['descriptions'] as $description) : ?>
+                        <h4><?php echo $description; ?></h4>
+                    <?php endforeach; ?>
                 </div>
             <?php endif;?>
         <?php endif; ?>
@@ -30,9 +32,11 @@
                 <div class="col-lg-3">
                     <a href="<?php echo $image['url']; ?>" class="flat-image-gallery-thumbnail <?php echo $current['pid'] === $image['pid'] ? 'active' : ''; ?>">
                         <img style="height: 100px;" src="<?php echo $image['thumbnail']; ?>" />
-                        <?php if ($image['label']) : ?>
+                        <?php if (count($image['descriptions']) > 0) : ?>
                             <div class="flat-image-gallery-caption">
-                                <small><?php echo $image['label']; ?></small>
+                                <?php foreach ($image['descriptions'] as $description) : ?>
+                                    <small><?php echo $description; ?></small><br />
+                                <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
                     </a>

@@ -84,12 +84,12 @@ class FlatImageGallery
 
                 $this->images[$id] = [
 
-                    'id'        => $id,
-                    'pid'       => $result['pid'],
-                    'thumbnail' => $thumbnail,
-                    'model'     => $model,
-                    'url'       => url('islandora/object/' . $this->object->id . '/ig/' . $id),
-                    'label'     => (isset($labels[$result['pid']]) ? $labels[$result['pid']]['label'] : false),
+                    'id'           => $id,
+                    'pid'          => $result['pid'],
+                    'thumbnail'    => $thumbnail,
+                    'model'        => $model,
+                    'url'          => url('islandora/object/' . $this->object->id . '/ig/' . $id),
+                    'descriptions' => (isset($labels[$result['pid']]) ? $labels[$result['pid']]['descriptions'] : []),
                 ];
 
                 $id += 1;
@@ -142,20 +142,23 @@ class FlatImageGallery
             foreach ($items as $item) {
 
                 $id           = $item->attributes->getNamedItem('ref')->value;
-                $label        = false;
-                $descriptions = $item->getElementsByTagName('Description');
+                $descriptions = [];
+                $rows         = $item->getElementsByTagName('Description');
 
-                if ($descriptions->length > 0) {
-                    $label = $descriptions[0]->textContent;
+                foreach ($rows as $row) {
+
+                    if ($row->textContent) {
+                        $descriptions[] = $row->textContent;
+                    }
                 }
 
-                if (isset($map[$id]) && false !== $label) {
+                if (isset($map[$id])) {
 
                     $labels[$map[$id]] = [
 
-                        'id'    => $id,
-                        'pid'   => $map[$id],
-                        'label' => $label,
+                        'id'           => $id,
+                        'pid'          => $map[$id],
+                        'descriptions' => $descriptions,
                     ];
                 }
             }
@@ -217,18 +220,18 @@ class FlatImageGallery
 
                 $this->current = [
 
-                    'pid'    => $current->id,
-                    'viewer' => $viewer,
-                    'label'  => $currentImage['label'],
+                    'pid'          => $current->id,
+                    'viewer'       => $viewer,
+                    'descriptions' => $currentImage['descriptions'],
                 ];
 
             } elseif ($currentImage['model'] === 'info:fedora/islandora:sp_basic_image') {
 
                 $this->current = [
 
-                    'pid'    => $currentImage['pid'],
-                    'viewer' => '<img src="' . url('islandora/object/' . $currentImage['pid'] . '/datastream/OBJ/view') . '" />',
-                    'label'  => $currentImage['label'],
+                    'pid'          => $currentImage['pid'],
+                    'viewer'       => '<img src="' . url('islandora/object/' . $currentImage['pid'] . '/datastream/OBJ/view') . '" />',
+                    'descriptions' => $currentImage['descriptions'],
                 ];
 
             } else {
