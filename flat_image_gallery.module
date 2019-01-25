@@ -68,7 +68,7 @@ function flat_image_gallery_preprocess_block(&$variables) {
 
         module_load_include('inc', 'flat_image_gallery', 'includes/FlatImageGallerySolr');
 
-        $pid     = arg(2);
+        $pid     = urldecode(arg(2));
         $solr    = new FlatImageGallerySolr();
         $results = $solr->getImages($pid);
 
