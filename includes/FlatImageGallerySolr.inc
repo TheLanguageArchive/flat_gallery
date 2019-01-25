@@ -119,20 +119,23 @@ class FlatImageGallerySolr
 
         $params = [
 
-            'fq' => [
-
-                'RELS_EXT_isViewableByUser_literal_ms:"' . $user->name . '"',
-                'OR',
-                '((*:* -RELS_EXT_isViewableByUser_literal_ms:[* TO *]) AND (*:* -RELS_EXT_isViewableByRole_literal_ms:[* TO *]))',
-            ],
+            'fq' => 'RELS_EXT_hasModel_uri_ms:("islandora:sp_large_image_cmodel" OR "info:fedora/islandora:sp_basic_image")
+                    AND (
+                            RELS_EXT_isViewableByUser_literal_ms:"' . $user->name . '"
+                            OR
+                            (
+                                (*:* -RELS_EXT_isViewableByUser_literal_ms:[* TO *]) AND (*:* -RELS_EXT_isViewableByRole_literal_ms:[* TO *])
+                            )',
         ];
 
         foreach ($user->roles as $role) {
-            $params['fq'][] = 'OR RELS_EXT_isViewableByRole_literal_ms:"' . $role . '"';
+            $params['fq'] .= ' OR RELS_EXT_isViewableByRole_literal_ms:"' . $role . '" ';
         }
 
+        $params['fq'] .= ')';
+
         $params['fl'][]  = 'PID, fgs_label_s, RELS_EXT_hasModel_uri_ms';
-        $params['fq']    = implode(' ', $params['fq']);
+        $params['fq']    = $params['fq'];
         $params['sort']  = variable_get('islandora_solr_object_label_field', 'fgs_label_s') . ' asc';
 
         return $params;
