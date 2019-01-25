@@ -1,10 +1,10 @@
-name = "Flat Image Gallery"
-description = "A FLAT module to display image gallery for bundles with images"
+name = "Flat Gallery"
+description = "A FLAT module to display a gallery for bundles with media"
 dependencies[] = flat_deposit
 package = FLAT
 core = 7.x
 version = 7.x-dev
-configure = admin/config/flat_deposit/flat_image_gallery
+configure = admin/config/flat_deposit/flat_gallery
 dependencies[] = flat_deposit
 dependencies[] = islandora
 dependencies[] = islandora_openseadragon

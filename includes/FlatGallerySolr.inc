@@ -1,9 +1,11 @@
 <?php
 /**
+ * FLAT Gallery Solr
+ *
  * @author  Ibrahim Abdullah
  * @package Flat Permissions
  */
-class FlatImageGallerySolr
+class FlatGallerySolr
 {
     /**
      * @var Apache_Solr_Service
@@ -61,20 +63,20 @@ class FlatImageGallerySolr
     }
 
     /**
-     * Fetching images
+     * Fetching gallery items from solr
      *
      * @param string $parent
      *
      * @return array
      */
-    public function getImages($parent)
+    public function getItems($parent)
     {
         $data   = $this->query($this->childrenQuery($parent), $this->childrenParams($parent));
-        $images = [];
+        $items = [];
 
         foreach ($data['response']['docs'] as $doc) {
 
-            $images[$doc['PID']] = [
+            $items[$doc['PID']] = [
 
                 'pid'      => $doc['PID'],
                 'models'   => $doc['RELS_EXT_hasModel_uri_ms'],
@@ -84,7 +86,7 @@ class FlatImageGallerySolr
 
         return [
 
-            'results' => $images,
+            'results' => $items,
             'total'   => $data['response']['numFound'],
             'start'   => $data['response']['start'],
         ];
@@ -149,7 +151,7 @@ class FlatImageGallerySolr
         if (null === $this->pagination) {
 
             $params   = drupal_get_query_parameters();
-            $per_page = variable_get('flat_image_gallery_per_page', FLAT_IMAGE_GALLERY_DEFAULT_PAGINATION_LIMIT);
+            $per_page = variable_get('flat_gallery_per_page', FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT);
             $start    = 0;
             $page     = 0;
 
