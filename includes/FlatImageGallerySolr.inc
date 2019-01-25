@@ -121,16 +121,16 @@ class FlatImageGallerySolr
 
             'fq' => [
 
-                'RELS_EXT_hasModel_uri_ms:("islandora:sp_large_image_cmodel" OR "info:fedora/islandora:sp_basic_image")',
-                'RELS_EXT_isViewableByUser_literal_ms:"' . $user->name . '"
-                    OR (
-                        (*:* -RELS_EXT_isViewableByUser_literal_ms:[* TO *]) AND (*:* -RELS_EXT_isViewableByRole_literal_ms:[* TO *])
-                    )',
+                0 => 'RELS_EXT_hasModel_uri_ms:("islandora:sp_large_image_cmodel" OR "info:fedora/islandora:sp_basic_image")',
+                1 => 'policy_datastream_users_ms:"' . $user->name . '"
+                        OR (
+                            (*:* -policy_datastream_users_ms:[* TO *]) AND (*:* -policy_datastream_roles_ms:[* TO *])
+                        )',
             ],
         ];
 
         foreach ($user->roles as $role) {
-            $params['fq'][1] .= ' OR (RELS_EXT_isViewableByRole_literal_ms:"' . $role . '") ';
+            $params['fq'][1] .= ' OR (policy_datastream_roles_ms:"' . $role . '") ';
         }
 
         $params['fl'][]  = 'PID, fgs_label_s, RELS_EXT_hasModel_uri_ms';
