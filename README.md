@@ -1,2 +1,2 @@
 # flat_image_gallery
-Drupal module for displaying an image gallery in a FLAT repository
+Drupal module for displaying a gallery of resources in a FLAT repository
