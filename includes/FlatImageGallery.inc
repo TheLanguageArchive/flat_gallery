@@ -322,7 +322,7 @@ class FlatImageGallery
         if (false === $previous && $params['page'] > 0) {
 
             // first image on the page, let's use the link to go the previous page
-            $links['previous'] = $this->generateNavigationLink('Previous', 0, ['page' => $params['page'] - 1]);
+            $links['previous'] = $this->generateNavigationLink('Previous', (variable_get('flat_image_gallery_per_page', FLAT_IMAGE_GALLERY_DEFAULT_PAGINATION_LIMIT) - 1), ['page' => $params['page'] - 1]);
         }
 
         if (!isset($links['previous'])) {
