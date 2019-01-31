@@ -18,7 +18,7 @@ function flat_gallery_admin_form($form, &$form_state) {
             '#type'          => 'textfield',
             '#title'         => 'Limit',
             '#size'          => 30,
-            '#default_value' => variable_get('flat_gallery_per_page', 10),
+            '#default_value' => variable_get('flat_gallery_per_page', FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT),
         ],
     ];
 
