@@ -86,10 +86,10 @@ class FlatGallery
                     $thumbnail = url('islandora/object/' . $result['pid'] . '/datastream/JPG/view');
                     $model     = 'islandora:sp_large_image_cmodel';
 
-                } elseif (is_array($result['models']) && in_array('info:fedora/islandora:sp_basic_image', $result['models'])) {
+                } elseif (is_array($result['models']) && in_array('islandora:sp_basic_image', $result['models'])) {
 
                     $thumbnail = url('islandora/object/' . $result['pid'] . '/datastream/MEDIUM_SIZE/view');
-                    $model     = 'info:fedora/islandora:sp_basic_image';
+                    $model     = 'islandora:sp_basic_image';
 
                 } else {
                     continue;
@@ -250,7 +250,7 @@ class FlatGallery
                     'descriptions' => $currentItem['descriptions'],
                 ];
 
-            } elseif ($currentItem['model'] === 'info:fedora/islandora:sp_basic_image') {
+            } elseif ($currentItem['model'] === 'islandora:sp_basic_image') {
 
                 // if basic image just display the contents of the object
                 // and load it into a html img tag

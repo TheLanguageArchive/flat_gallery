@@ -79,7 +79,7 @@ class FlatGallerySolr
             $items[$doc['PID']] = [
 
                 'pid'      => $doc['PID'],
-                'models'   => $doc['RELS_EXT_hasModel_uri_ms'],
+                'models'   => array_map([$this, 'removeFedoraPrefix'], $doc['RELS_EXT_hasModel_uri_ms']),
                 'filename' => $doc['fgs_label_s'],
             ];
         }
@@ -170,5 +170,16 @@ class FlatGallerySolr
         }
 
         return $this->pagination;
+    }
+
+    /**
+     * Removing fedora prefix from models to allow uniform
+     * checking of models in rest of module
+     *
+     * @return string
+     */
+    private function removeFedoraPrefix($string)
+    {
+        return str_replace('info:fedora/', '', $string);
     }
 }
