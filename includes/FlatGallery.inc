@@ -250,6 +250,8 @@ class FlatGallery
                     'descriptions' => $currentItem['descriptions'],
                 ];
 
+                var_dump($this->current);
+
             } elseif ($currentItem['model'] === 'islandora:sp_basic_image') {
 
                 // if basic image just display the contents of the object

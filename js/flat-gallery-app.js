@@ -16,10 +16,6 @@
 
             var content = jq('[data-role="flat-gallery-modal-content"]');
             content.parent().fadeTo('fast', 1.0);
-
-            // content.load(url, function() {
-            //     content.parent().fadeTo('fast', 1.0);
-            // });
         });
 
         body.on('click', '[data-role="flat-gallery-modal-close"]', function(event) {
