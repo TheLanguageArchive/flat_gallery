@@ -234,9 +234,13 @@ class FlatGallery
                 $token   = islandora_get_object_token($current->id, 'JP2', 2);
                 $params  = [
 
-                    'token' => $token,
-                    'pid'   => $current->id,
-                    'dsid'  => 'JP2',
+                    'jp2_url' => url('islandora/object/' . $current->id . '/datastream/JP2/view', [
+
+                        'absolute' => true,
+                        'query'    => [
+                            'token' => $token,
+                        ],
+                    ]),
                 ];
 
                 $viewer = islandora_get_viewer($params, 'islandora_large_image_viewers', $current);
@@ -249,8 +253,6 @@ class FlatGallery
                     'viewer'       => $viewer,
                     'descriptions' => $currentItem['descriptions'],
                 ];
-
-                var_dump($this->current);
 
             } elseif ($currentItem['model'] === 'islandora:sp_basic_image') {
 

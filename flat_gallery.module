@@ -1,5 +1,7 @@
 <?php
 define('FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT', 10);
+module_load_include('inc', 'islandora', 'includes/authtokens');
+module_load_include('inc', 'islandora', 'includes/solution_packs');
 /**
  * FLAT gallery
  *
