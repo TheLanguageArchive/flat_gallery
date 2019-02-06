@@ -29,7 +29,7 @@
         <div class="col-lg-12">
             <div class="row">
                 <?php foreach ($items as $item) : ?>
-                <div class="col-lg-4">
+                <div class="col-lg-<?php echo (12 / $max_per_row); ?>">
                     <a href="<?php echo $item['url']; ?>" class="flat-gallery-thumbnail <?php echo $current['pid'] === $item['pid'] ? 'active' : ''; ?>">
                         <img src="<?php echo $item['thumbnail']; ?>" />
                         <div class="flat-gallery-caption">
