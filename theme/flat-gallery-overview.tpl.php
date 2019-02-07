@@ -17,36 +17,24 @@
             </div>
         <?php endif; ?>
     </div>
-    <div class="row">
-        <div class="col-lg-offset-5">
-            <p>
-                <?php echo implode(' | ', $navigationLinks); ?>
-            </p>
-        </div>
+    <div class="center">
+        <span><?php echo implode(' | ', $navigationLinks); ?></span>
     </div>
     <hr />
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="row">
-                <?php foreach ($items as $item) : ?>
-                <div class="col-lg-<?php echo (12 / $max_per_row); ?>">
-                    <a href="<?php echo $item['url']; ?>" class="flat-gallery-thumbnail <?php echo $current['pid'] === $item['pid'] ? 'active' : ''; ?>">
-                        <img src="<?php echo $item['thumbnail']; ?>" />
-                        <div class="flat-gallery-caption">
-                            <small class="flat-gallery-caption-filename"><?php echo $item['filename']; ?></small>
-                        </div>
-                    </a>
+    <div class="flat-gallery-grid">
+        <?php foreach ($items as $item) : ?>
+        <div class="flat-gallery-grid-column">
+            <a title="<?php echo $item['filename']; ?>" href="<?php echo $item['url']; ?>" class="flat-gallery-thumbnail <?php echo $current['pid'] === $item['pid'] ? 'active' : ''; ?>">
+                <img src="<?php echo $item['thumbnail']; ?>" />
+                <div class="flat-gallery-caption">
+                    <small class="flat-gallery-caption-filename"><?php echo $item['filename']; ?></small>
                 </div>
-                <?php endforeach; ?>
-            </div>
+            </a>
         </div>
+        <?php endforeach; ?>
     </div>
     <hr />
-    <div class="row">
-        <div class="col-lg-offset-5">
-            <p>
-                <?php echo implode(' | ', $paginationLinks); ?>
-            </p>
-        </div>
+    <div class="center">
+        <span><?php echo implode(' | ', $paginationLinks); ?></span>
     </div>
 </div>

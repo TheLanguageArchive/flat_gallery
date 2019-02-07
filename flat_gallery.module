@@ -1,7 +1,5 @@
 <?php
 define('FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT', 10);
-define('FLAT_GALLERY_DEFAULT_MAX_PER_ROW', 3);
-
 module_load_include('inc', 'islandora', 'includes/authtokens');
 module_load_include('inc', 'islandora', 'includes/solution_packs');
 /**
@@ -37,7 +35,6 @@ function flat_gallery($object, $id = null) {
         'islandora_object' => $object,
         'items'            => $items,
         'current'          => $current,
-        'max_per_row'      => variable_get('flat_gallery_max_per_row', FLAT_GALLERY_DEFAULT_MAX_PER_ROW),
         'navigationLinks'  => $gallery->getNavigationLinks(),
         'paginationLinks'  => $gallery->getPaginationLinks(),
     ]);
