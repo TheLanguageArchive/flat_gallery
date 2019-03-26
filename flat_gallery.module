@@ -15,6 +15,7 @@ function flat_gallery($object, $id = null) {
     module_load_include('inc', 'flat_gallery', 'includes/FlatGallery');
     module_load_include('inc', 'flat_gallery', 'includes/FlatGallerySolr');
 
+    drupal_add_js(drupal_get_path('module', 'flat_gallery') . '/js/flat-gallery-app.js');
     drupal_add_css(drupal_get_path('module', 'flat_gallery') . '/css/flat-gallery-app.css');
 
     $solr    = new FlatGallerySolr();

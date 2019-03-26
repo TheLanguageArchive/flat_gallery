@@ -3,6 +3,29 @@
     jq(function() {
 
         var body = jq('body');
+        var full = jq('[data-role="flat-gallery-toggle-fullscreen"]');
+
+        body.on('click', '[data-role="flat-gallery-toggle-fullscreen"]', function(event) {
+
+            event.preventDefault();
+
+            if (full.data('fgfull') === true) {
+
+                console.log('off');
+
+                jq('[data-role="flat-gallery-fullscreen"]').addClass('hidden');
+                jq('[data-role="flat-gallery-preview"]').removeClass('hidden');
+                full.data('fgfull', false);
+
+            } else {
+
+                console.log('on');
+
+                jq('[data-role="flat-gallery-fullscreen"]').removeClass('hidden');
+                jq('[data-role="flat-gallery-preview"]').addClass('hidden');
+                full.data('fgfull', true);
+            }
+        });
 
         body.on('click', '[data-role="flat-gallery-modal"]', function(event) {
 

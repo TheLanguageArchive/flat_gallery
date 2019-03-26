@@ -263,7 +263,7 @@ class FlatGallery
                     'id'           => $currentItem['id'],
                     'pid'          => $currentItem['pid'],
                     'filename'     => $currentItem['filename'],
-                    'viewer'       => '<img class="flat-gallery-basic-image" src="' . url('islandora/object/' . $currentItem['pid'] . '/datastream/OBJ/view') . '" />',
+                    'viewer'       => '<img class="flat-gallery-basic-image" data-role="flat-gallery-toggle-fullscreen" data-flat-gallery-fullscreen="false" src="' . url('islandora/object/' . $currentItem['pid'] . '/datastream/OBJ/view') . '" />',
                     'descriptions' => $currentItem['descriptions'],
                 ];
 
