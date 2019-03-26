@@ -25,7 +25,9 @@
         <?php foreach ($items as $item) : ?>
         <div class="flat-gallery-grid-column">
             <a title="<?php echo $item['filename']; ?>" href="<?php echo $item['url']; ?>" class="flat-gallery-thumbnail <?php echo $current['pid'] === $item['pid'] ? 'active' : ''; ?>">
-                <img src="<?php echo $item['thumbnail']; ?>" />
+                <div class="flat-gallery-thumbnail-container">
+                    <img src="<?php echo $item['thumbnail']; ?>" />
+                </div>
                 <div class="flat-gallery-caption">
                     <small class="flat-gallery-caption-filename"><?php echo $item['filename']; ?></small>
                 </div>

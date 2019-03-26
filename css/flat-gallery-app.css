@@ -1,5 +1,5 @@
 .flat-gallery-container {
-  max-width: 95vw;
+  max-width: 1800px;
   margin: 0 auto;
 }
 .center {
@@ -20,6 +20,12 @@
   padding-left: 15px;
   padding-right: 15px;
 }
+a.flat-gallery-thumbnail {
+  height: 200px;
+}
+.flat-gallery-thumbnail-container {
+  height: 160px;
+}
 .flat-gallery-thumbnail {
   display: block;
   padding: 4px;
@@ -32,8 +38,8 @@
   -o-transition: border 0.2s ease-in-out;
   transition: border 0.2s ease-in-out;
 }
-.flat-gallery-thumbnail > img,
-.flat-gallery-thumbnail a > img {
+.flat-gallery-thumbnail > .flat-gallery-thumbnail-container > img,
+.flat-gallery-thumbnail a > .flat-gallery-thumbnail-container > img {
   margin-right: auto;
   margin-left: auto;
 }
@@ -46,10 +52,11 @@ a.flat-gallery-thumbnail.active {
   padding: 9px;
   color: #2c3e50;
 }
-.flat-gallery-thumbnail > img,
-.flat-gallery-thumbnail a > img {
+.flat-gallery-thumbnail > .flat-gallery-thumbnail-container > img,
+.flat-gallery-thumbnail a > .flat-gallery-thumbnail-container > img {
   display: block;
   max-width: 100%;
+  max-height: 160px;
 }
 .flat-gallery-modal,
 .flat-gallery-modal-overlay,
@@ -57,7 +64,7 @@ a.flat-gallery-thumbnail.active {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 500;
+  z-index: 900;
   height: 100%;
   width: 100%;
 }
