@@ -11,7 +11,7 @@
         <div class="flat-gallery-modal-content-container">
             <a href="#" class="flat-gallery-modal-close" data-role="flat-gallery-modal-close"></a>
             <div class="flat-gallery-modal-content" data-role="flat-gallery-modal-content">
-                <iframe src="<?php echo $url; ?>"></iframe>
+                <iframe allowfullscreen="true" allow="fullscreen" src="<?php echo $url; ?>"></iframe>
             </div>
         </div>
     </div>
