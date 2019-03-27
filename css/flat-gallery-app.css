@@ -123,13 +123,12 @@ a.flat-gallery-thumbnail.active {
   position: absolute;
   right: 0;
 }
+.flat-gallery-basic-image {
+  cursor: pointer;
+}
 .flat-gallery-thumbnail > img.flat-gallery-basic-image {
   display: block;
   width: 100%;
-  /* position: absolute;
-  top: 0;
-  max-width: 100vw;
-  max-height: 100vh; */
 }
 .flat-gallery-caption-filename {
   display: block;

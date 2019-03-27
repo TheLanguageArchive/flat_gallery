@@ -9,21 +9,17 @@
 
             event.preventDefault();
 
-            if (full.data('fgfull') === true) {
-
-                console.log('off');
+            if (full.data('flat-gallery-fullscreen') === true) {
 
                 jq('[data-role="flat-gallery-fullscreen"]').addClass('hidden');
                 jq('[data-role="flat-gallery-preview"]').removeClass('hidden');
-                full.data('fgfull', false);
+                full.data('flat-gallery-fullscreen', false);
 
             } else {
 
-                console.log('on');
-
                 jq('[data-role="flat-gallery-fullscreen"]').removeClass('hidden');
                 jq('[data-role="flat-gallery-preview"]').addClass('hidden');
-                full.data('fgfull', true);
+                full.data('flat-gallery-fullscreen', true);
             }
         });
 

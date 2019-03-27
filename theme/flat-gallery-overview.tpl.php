@@ -4,9 +4,11 @@
  * FLAT Gallery overview template.
  */
 ?>
-<div class="flat-gallery-fullscreen hidden" data-role="flat-gallery-fullscreen">
-    <?php echo $current['viewer']; ?>
-</div>
+<?php if ($current['viewer_type'] === 'basic') : ?>
+    <div class="flat-gallery-fullscreen hidden" data-role="flat-gallery-fullscreen">
+        <?php echo $current['viewer']; ?>
+    </div>
+<?php endif; ?>
 <div class="flat-gallery" data-role="flat-gallery-preview">
     <div class="flat-gallery-preview-container">
         <h1><?php echo $islandora_object->label; ?> - media items</h1>

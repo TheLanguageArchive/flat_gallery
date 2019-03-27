@@ -250,6 +250,7 @@ class FlatGallery
                     'id'           => $currentItem['id'],
                     'pid'          => $current->id,
                     'filename'     => $currentItem['filename'],
+                    'viewer_type'  => 'large',
                     'viewer'       => $viewer,
                     'descriptions' => $currentItem['descriptions'],
                 ];
@@ -263,6 +264,7 @@ class FlatGallery
                     'id'           => $currentItem['id'],
                     'pid'          => $currentItem['pid'],
                     'filename'     => $currentItem['filename'],
+                    'viewer_type'  => 'basic',
                     'viewer'       => '<img class="flat-gallery-basic-image" data-role="flat-gallery-toggle-fullscreen" data-flat-gallery-fullscreen="false" src="' . url('islandora/object/' . $currentItem['pid'] . '/datastream/OBJ/view') . '" />',
                     'descriptions' => $currentItem['descriptions'],
                 ];
