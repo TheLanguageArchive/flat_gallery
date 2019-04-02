@@ -126,7 +126,7 @@ a.flat-gallery-thumbnail.active {
 .flat-gallery-basic-image {
   cursor: pointer;
 }
-.flat-gallery-thumbnail > img.flat-gallery-basic-image {
+.flat-gallery-thumbnail > div > img.flat-gallery-basic-image {
   display: block;
   width: 100%;
 }
@@ -139,4 +139,31 @@ a.flat-gallery-thumbnail.active {
 }
 .flat-gallery-viewer.flat-gallery-caption-filename {
   font-size: 10px;
+}
+.flat-gallery-nav {
+  cursor: pointer;
+}
+.flat-gallery-nav-prev {
+  background-image: url(../images/prev.png);
+  background-color: rgba(0, 0, 0, 0.6);
+  background-position-x: -10px;
+  background-repeat: no-repeat;
+  border-radius: 14px;
+  position: absolute;
+  top: 50vh;
+  left: 2vw;
+  width: 50px;
+  height: 50px;
+}
+.flat-gallery-nav-next {
+  background-image: url(../images/next.png);
+  background-color: rgba(0, 0, 0, 0.6);
+  background-position-x: 10px;
+  background-repeat: no-repeat;
+  border-radius: 14px;
+  position: absolute;
+  top: 50vh;
+  right: 2vw;
+  width: 50px;
+  height: 50px;
 }

@@ -8,44 +8,73 @@
         document.exitFullscreen = document.mozExitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
     }
 
+    if (!document.fullscreenElement) {
+        document.fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    }
+
     jq(function() {
 
-        var body   = jq('body');
-        var full   = jq('[data-role="flat-gallery-toggle-fullscreen"]');
-        var fullEl = jq('[data-role="flat-gallery-toggle-fullscreen"]:last').get(0);
+        if (Drupal.settings.islandora_open_seadragon_viewer) {
+
+            Drupal.settings.islandora_open_seadragon_viewer.addHandler('pre-full-screen', function(options) {
+                options.preventDefaultAction = true;
+            });
+        }
+
+        var body        = jq('body');
+        var fullscreen  = jq('[data-role="flat-gallery-toggle-fullscreen"]');
+        var navigation  = jq('[data-role="flat-gallery-nav"]');
+        var fullElement = fullscreen.get(0);
+
+        var exitHandler = function() {
+
+            if (null === document.fullscreenElement) {
+
+                navigation.addClass('hidden');
+                fullscreen.data('flat-gallery-fullscreen', false);
+            }
+        };
+
+        var fullscreenHandler = function() {
+
+            navigation.removeClass('hidden');
+            fullscreen.data('flat-gallery-fullscreen', true);
+        };
+
+        document.addEventListener('fullscreenchange', exitHandler);
+        document.addEventListener('webkitfullscreenchange', exitHandler);
+        document.addEventListener('mozfullscreenchange', exitHandler);
+        document.addEventListener('MSFullscreenChange', exitHandler);
 
         body.on('click', '[data-role="flat-gallery-toggle-fullscreen"]', function(event) {
 
             event.preventDefault();
 
-            if (full.data('flat-gallery-fullscreen') === true) {
+            if (fullscreen.data('flat-gallery-fullscreen') === true) {
 
                 if (document.exitFullscreen) {
-
                     document.exitFullscreen();
-
-                } else {
-
-                    jq('[data-role="flat-gallery-fullscreen"]').addClass('hidden');
-                    jq('[data-role="flat-gallery-preview"]').removeClass('hidden');
                 }
-
-                full.data('flat-gallery-fullscreen', false);
 
             } else {
 
-                if (fullEl.requestFullscreen) {
-
-                    fullEl.requestFullscreen();
-
-                } else {
-
-                    jq('[data-role="flat-gallery-fullscreen"]').removeClass('hidden');
-                    jq('[data-role="flat-gallery-preview"]').addClass('hidden');
+                if (fullElement.requestFullscreen) {
+                    fullElement.requestFullscreen().then(fullscreenHandler);
                 }
-
-                full.data('flat-gallery-fullscreen', true);
             }
+        });
+
+        body.on('click', '[data-role="flat-gallery-nav"] > div', function(event) {
+
+            // stopping propagation to allow
+            // listening to prev/next navigation
+            event.stopPropagation();
+            event.preventDefault();
+
+            var element = jq(this);
+            var which   = element.data('flat-gallery-nav');
+
+            console.log(which);
         });
 
         body.on('click', '[data-role="flat-gallery-modal"]', function(event) {
