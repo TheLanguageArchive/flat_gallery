@@ -31,6 +31,12 @@ function flat_gallery($object, $id = null) {
         ]);
     }
 
+    drupal_add_js([
+        'flat_gallery' => [
+            'images' => $items,
+        ],
+    ], 'setting');
+
     return theme('flat_gallery_overview', [
 
         'islandora_object' => $object,
@@ -41,6 +47,16 @@ function flat_gallery($object, $id = null) {
     ]);
 }
 
+function flat_gallery_fetch_large_image_ajax() {
+
+    $pid     = arg(2);
+    $id      = arg(3);
+    $object  = islandora_object_load($pid);
+
+    $solr    = new FlatGallerySolr();
+    $gallery = new FlatGallery($object, $solr, $id);
+}
+
 /**
  * Ajax callback method
  *
@@ -48,7 +64,7 @@ function flat_gallery($object, $id = null) {
  *
  * @return void
  */
-function flat_gallery_ajax($page_callback_result) {
+function flat_gallery_open_gallery_ajax($page_callback_result) {
 
     // Add CSS and JS files, add some markup
     $html = '<html><head><title></title>' . drupal_get_css() . drupal_get_js() . '</head><body>' . $page_callback_result . '</body></html>';
@@ -102,7 +118,15 @@ function flat_gallery_menu() {
         'page callback'     => 'flat_gallery',
         'page arguments'    => [2],
         'access callback'   => 'flat_gallery_menu_access',
-        'delivery callback' => 'flat_gallery_ajax',
+        'delivery callback' => 'flat_gallery_open_gallery_ajax',
+    ];
+
+    $items['islandora/object/%islandora_object/ig/li/%id'] = [
+
+        'title'             => 'FLAT Gallery',
+        'type'              => MENU_CALLBACK,
+        'page callback'     => 'flat_gallery',
+        'page arguments'    => [],
     ];
 
     $items['admin/config/flat_deposit/flat_gallery'] = [

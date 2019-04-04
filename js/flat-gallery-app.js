@@ -24,11 +24,23 @@
         var body        = jq('body');
         var fullscreen  = jq('[data-role="flat-gallery-toggle-fullscreen"]');
         var navigation  = jq('[data-role="flat-gallery-nav"]');
-        var fullElement = fullscreen.get(0);
+        var fullElement = jq('[data-role="flat-gallery-fullscreen"]');
 
         var exitHandler = function() {
 
             if (null === document.fullscreenElement) {
+
+                fullscreen
+                    .empty()
+                    .append(
+                        fullElement
+                            .find('[data-role="flat-gallery-toggle-fullscreen"]')
+                            .clone()
+                    );
+
+                fullElement
+                    .find('[data-role="flat-gallery-fullscreen-element"]')
+                    .empty();
 
                 navigation.addClass('hidden');
                 fullscreen.data('flat-gallery-fullscreen', false);
@@ -36,6 +48,11 @@
         };
 
         var fullscreenHandler = function() {
+
+            fullElement
+                .find('[data-role="flat-gallery-fullscreen-element"]')
+                .empty()
+                .append(fullscreen.clone())
 
             navigation.removeClass('hidden');
             fullscreen.data('flat-gallery-fullscreen', true);
@@ -58,8 +75,12 @@
 
             } else {
 
-                if (fullElement.requestFullscreen) {
-                    fullElement.requestFullscreen().then(fullscreenHandler);
+                if (fullElement.get(0).requestFullscreen) {
+
+                    fullElement
+                        .get(0)
+                        .requestFullscreen()
+                        .then(fullscreenHandler);
                 }
             }
         });
@@ -71,10 +92,56 @@
             event.stopPropagation();
             event.preventDefault();
 
-            var element = jq(this);
-            var which   = element.data('flat-gallery-nav');
+            var element    = jq(this);
+            var which      = element.data('flat-gallery-nav');
+            var fullscreen = jq('[data-role="flat-gallery-fullscreen"]');
+            var current    = fullscreen.data('flat-gallery-current-id');
 
-            console.log(which);
+            if (which === 'next' && typeof Drupal.settings.flat_gallery.images[current + 1] !== 'undefined') {
+
+                var next  = current + 1;
+                var image = Drupal.settings.flat_gallery.images[next];
+
+                fullscreen
+                    .data('flat-gallery-current-id', next)
+                    .find('[data-role="flat-gallery-fullscreen-element"] img')
+                    .attr('src', image.object);
+
+                // showing previous button
+                jq('[data-flat-gallery-nav="previous"]').removeClass('hidden');
+
+                if (typeof Drupal.settings.flat_gallery.images[next + 1] === 'undefined') {
+
+                    // no more new images, hiding next button
+                    jq('[data-flat-gallery-nav="next"]').addClass('hidden');
+
+                } else {
+                    jq('[data-flat-gallery-nav="next"]').removeClass('hidden');
+                }
+            }
+
+            if (which === 'previous' && typeof Drupal.settings.flat_gallery.images[current - 1] !== 'undefined') {
+
+                var previous = current - 1;
+                var image    = Drupal.settings.flat_gallery.images[previous];
+
+                fullscreen
+                    .data('flat-gallery-current-id', previous)
+                    .find('[data-role="flat-gallery-fullscreen-element"] img')
+                    .attr('src', image.object);
+
+                // showing next button
+                jq('[data-flat-gallery-nav="next"]').removeClass('hidden');
+
+                if (typeof Drupal.settings.flat_gallery.images[previous - 1] === 'undefined') {
+
+                    // no more new images, hiding previous button
+                    jq('[data-flat-gallery-nav="previous"]').addClass('hidden');
+
+                } else {
+                    jq('[data-flat-gallery-nav="previous"]').removeClass('hidden');
+                }
+            }
         });
 
         body.on('click', '[data-role="flat-gallery-modal"]', function(event) {

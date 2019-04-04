@@ -102,7 +102,7 @@ class FlatGallery
                     'filename'     => $result['filename'],
                     'thumbnail'    => $thumbnail,
                     'model'        => $model,
-                    'object'       => url('islandora/object/' . $this->object->id . '/datastream/OBJ/view'),
+                    'object'       => url('islandora/object/' . $result['pid'] . '/datastream/OBJ/view'),
                     'url'          => url('islandora/object/' . $this->object->id . '/ig/' . $id, ['query' => ['page' => $params['page']]]),
                     'descriptions' => (isset($labels[$result['pid']]) ? $labels[$result['pid']]['descriptions'] : []),
                 ];
@@ -266,7 +266,7 @@ class FlatGallery
                     'pid'          => $currentItem['pid'],
                     'filename'     => $currentItem['filename'],
                     'viewer_type'  => 'basic',
-                    'viewer'       => '<img class="flat-gallery-basic-image" src="' . url('islandora/object/' . $currentItem['pid'] . '/datastream/OBJ/view') . '" />',
+                    'viewer'       => '<img class="flat-gallery-basic-image" data-role="flat-gallery-toggle-fullscreen" data-flat-gallery-fullscreen="false" data-flat-gallery-id="' . $currentItem['id'] . '" src="' . url('islandora/object/' . $currentItem['pid'] . '/datastream/OBJ/view') . '" />',
                     'descriptions' => $currentItem['descriptions'],
                 ];
 
