@@ -53,12 +53,12 @@
 
         attach: function(context, settings) {
 
+            Drupal.FlatGallery.bindFullscreenMethods();
+            Drupal.FlatGallery.bindModal();
+
             if (typeof Drupal.settings.flat_gallery === 'undefined') {
                 return;
             }
-
-            Drupal.FlatGallery.bindFullscreenMethods();
-            Drupal.FlatGallery.bindModal();
 
             var flat_gallery_images = Drupal.settings.flat_gallery.images;
 
