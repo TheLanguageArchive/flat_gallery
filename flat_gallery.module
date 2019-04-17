@@ -52,6 +52,13 @@ function flat_gallery($object, $id = null) {
     ]);
 }
 
+/**
+ * Setting up openseadragon to allow for
+ * ajax fetching of this data
+ *
+ * @param array $image
+ * @return array
+ */
 function flat_gallery_setup_openseadragon($image) {
 
     if ($image['viewer_type'] !== 'large') {
@@ -75,14 +82,18 @@ function flat_gallery_setup_openseadragon($image) {
         'dsid'  => 'JP2',
     ];
 
-    $token_header = variable_get('islandora_openseadragon_tilesource', 'djatoka') == 'iiif'
-      && variable_get('islandora_openseadragon_iiif_token_header', FALSE);
+    $params['jp2_url'] = url('islandora/object/' . $params['pid'] . '/datastream/JP2/view', [
+
+        'absolute' => true,
+        'query'    => [
+            'token' => $params['token']
+        ],
+    ]);
 
     $openseadragon = [
-        'pid' => $params['pid'],
-        'tile_sources' => islandora_openseadragon_tile_source($params['pid'], $params['dsid'], $params['token']),
-        'token' => $params['token'],
-        'token_header' => $token_header,
+
+        'pid'          => $params['pid'],
+        'tile_sources' => islandora_openseadragon_identifier_tile_source($params['jp2_url']),
     ];
 
 
@@ -94,45 +105,17 @@ function flat_gallery_setup_openseadragon($image) {
     template_process_islandora_openseadragon_viewer($openseadragon);
 
     return $openseadragon;
-
-    // islandora_openseadragon_callback($params, $image['object']);
-
-    // module_load_include('inc', 'islandora_openseadragon', 'includes/utilities');
-
-    // $object       = $image['object'];
-    // $library_path = libraries_get_path('openseadragon');
-    // $id           = 'islandora-openseadragon';
-    // $token        = islandora_get_object_token($object->id, 'JP2', 2);
-    // $tile_sources = islandora_openseadragon_tile_source($object->id, 'JP2', $token);
-    // $token_header = variable_get('islandora_openseadragon_tilesource', 'djatoka') == 'iiif'
-    //                 && variable_get('islandora_openseadragon_iiif_token_header', false);
-
-    // $openseadragon = [
-
-    //     'pid'                  => $object->id,
-    //     'imageServer'          => variable_get('islandora_openseadragon_tilesource', 'djatoka'),
-    //     'djatokaServerBaseURL' => url(variable_get('islandora_openseadragon_djatoka_url', 'adore-djatoka/resolver'), ['absolute' => true]),
-    //     'iiifServerBaseURL'    => url(variable_get('islandora_openseadragon_iiif_url', 'iiif')),
-    //     'fitToAspectRatio'     => variable_get('islandora_openseadragon_fit_to_aspect_ratio', false),
-    //     'options'              => [
-    //         'id'          => $id,
-    //         'prefixUrl'   => file_create_url("{$library_path}/images/"),
-    //         'tileSources' => $tile_sources,
-    //         'overlays'    => islandora_openseadragon_viewer_query_solr_for_overlays($object->id),
-    //     ] + islandora_openseadragon_get_settings(),
-    // ];
-
-    // if ($token_header) {
-
-    //     $openseadragon['options']['loadTilesWithAjax'] = true;
-    //     $openseadragon['options']['ajaxHeaders'] = [
-    //         'X-ISLANDORA-TOKEN' => $token,
-    //     ];
-    // }
-
-    return $openseadragon;
 }
 
+/**
+ * Fetching large image data via ajax
+ *
+ * @param AbstractObject $object
+ * @param string $ig
+ * @param string $ajax
+ * @param int $id
+ * @return array|false
+ */
 function flat_gallery_fetch_large_image_ajax($object, $ig, $ajax, $id) {
 
     module_load_include('inc', 'flat_gallery', 'includes/FlatGallery');
