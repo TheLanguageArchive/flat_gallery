@@ -55,7 +55,14 @@ function flat_gallery($object, $id = null) {
 function flat_gallery_setup_openseadragon($image) {
 
     if ($image['viewer_type'] !== 'large') {
-        return null;
+
+        return [
+            'settings' => [
+                'options' => [
+                    'id' => 'islandora-openseadragon-new',
+                ],
+            ],
+        ];
     }
 
     module_load_include('inc', 'islandora_openseadragon', 'theme/theme');

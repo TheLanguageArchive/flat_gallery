@@ -53,6 +53,10 @@
 
         attach: function(context, settings) {
 
+            if (typeof Drupal.settings.flat_gallery === 'undefined') {
+                return;
+            }
+
             Drupal.FlatGallery.bindFullscreenMethods();
             Drupal.FlatGallery.bindModal();
 
@@ -122,6 +126,10 @@
                 };
 
                 var disconnectViewer = function(base) {
+
+                    if (typeof Drupal.IslandoraOpenSeadragonViewer === 'undefined') {
+                        return;
+                    }
 
                     var baseEl = jq(base);
                     baseEl.removeData();
