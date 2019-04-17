@@ -83,13 +83,15 @@ class FlatGallery
 
                 if (is_array($result['models']) && in_array('islandora:sp_large_image_cmodel', $result['models'])) {
 
-                    $thumbnail = url('islandora/object/' . $result['pid'] . '/datastream/JPG/view');
-                    $model     = 'islandora:sp_large_image_cmodel';
+                    $thumbnail   = url('islandora/object/' . $result['pid'] . '/datastream/JPG/view');
+                    $model       = 'islandora:sp_large_image_cmodel';
+                    $viewer_type = 'large';
 
                 } elseif (is_array($result['models']) && in_array('islandora:sp_basic_image', $result['models'])) {
 
-                    $thumbnail = url('islandora/object/' . $result['pid'] . '/datastream/MEDIUM_SIZE/view');
-                    $model     = 'islandora:sp_basic_image';
+                    $thumbnail   = url('islandora/object/' . $result['pid'] . '/datastream/MEDIUM_SIZE/view');
+                    $model       = 'islandora:sp_basic_image';
+                    $viewer_type = 'basic';
 
                 } else {
                     continue;
@@ -102,6 +104,7 @@ class FlatGallery
                     'filename'     => $result['filename'],
                     'thumbnail'    => $thumbnail,
                     'model'        => $model,
+                    'viewer_type'  => $viewer_type,
                     'object'       => url('islandora/object/' . $result['pid'] . '/datastream/OBJ/view'),
                     'url'          => url('islandora/object/' . $this->object->id . '/ig/' . $id, ['query' => ['page' => $params['page']]]),
                     'descriptions' => (isset($labels[$result['pid']]) ? $labels[$result['pid']]['descriptions'] : []),
@@ -227,32 +230,18 @@ class FlatGallery
             }
 
             $currentItem = $items[$id];
+            $current     = islandora_object_load($currentItem['pid']);
 
             if ($currentItem['model'] === 'islandora:sp_large_image_cmodel') {
-
-                // if model is a large image, load openseadragon
-                $current = islandora_object_load($currentItem['pid']);
-                $token   = islandora_get_object_token($current->id, 'JP2', 2);
-                $params  = [
-
-                    'jp2_url' => url('islandora/object/' . $current->id . '/datastream/JP2/view', [
-
-                        'absolute' => true,
-                        'query'    => [
-                            'token' => $token,
-                        ],
-                    ]),
-                ];
-
-                $viewer = islandora_get_viewer($params, 'islandora_large_image_viewers', $current);
 
                 $this->current = [
 
                     'id'           => $currentItem['id'],
                     'pid'          => $current->id,
+                    'object'       => $current,
                     'filename'     => $currentItem['filename'],
                     'viewer_type'  => 'large',
-                    'viewer'       => $viewer,
+                    'viewer'       => '<div id="islandora-openseadragon-new" class="islandora-openseadragon"></div>',
                     'descriptions' => $currentItem['descriptions'],
                 ];
 
@@ -264,6 +253,7 @@ class FlatGallery
 
                     'id'           => $currentItem['id'],
                     'pid'          => $currentItem['pid'],
+                    'object'       => $current,
                     'filename'     => $currentItem['filename'],
                     'viewer_type'  => 'basic',
                     'viewer'       => '<img class="flat-gallery-basic-image" data-role="flat-gallery-toggle-fullscreen" data-flat-gallery-fullscreen="false" data-flat-gallery-id="' . $currentItem['id'] . '" src="' . url('islandora/object/' . $currentItem['pid'] . '/datastream/OBJ/view') . '" />',

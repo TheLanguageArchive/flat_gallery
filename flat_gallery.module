@@ -32,9 +32,14 @@ function flat_gallery($object, $id = null) {
     }
 
     drupal_add_js([
+
         'flat_gallery' => [
-            'images' => $items,
+
+            'url'           => url('islandora/object/' . $object->id . '/ig/ajax'),
+            'images'        => $items,
+            'openseadragon' => flat_gallery_setup_openseadragon($current)['settings'],
         ],
+
     ], 'setting');
 
     return theme('flat_gallery_overview', [
@@ -47,14 +52,96 @@ function flat_gallery($object, $id = null) {
     ]);
 }
 
-function flat_gallery_fetch_large_image_ajax() {
+function flat_gallery_setup_openseadragon($image) {
 
-    $pid     = arg(2);
-    $id      = arg(3);
-    $object  = islandora_object_load($pid);
+    if ($image['viewer_type'] !== 'large') {
+        return null;
+    }
+
+    module_load_include('inc', 'islandora_openseadragon', 'theme/theme');
+    module_load_include('inc', 'islandora_openseadragon', 'includes/utilities');
+
+    $params = [
+
+        'token' => islandora_get_object_token($image['object']->id, 'JP2', 2),
+        'pid'   => $image['object']->id,
+        'dsid'  => 'JP2',
+    ];
+
+    $token_header = variable_get('islandora_openseadragon_tilesource', 'djatoka') == 'iiif'
+      && variable_get('islandora_openseadragon_iiif_token_header', FALSE);
+
+    $openseadragon = [
+        'pid' => $params['pid'],
+        'tile_sources' => islandora_openseadragon_tile_source($params['pid'], $params['dsid'], $params['token']),
+        'token' => $params['token'],
+        'token_header' => $token_header,
+    ];
+
+
+    template_preprocess_islandora_openseadragon_viewer($openseadragon);
+
+    $openseadragon['id'] = $openseadragon['id'] . '-new';
+    $openseadragon['settings']['options']['id'] = $openseadragon['id'];
+
+    template_process_islandora_openseadragon_viewer($openseadragon);
+
+    return $openseadragon;
+
+    // islandora_openseadragon_callback($params, $image['object']);
+
+    // module_load_include('inc', 'islandora_openseadragon', 'includes/utilities');
+
+    // $object       = $image['object'];
+    // $library_path = libraries_get_path('openseadragon');
+    // $id           = 'islandora-openseadragon';
+    // $token        = islandora_get_object_token($object->id, 'JP2', 2);
+    // $tile_sources = islandora_openseadragon_tile_source($object->id, 'JP2', $token);
+    // $token_header = variable_get('islandora_openseadragon_tilesource', 'djatoka') == 'iiif'
+    //                 && variable_get('islandora_openseadragon_iiif_token_header', false);
+
+    // $openseadragon = [
+
+    //     'pid'                  => $object->id,
+    //     'imageServer'          => variable_get('islandora_openseadragon_tilesource', 'djatoka'),
+    //     'djatokaServerBaseURL' => url(variable_get('islandora_openseadragon_djatoka_url', 'adore-djatoka/resolver'), ['absolute' => true]),
+    //     'iiifServerBaseURL'    => url(variable_get('islandora_openseadragon_iiif_url', 'iiif')),
+    //     'fitToAspectRatio'     => variable_get('islandora_openseadragon_fit_to_aspect_ratio', false),
+    //     'options'              => [
+    //         'id'          => $id,
+    //         'prefixUrl'   => file_create_url("{$library_path}/images/"),
+    //         'tileSources' => $tile_sources,
+    //         'overlays'    => islandora_openseadragon_viewer_query_solr_for_overlays($object->id),
+    //     ] + islandora_openseadragon_get_settings(),
+    // ];
+
+    // if ($token_header) {
+
+    //     $openseadragon['options']['loadTilesWithAjax'] = true;
+    //     $openseadragon['options']['ajaxHeaders'] = [
+    //         'X-ISLANDORA-TOKEN' => $token,
+    //     ];
+    // }
+
+    return $openseadragon;
+}
+
+function flat_gallery_fetch_large_image_ajax($object, $ig, $ajax, $id) {
+
+    module_load_include('inc', 'flat_gallery', 'includes/FlatGallery');
+    module_load_include('inc', 'flat_gallery', 'includes/FlatGallerySolr');
 
     $solr    = new FlatGallerySolr();
     $gallery = new FlatGallery($object, $solr, $id);
+    $current = $gallery->getCurrentItem();
+
+    if (false === $current) {
+        return false;
+    }
+
+    $data = flat_gallery_setup_openseadragon($current);
+
+    return $data['settings'];
 }
 
 /**
@@ -121,12 +208,22 @@ function flat_gallery_menu() {
         'delivery callback' => 'flat_gallery_open_gallery_ajax',
     ];
 
-    $items['islandora/object/%islandora_object/ig/li/%id'] = [
+    $items['islandora/object/%islandora_object/ig/li/%'] = [
 
         'title'             => 'FLAT Gallery',
         'type'              => MENU_CALLBACK,
         'page callback'     => 'flat_gallery',
         'page arguments'    => [],
+    ];
+
+    $items['islandora/object/%islandora_object/ig/ajax/%'] = [
+
+        'title'             => 'FLAT Gallery',
+        'type'              => MENU_CALLBACK,
+        'page callback'     => 'flat_gallery_fetch_large_image_ajax',
+        'page arguments'    => [2, 3, 4, 5],
+        'access callback'   => 'flat_gallery_menu_access',
+        'delivery callback' => 'drupal_json_output',
     ];
 
     $items['admin/config/flat_deposit/flat_gallery'] = [

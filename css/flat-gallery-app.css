@@ -149,6 +149,7 @@ a.flat-gallery-thumbnail.active {
   left: 2vw;
   width: 50px;
   height: 50px;
+  z-index: 10;
 }
 .flat-gallery-nav-next {
   background-image: url(../images/next.png);
@@ -161,4 +162,11 @@ a.flat-gallery-thumbnail.active {
   right: 2vw;
   width: 50px;
   height: 50px;
+  z-index: 10;
+}
+.flat-gallery-openseadragon-fullscreen {
+  margin: 0px;
+  padding: 0px;
+  height: 100% !important;
+  width: 100% !important;
 }
