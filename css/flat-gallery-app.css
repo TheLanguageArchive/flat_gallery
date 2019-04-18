@@ -96,6 +96,11 @@ a.flat-gallery-thumbnail.active {
   top: 2vh;
   opacity: 0;
   overflow-y: scroll;
+  transition: opacity linear 0.8s 0s;
+}
+.fade-to {
+  opacity: 1;
+  transition: opacity linear 0.8s 0s;
 }
 .flat-gallery-modal-content {
   background: white;

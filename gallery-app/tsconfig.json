@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "outDir": "./build",
+        "allowJs": false,
+        "target": "es5",
+        "lib": ["es5", "es6", "dom"],
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "typeRoots": ["node_modules/@types", "./src/typings"],
+        "baseUrl": "./src/",
+        "paths": {
+            "@fg-apps/*": ["apps/*"],
+            "@fg-models/*": ["models/*"],
+            "@fg-services/*": ["services/*"],
+            "@fg-exceptions/*": ["exceptions/*"],
+            "@fg-events/*": ["events/*"]
+        }
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}
