@@ -5,6 +5,8 @@ import App from "@fg-apps/app";
 
 export default class ModalApp implements App {
 
+    action() {}
+
     run() {
 
         EventManager.add(new ModalOpenEvent());

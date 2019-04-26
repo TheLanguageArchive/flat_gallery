@@ -1,5 +1,5 @@
 import { Application } from "./application";
-import Settings from "@fg-services/settings";
+import Settings, { DefaultSettings } from "@fg-services/settings";
 
 (function (jq, Drupal) {
 

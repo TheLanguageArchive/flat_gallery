@@ -1,9 +1,9 @@
-import Event from "@fg-events/event";
+import { Event as CustomEvent } from "@fg-events/event";
 import ModalTemplate from "@fg-models/modal-template";
 import ServiceLocator from "@fg-services/locator";
 import { ModalSettings } from "@fg-services/settings";
 
-export default class ModalOpenEvent implements Event {
+export default class ModalOpenEvent implements CustomEvent {
 
     type: string;
     target: EventTarget;
@@ -16,7 +16,7 @@ export default class ModalOpenEvent implements Event {
         this.target     = document;
     }
 
-    listener(event) {
+    listener(event: Event) {
 
         let target = (event.target as Element);
         if (target.getAttribute('data-role') === 'flat-gallery-modal') {

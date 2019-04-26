@@ -9,6 +9,6 @@ export default function FixFullscreenCompatibility() {
     }
 
     if (!document.fullscreenElement) {
-        document.fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+        document.fullscreenElement = document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
     }
 }

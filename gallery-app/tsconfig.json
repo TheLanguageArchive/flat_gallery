@@ -9,11 +9,13 @@
         "typeRoots": ["node_modules/@types", "./src/typings"],
         "baseUrl": "./src/",
         "paths": {
+            "@fg-application": ["application"],
             "@fg-apps/*": ["apps/*"],
             "@fg-models/*": ["models/*"],
             "@fg-services/*": ["services/*"],
             "@fg-exceptions/*": ["exceptions/*"],
-            "@fg-events/*": ["events/*"]
+            "@fg-events/*": ["events/*"],
+            "@fg-animations/*": ["animations/*"]
         }
     },
     "include": [

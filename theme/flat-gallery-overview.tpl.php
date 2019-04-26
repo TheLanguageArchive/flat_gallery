@@ -4,7 +4,7 @@
  * FLAT Gallery overview template.
  */
 ?>
-<div class="flat-gallery-fullscreen" data-role="flat-gallery-fullscreen" data-flat-gallery-current-id="<?php echo $current['id']; ?>">
+<div class="flat-gallery-fullscreen" data-role="flat-gallery-fullscreen">
     <div class="flat-gallery-nav hidden" data-role="flat-gallery-nav">
         <div class="flat-gallery-nav-prev" data-flat-gallery-nav="previous"></div>
         <div class="flat-gallery-nav-next" data-flat-gallery-nav="next"></div>
@@ -16,9 +16,9 @@
         <h1><?php echo $islandora_object->label; ?> - media items</h1>
         <div class="flat-gallery-thumbnail">
             <?php if (false !== $current) : ?>
-                <div data-role="flat-gallery-viewer"><?php echo $current['viewer']; ?></div>
+                <div class="flat-gallery-viewer" data-role="flat-gallery-viewer"><?php echo $current['viewer']; ?></div>
                 <div class="flat-gallery-caption">
-                    <small class="flat-gallery-viewer flat-gallery-caption-filename"><?php echo $current['filename']; ?></small>
+                    <small class="flat-gallery-caption-filename"><?php echo $current['filename']; ?></small>
                     <?php foreach ($current['descriptions'] as $description) : ?>
                         <h4><?php echo $description; ?></h4>
                     <?php endforeach; ?>

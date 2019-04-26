@@ -4,7 +4,7 @@ import Navigation from "@fg-services/navigation";
 import { Application } from "@fg-application";
 import LoadImageAction from "@fg-apps/viewer/actions/load-image";
 
-export default class NavigationPreviousEvent implements CustomEvent {
+export default class KeyboardPreviousEvent implements CustomEvent {
 
     type: string;
     target: EventTarget;
@@ -14,18 +14,18 @@ export default class NavigationPreviousEvent implements CustomEvent {
 
     constructor() {
 
-        this.type        = 'click';
+        this.type        = 'keyup';
         this.useCapture  = false;
         this.target      = document;
         this.application = ServiceLocator.get('app') as Application;
         this.navigation  = ServiceLocator.get('navigation') as Navigation;
     }
 
-    listener(event: Event) {
+    listener(event: KeyboardEvent) {
 
-        let target = (event.target as Element);
+        let keyboard = event.which || event.keyCode || 0;
 
-        if (target.hasAttribute('data-flat-gallery-nav') && target.getAttribute('data-flat-gallery-nav') === 'previous') {
+        if (keyboard === 37) {
 
             event.preventDefault();
 

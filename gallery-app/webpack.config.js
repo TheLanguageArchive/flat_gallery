@@ -20,7 +20,7 @@ module.exports = {
     mode: 'development',
     entry: "./src/index.ts",
     output: {
-        filename: "../../js/flat-gallery-app-new.js",
+        filename: "../../js/flat-gallery-app.js",
     },
 
     // enable sourcemaps for debugging webpack's output.

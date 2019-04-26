@@ -5,6 +5,9 @@ import ViewerApp from "@fg-apps/viewer";
 import ModalApp from "@fg-apps/modal";
 import App from "@fg-apps/app";
 import Navigation from "@fg-services/navigation";
+import Action from "@fg-apps/viewer/actions/action";
+import Animation from "@fg-animations/animation";
+import FadeOutAnimation from "@fg-animations/fade-out";
 
 export class Application {
 
@@ -29,7 +32,9 @@ export class Application {
 
     if (true === isDefaultSettings(settings.flat_gallery)) {
 
-      ServiceLocator.set('navigation', new Navigation((settings.flat_gallery as DefaultSettings).images));
+      let default_settings = (settings.flat_gallery as DefaultSettings);
+
+      ServiceLocator.set('navigation', new Navigation(default_settings.current_id, default_settings.images));
       this.apps.push(new ViewerApp());
     }
   }
@@ -40,6 +45,13 @@ export class Application {
 
     this.apps.forEach((app) => {
       app.run();
+    });
+  }
+
+  action(action: Action) {
+
+    this.apps.forEach((app) => {
+      app.action(action);
     });
   }
 }

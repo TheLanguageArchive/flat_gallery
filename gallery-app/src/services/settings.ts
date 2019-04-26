@@ -51,7 +51,18 @@ export interface OptionsIdSettings {
     };
 }
 
+export interface FedoraSettings {
+
+    pid: string;
+    label: string;
+    fetch_large_image_url: string;
+}
+
 export interface DefaultSettings {
+
+    fedora: FedoraSettings;
+
+    current_id: number;
 
     /**
      * Flat Gallery sends us either an array of images
@@ -78,8 +89,9 @@ export interface ModalSettings {
     url: string;
 }
 
-export interface OpenseadragonViewer {
+export interface OpenseadragonInstance {
     addHandler: (event: string, handler: (options: {[k: string]: any}) => any) => any
+    buttons: any;
 }
 
 /**
@@ -92,7 +104,7 @@ export interface Settings {
 
     flat_gallery: DefaultSettings | ModalSettings | null | undefined;
 
-    islandora_open_seadragon_viewer: OpenseadragonViewer | null | undefined;
+    islandora_open_seadragon_viewer: OpenseadragonInstance | null | undefined;
 }
 
 export function isModalSettings(item: any): item is ModalSettings {

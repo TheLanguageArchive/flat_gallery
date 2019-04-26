@@ -124,6 +124,26 @@ class FlatGallery
      */
     public function getLabels()
     {
+        return [
+            'lat:12345_1ab1bacc_af76_45e0_8fcb_3e5356665b09' => [
+                'id' => 0,
+                'pid' => 'lat:12345_1ab1bacc_af76_45e0_8fcb_3e5356665b09',
+                'descriptions' => [
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
+                ],
+            ],
+
+            'lat:12345_800cb815_5748_44da_b223_9d013b48f301' => [
+                'id' => 1,
+                'pid' => 'lat:12345_800cb815_5748_44da_b223_9d013b48f301',
+                'descriptions' => [
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
+                ],
+            ],
+        ];
+
         if ($this->labels !== null) {
             return $this->labels;
         }
@@ -313,13 +333,13 @@ class FlatGallery
         if (false !== $previous) {
 
             // we found a previous item
-            $links['previous'] = $this->generateNavigationLink('Previous', $previous['id'], ['page' => $params['page']]);
+            $links['previous'] = $this->generateNavigationLink('Previous', $previous['id'], ['page' => $params['page']], 'previous');
         }
 
         if (false === $previous && $params['page'] > 0) {
 
             // first item on the page, let's use the link to go the previous page
-            $links['previous'] = $this->generateNavigationLink('Previous', (variable_get('flat_gallery_pagination_limit', FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT) - 1), ['page' => $params['page'] - 1]);
+            $links['previous'] = $this->generateNavigationLink('Previous', (variable_get('flat_gallery_pagination_limit', FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT) - 1), ['page' => $params['page'] - 1], 'previous');
         }
 
         if (!isset($links['previous'])) {
@@ -331,7 +351,7 @@ class FlatGallery
         if (false !== $next) {
 
             // next item found
-            $links['next'] = $this->generateNavigationLink('Next', $next['id'], ['page' => $params['page']]);
+            $links['next'] = $this->generateNavigationLink('Next', $next['id'], ['page' => $params['page']], 'next');
         }
 
         if (false === $next) {
@@ -343,7 +363,7 @@ class FlatGallery
             if ($params['page'] < ($pages - 1)) {
 
                 // we have a next page
-                $links['next'] = $this->generateNavigationLink('Next', 0, ['page' => $params['page'] + 1]);
+                $links['next'] = $this->generateNavigationLink('Next', 0, ['page' => $params['page'] + 1], 'next');
             }
         }
 
@@ -365,9 +385,24 @@ class FlatGallery
      *
      * @return string
      */
-    public function generateNavigationLink(string $label, $id = false, $params = []): string
+    public function generateNavigationLink(string $label, $id = false, $params = [], $nav = false): string
     {
-        return (false === $id ? $label : l(decode_entities($label), 'islandora/object/' . $this->object->id . '/ig/' . $id, ['query' => $params]));
+        $params = [
+            'query' => $params,
+        ];
+
+        if (false !== $nav) {
+
+            $params['attributes'] = [
+                'data-flat-gallery-nav' => $nav,
+            ];
+        }
+
+        return (false === $id ? $label : l(
+            decode_entities($label),
+            'islandora/object/' . $this->object->id . '/ig/' . $id,
+            $params
+        ));
     }
 
     /**

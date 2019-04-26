@@ -102,6 +102,10 @@ a.flat-gallery-thumbnail.active {
   opacity: 1;
   transition: opacity linear 0.8s 0s;
 }
+.fade-out {
+  opacity: 0;
+  transition: opacity linear 0.8s 0s;
+}
 .flat-gallery-modal-content {
   background: white;
   padding: 0.5em 1em;
@@ -129,6 +133,7 @@ a.flat-gallery-thumbnail.active {
 .flat-gallery-thumbnail > div > img.flat-gallery-basic-image {
   display: block;
   width: 100%;
+  max-height: 510px;
 }
 .flat-gallery-caption-filename {
   display: block;
@@ -136,9 +141,24 @@ a.flat-gallery-thumbnail.active {
   overflow: hidden;
   -o-text-overflow: ellipsis;
      text-overflow: ellipsis;
-}
-.flat-gallery-viewer.flat-gallery-caption-filename {
   font-size: 10px;
+}
+.flat-gallery-viewer {
+  height: 510px;
+}
+.flat-gallery-viewer-caption {
+  color: white;
+  font-size: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  height: 70px;
+  width: 100%;
+  bottom: 0;
+  position: fixed;
+  text-align: center;
+  padding-top: 16px;
+}
+.flat-gallery-viewer-caption span {
+  display: block;
 }
 .flat-gallery-nav {
   cursor: pointer;
@@ -168,6 +188,10 @@ a.flat-gallery-thumbnail.active {
   width: 50px;
   height: 50px;
   z-index: 10;
+}
+.disabled-link {
+  color: inherit;
+  cursor: default;
 }
 .flat-gallery-openseadragon-fullscreen {
   margin: 0px;

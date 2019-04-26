@@ -1,5 +1,3 @@
-import Navigation from "@fg-services/navigation";
-
 interface Element {
     mozRequestFullscreen(options?: FullscreenOptions): Promise<void>;
     webkitRequestFullscreen(options?: FullscreenOptions): Promise<void>;
@@ -15,8 +13,4 @@ interface Document {
     webkitFullscreenElement: Element | null;
     mozFullScreenElement: Element | null;
     msFullscreenElement: Element | null;
-}
-
-interface Window {
-    Navigation: Navigation
 }

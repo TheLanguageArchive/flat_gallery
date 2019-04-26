@@ -1,6 +1,6 @@
-import Event from "@fg-events/event";
+import { Event as CustomEvent } from "@fg-events/event";
 
-export default class ModalCloseEvent implements Event {
+export default class ModalCloseEvent implements CustomEvent {
 
     type: string;
     target: EventTarget;
@@ -13,7 +13,7 @@ export default class ModalCloseEvent implements Event {
         this.target     = document;
     }
 
-    listener(event) {
+    listener(event: Event) {
 
         let target = (event.target as Element);
 

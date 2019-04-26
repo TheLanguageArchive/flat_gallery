@@ -1,3 +1,5 @@
+import { FedoraModel } from "./fedora-model";
+
 /**
  * This interface defines which property an Image object
  * is supposed to have.
@@ -5,7 +7,7 @@
  * @author  Ibrahim Abdullah <ibrahim.abdullah@mpi.nl>
  * @package Flat Gallery
  */
-export default class Image {
+export class Image {
 
   /**
    * ID refers to the position inside the gallery
@@ -34,7 +36,7 @@ export default class Image {
    * This is to identify what kind of image we are
    * displaying, which can be of type {FedoraModel}
    */
-  model: string;
+  model: FedoraModel;
 
   /**
    * This is the absolute uri to the location of the
@@ -52,3 +54,5 @@ export default class Image {
    */
   descriptions: string[];
 }
+
+export default Image;
