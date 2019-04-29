@@ -33,6 +33,7 @@ export default class OpenseadragonViewModel {
                     if (false === this.fullscreen) {
                         this.requestFullscreen();
                     } else {
+
                         // calling document.exitFullscreen instead of this.leaveFullscreen
                         // because listeners on fullscreenchange already call it
                         document.exitFullscreen();
@@ -55,7 +56,6 @@ export default class OpenseadragonViewModel {
 
     fullscreenChange() {
 
-        console.log(document.fullscreenElement);
         if (null == document.fullscreenElement) {
 
             // exiting fullscreen

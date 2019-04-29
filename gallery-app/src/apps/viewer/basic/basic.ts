@@ -26,9 +26,9 @@ export default class BasicViewModel {
             return;
         }
 
-        document.addEventListener('click', this.enterFullscreen.bind(this));
+        document.addEventListener('click', this.toggleFullscreen.bind(this));
 
-        let fullscreenchange = this.leaveFullscreen.bind(this);
+        let fullscreenchange = this.fullscreenChange.bind(this);
 
         document.addEventListener('fullscreenchange', fullscreenchange);
         document.addEventListener('webkitfullscreenchange', fullscreenchange);
@@ -38,29 +38,55 @@ export default class BasicViewModel {
         this.eventsBound = true;
     }
 
-    enterFullscreen(event: Event) {
+    fullscreenChange() {
+
+        if (null == document.fullscreenElement) {
+
+            // exiting fullscreen
+            this.leaveFullscreen();
+
+        } else {
+
+            // entering fullscreen
+            this.enterFullscreen();
+        }
+    }
+
+    requestFullscreen() {
+
+        if (true === this.fullscreen) {
+            return;
+        }
+
+        this.fullscreen = true;
+
+        let fullscreenRequestElement = document.querySelector('[data-role="flat-gallery-fullscreen"]');
+        fullscreenRequestElement.requestFullscreen();
+    }
+
+    toggleFullscreen() {
 
         let target = (event.target as Element);
         if (target.getAttribute('data-role') === 'flat-gallery-toggle-fullscreen') {
 
-            if (true === this.fullscreen) {
-                return;
+            if (false === this.fullscreen) {
+                this.requestFullscreen();
+            } else {
+
+                // calling document.exitFullscreen instead of this.leaveFullscreen
+                // because listeners on fullscreenchange already call it
+                document.exitFullscreen();
             }
-
-            this.fullscreen = true;
-            let fullscreenRequestElement = document.querySelector('[data-role="flat-gallery-fullscreen"]');
-
-            fullscreenRequestElement
-                .requestFullscreen()
-                .then(() => {
-
-                    let navigation = ServiceLocator.get('navigation') as Navigation;
-                    navigation.show();
-                    navigation.render();
-
-                    this.renderImage(navigation.current());
-                });
         }
+    }
+
+    enterFullscreen() {
+
+        let navigation = ServiceLocator.get('navigation') as Navigation;
+        navigation.show();
+        navigation.render();
+
+        this.renderImage(navigation.current());
     }
 
     leaveFullscreen() {

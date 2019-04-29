@@ -318,32 +318,50 @@ var BasicViewModel = /** @class */ (function () {
         if (navigation.current().model !== fedora_model_1.FedoraModel.Basic) {
             return;
         }
-        document.addEventListener('click', this.enterFullscreen.bind(this));
-        var fullscreenchange = this.leaveFullscreen.bind(this);
+        document.addEventListener('click', this.toggleFullscreen.bind(this));
+        var fullscreenchange = this.fullscreenChange.bind(this);
         document.addEventListener('fullscreenchange', fullscreenchange);
         document.addEventListener('webkitfullscreenchange', fullscreenchange);
         document.addEventListener('mozfullscreenchange', fullscreenchange);
         document.addEventListener('MSFullscreenChange', fullscreenchange);
         this.eventsBound = true;
     };
-    BasicViewModel.prototype.enterFullscreen = function (event) {
-        var _this = this;
+    BasicViewModel.prototype.fullscreenChange = function () {
+        if (null == document.fullscreenElement) {
+            // exiting fullscreen
+            this.leaveFullscreen();
+        }
+        else {
+            // entering fullscreen
+            this.enterFullscreen();
+        }
+    };
+    BasicViewModel.prototype.requestFullscreen = function () {
+        if (true === this.fullscreen) {
+            return;
+        }
+        this.fullscreen = true;
+        var fullscreenRequestElement = document.querySelector('[data-role="flat-gallery-fullscreen"]');
+        fullscreenRequestElement.requestFullscreen();
+    };
+    BasicViewModel.prototype.toggleFullscreen = function () {
         var target = event.target;
         if (target.getAttribute('data-role') === 'flat-gallery-toggle-fullscreen') {
-            if (true === this.fullscreen) {
-                return;
+            if (false === this.fullscreen) {
+                this.requestFullscreen();
             }
-            this.fullscreen = true;
-            var fullscreenRequestElement = document.querySelector('[data-role="flat-gallery-fullscreen"]');
-            fullscreenRequestElement
-                .requestFullscreen()
-                .then(function () {
-                var navigation = locator_1.default.get('navigation');
-                navigation.show();
-                navigation.render();
-                _this.renderImage(navigation.current());
-            });
+            else {
+                // calling document.exitFullscreen instead of this.leaveFullscreen
+                // because listeners on fullscreenchange already call it
+                document.exitFullscreen();
+            }
         }
+    };
+    BasicViewModel.prototype.enterFullscreen = function () {
+        var navigation = locator_1.default.get('navigation');
+        navigation.show();
+        navigation.render();
+        this.renderImage(navigation.current());
     };
     BasicViewModel.prototype.leaveFullscreen = function () {
         var navigation = locator_1.default.get('navigation');
@@ -607,7 +625,6 @@ var OpenseadragonViewModel = /** @class */ (function () {
         document.addEventListener('MSFullscreenChange', fullscreenchange);
     };
     OpenseadragonViewModel.prototype.fullscreenChange = function () {
-        console.log(document.fullscreenElement);
         if (null == document.fullscreenElement) {
             // exiting fullscreen
             this.leaveFullscreen();
