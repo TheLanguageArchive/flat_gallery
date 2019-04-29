@@ -373,11 +373,13 @@ var BasicViewModel = /** @class */ (function () {
                 captionsElement.appendChild(captionElement);
             });
         }
-        if (true === this.fullscreen) {
-            viewerElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        if (null === document.fullscreenElement) {
+            viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+            this.fullscreen = false;
         }
         else {
-            viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+            viewerElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+            this.fullscreen = true;
         }
         while (viewerElement.lastChild) {
             viewerElement.removeChild(viewerElement.lastChild);
