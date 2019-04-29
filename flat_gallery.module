@@ -63,9 +63,9 @@ function flat_gallery_prepare_settings_js($object, $items, $current_image) {
             'openseadragon' => flat_gallery_setup_openseadragon($current_image),
             'fedora'        => [
 
-                'pid'                   => $object->id,
-                'label'                 => $object->label,
-                'fetch_large_image_url' => url('islandora/object/' . $object->id . '/ig/ajax'),
+                'pid'      => $object->id,
+                'label'    => $object->label,
+                'base_url' => url('islandora/object/' . $object->id . '/ig'),
             ],
         ],
     ], 'setting');

@@ -13,7 +13,7 @@
 </div>
 <div class="flat-gallery">
     <div class="flat-gallery-preview-container">
-        <h1><?php echo $islandora_object->label; ?> - media items</h1>
+        <h1><?php echo $islandora_object->label; ?></h1>
         <div class="flat-gallery-thumbnail">
             <?php if (false !== $current) : ?>
                 <div class="flat-gallery-viewer" data-role="flat-gallery-viewer"><?php echo $current['viewer']; ?></div>
@@ -28,7 +28,7 @@
     </div>
     <div class="flat-gallery-container">
         <div class="center">
-            <span><?php echo implode(' | ', $navigationLinks); ?></span>
+            <span data-role="flat-gallery-nav-textual"><?php echo implode(' | ', $navigationLinks); ?></span>
         </div>
         <hr />
         <div class="flat-gallery-grid">

@@ -8,6 +8,7 @@ import Navigation from "@fg-services/navigation";
 import Action from "@fg-apps/viewer/actions/action";
 import Animation from "@fg-animations/animation";
 import FadeOutAnimation from "@fg-animations/fade-out";
+import LinkGenerator from "@fg-services/link-generator";
 
 export class Application {
 
@@ -33,8 +34,11 @@ export class Application {
     if (true === isDefaultSettings(settings.flat_gallery)) {
 
       let default_settings = (settings.flat_gallery as DefaultSettings);
+      let navigation       = new Navigation(default_settings.current_id, default_settings.images);
 
-      ServiceLocator.set('navigation', new Navigation(default_settings.current_id, default_settings.images));
+      ServiceLocator.set('link-generator', new LinkGenerator(navigation, default_settings.fedora.base_url));
+      ServiceLocator.set('navigation', navigation);
+
       this.apps.push(new ViewerApp());
     }
   }

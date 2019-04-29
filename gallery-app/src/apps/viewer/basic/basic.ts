@@ -6,14 +6,21 @@ import Image from "@fg-models/image";
 export default class BasicViewModel {
 
     private fullscreen: boolean;
+    private eventsBound: boolean;
 
     constructor() {
-        this.fullscreen = false;
+
+        this.fullscreen  = false;
+        this.eventsBound = false;
     }
 
     setup() {
 
-        let navigation   = (ServiceLocator.get('navigation') as Navigation);
+        if (true === this.eventsBound) {
+            return;
+        }
+
+        let navigation = (ServiceLocator.get('navigation') as Navigation);
 
         if (navigation.current().model !== FedoraModel.Basic) {
             return;
@@ -27,6 +34,8 @@ export default class BasicViewModel {
         document.addEventListener('webkitfullscreenchange', fullscreenchange);
         document.addEventListener('mozfullscreenchange', fullscreenchange);
         document.addEventListener('MSFullscreenChange', fullscreenchange);
+
+        this.eventsBound = true;
     }
 
     enterFullscreen(event: Event) {
@@ -94,21 +103,6 @@ export default class BasicViewModel {
 
         captionsElement.classList.add('hidden');
 
-        if (image.descriptions.length > 0) {
-
-            captionsElement.classList.remove('hidden');
-            captionsElement.classList.add('flat-gallery-viewer-caption');
-            captionsElement.setAttribute('data-role', 'flat-gallery-captions');
-
-            image.descriptions.forEach((description) => {
-
-                let captionElement = document.createElement('span');
-                captionElement.textContent = description;
-
-                captionsElement.appendChild(captionElement);
-            });
-        }
-
         if (null === document.fullscreenElement) {
 
             viewerElement   = document.querySelector('[data-role="flat-gallery-viewer"]');
@@ -122,6 +116,21 @@ export default class BasicViewModel {
 
         while (viewerElement.lastChild) {
             viewerElement.removeChild(viewerElement.lastChild);
+        }
+
+        if (image.descriptions.length > 0 && true === this.fullscreen) {
+
+            captionsElement.classList.remove('hidden');
+            captionsElement.classList.add('flat-gallery-viewer-caption');
+            captionsElement.setAttribute('data-role', 'flat-gallery-captions');
+
+            image.descriptions.forEach((description) => {
+
+                let captionElement = document.createElement('span');
+                captionElement.textContent = description;
+
+                captionsElement.appendChild(captionElement);
+            });
         }
 
         viewerElement.appendChild(imageElement);

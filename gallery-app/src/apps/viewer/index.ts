@@ -10,8 +10,14 @@ import KeyboardPreviousEvent from "@fg-events/navigation/keyboard-previous";
 import BasicViewer from "@fg-apps/viewer/basic";
 import Action from "@fg-apps/viewer/actions/action";
 import MouseMoveEvent from "@fg-events/navigation/mouse-move";
+import LoadImageAction from "./actions/load-image";
+import ServiceLocator from "@fg-services/locator";
+import LinkGenerator from "@fg-services/link-generator";
+import NavTextualViewModel from "@fg-apps/viewer/nav-textual";
 
 export default class ViewerApp implements App {
+
+    private navTextual: NavTextualViewModel;
 
     private viewers: Viewer[] = [
 
@@ -28,6 +34,8 @@ export default class ViewerApp implements App {
         EventManager.add(new KeyboardNextEvent());
         EventManager.add(new KeyboardPreviousEvent());
         EventManager.add(new MouseMoveEvent());
+
+        this.navTextual = new NavTextualViewModel(ServiceLocator.get('link-generator') as LinkGenerator);
     }
 
     run() {
@@ -40,6 +48,10 @@ export default class ViewerApp implements App {
     }
 
     action(action: Action) {
+
+        if (action instanceof LoadImageAction) {
+            this.navTextual.render();
+        }
 
         this.viewers.forEach((viewer: Viewer) => {
             viewer.action(action);

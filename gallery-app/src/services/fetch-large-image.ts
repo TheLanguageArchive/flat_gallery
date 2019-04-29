@@ -4,7 +4,7 @@ import ServiceLocator from "./locator";
 
 export default async function FetchLargeImage(image: Image) {
 
-  let url      = (ServiceLocator.get('settings') as DefaultSettings).fedora.fetch_large_image_url;
+  let url      = (ServiceLocator.get('settings') as DefaultSettings).fedora.base_url + '/ajax';
   let response = await fetch(`${url}/${image.id}`);
 
   return await response.json();

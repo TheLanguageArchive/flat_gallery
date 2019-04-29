@@ -55,7 +55,7 @@ export interface FedoraSettings {
 
     pid: string;
     label: string;
-    fetch_large_image_url: string;
+    base_url: string;
 }
 
 export interface DefaultSettings {

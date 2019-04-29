@@ -24,6 +24,15 @@ export default class Navigation {
         return this.images[this.id];
     }
 
+    getNextImage() {
+
+        if (false === this.nextImageAvailable()) {
+            return false;
+        }
+
+        return this.images[this.id + 1];
+    }
+
     nextImageAvailable() {
         return null != this.images[this.id + 1];
     }
@@ -37,6 +46,15 @@ export default class Navigation {
         this.id += 1;
 
         return this.images[this.id];
+    }
+
+    getPreviousImage() {
+
+        if (false === this.previousImageAvailable()) {
+            return false;
+        }
+
+        return this.images[this.id - 1];
     }
 
     previousImageAvailable() {
