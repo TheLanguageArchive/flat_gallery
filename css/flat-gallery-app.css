@@ -134,7 +134,7 @@ a.flat-gallery-thumbnail.active {
 .flat-gallery-basic-image {
   cursor: pointer;
 }
-.flat-gallery-thumbnail > div > img.flat-gallery-basic-image {
+.flat-gallery-thumbnail img.flat-gallery-basic-image {
   display: block;
   width: 100%;
   max-height: 510px;

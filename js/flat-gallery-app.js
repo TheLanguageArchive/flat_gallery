@@ -313,6 +313,9 @@ var BasicViewModel = /** @class */ (function () {
         this.eventsBound = false;
     }
     BasicViewModel.prototype.setup = function () {
+        if (null != document.fullscreenElement) {
+            this.fullscreen = true;
+        }
         if (true === this.eventsBound) {
             return;
         }
