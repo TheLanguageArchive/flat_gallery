@@ -381,14 +381,18 @@ var BasicViewModel = /** @class */ (function () {
             this.renderViewerImage(image);
         }
     };
-    BasicViewModel.prototype.renderFullscreenImage = function (image) {
-        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+    BasicViewModel.prototype.renderImage = function (image) {
         var imageElement = document.createElement('img');
-        var captionsElement = fullscreen_captions_template_1.default(image);
         imageElement.setAttribute('data-role', 'flat-gallery-toggle-fullscreen');
         imageElement.setAttribute('data-flat-gallery-id', image.id.toString());
         imageElement.setAttribute('src', image.object);
         imageElement.classList.add('flat-gallery-basic-image');
+        return imageElement;
+    };
+    BasicViewModel.prototype.renderFullscreenImage = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        var captionsElement = fullscreen_captions_template_1.default(image);
+        var imageElement = this.renderImage(image);
         while (fullscreenElement.lastChild) {
             fullscreenElement.removeChild(fullscreenElement.lastChild);
         }
@@ -400,7 +404,7 @@ var BasicViewModel = /** @class */ (function () {
     BasicViewModel.prototype.renderViewerImage = function (image) {
         var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
         var viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
-        var imageElement = document.querySelector('[data-role="flat-gallery-toggle-fullscreen"]');
+        var imageElement = this.renderImage(image);
         var viewer = viewer_template_1.default(imageElement, image);
         while (viewerElement.lastChild) {
             viewerElement.removeChild(viewerElement.lastChild);
@@ -596,6 +600,7 @@ var fetch_large_image_1 = __webpack_require__(/*! @fg-services/fetch-large-image
 var fedora_model_1 = __webpack_require__(/*! @fg-models/fedora-model */ "./src/models/fedora-model.ts");
 var viewer_template_1 = __webpack_require__(/*! @fg-models/viewer-template */ "./src/models/viewer-template.ts");
 var fullscreen_captions_template_1 = __webpack_require__(/*! @fg-models/fullscreen-captions-template */ "./src/models/fullscreen-captions-template.ts");
+var viewer_captions_template_1 = __webpack_require__(/*! @fg-models/viewer-captions-template */ "./src/models/viewer-captions-template.ts");
 var OpenseadragonViewModel = /** @class */ (function () {
     function OpenseadragonViewModel(base) {
         this.base = '#' + base;
@@ -654,20 +659,9 @@ var OpenseadragonViewModel = /** @class */ (function () {
     };
     OpenseadragonViewModel.prototype.enterFullscreen = function () {
         var navigation = locator_1.default.get('navigation');
-        var image = navigation.current();
         navigation.show();
         navigation.render();
-        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-        var openseadragonElement = document.querySelector(this.base);
-        while (fullscreenElement.lastChild) {
-            fullscreenElement.removeChild(fullscreenElement.lastChild);
-        }
-        fullscreenElement.appendChild(openseadragonElement);
-        openseadragonElement.classList.add('flat-gallery-openseadragon-fullscreen');
-        var captionsElement = fullscreen_captions_template_1.default(image);
-        if (false !== captionsElement) {
-            fullscreenElement.appendChild(captionsElement);
-        }
+        this.renderFullscreenElement(navigation.current());
     };
     OpenseadragonViewModel.prototype.leaveFullscreen = function () {
         var navigation = locator_1.default.get('navigation');
@@ -675,18 +669,7 @@ var OpenseadragonViewModel = /** @class */ (function () {
         if (null == document.fullscreenElement && true === this.fullscreen && image.model === fedora_model_1.FedoraModel.Large) {
             this.fullscreen = false;
             navigation.hide();
-            var viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
-            var openseadragonElement = document.querySelector(this.base);
-            while (viewerElement.lastChild) {
-                viewerElement.removeChild(viewerElement.lastChild);
-            }
-            openseadragonElement.classList.remove('flat-gallery-openseadragon-fullscreen');
-            var viewer = viewer_template_1.default(openseadragonElement, image);
-            viewerElement.appendChild(viewer);
-            var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-            while (fullscreenElement.lastChild) {
-                fullscreenElement.removeChild(fullscreenElement.lastChild);
-            }
+            this.renderViewerElement(image);
         }
     };
     OpenseadragonViewModel.prototype.create = function (image) {
@@ -698,6 +681,11 @@ var OpenseadragonViewModel = /** @class */ (function () {
             Drupal.IslandoraOpenSeadragonViewer[_this.base] = new Drupal.IslandoraOpenSeadragonViewer(_this.base, settings);
             locator_1.default.set('openseadragon', Drupal.settings.islandora_open_seadragon_viewer);
             _this.setup();
+            // if (false === this.fullscreen) {
+            //     this.renderViewerCaptions(image);
+            // } else {
+            //     this.renderFullscreenCaptions(image);
+            // }
         });
     };
     OpenseadragonViewModel.prototype.cleanBaseElement = function () {
@@ -705,6 +693,8 @@ var OpenseadragonViewModel = /** @class */ (function () {
             return;
         }
         var viewerElement = null;
+        var captionsElement = null;
+        var image = locator_1.default.get('navigation').current();
         var baseElement = document.querySelector(this.base);
         var newBaseElement = document.createElement('div');
         newBaseElement.setAttribute('id', this.base.substring(1)); // removing # from base name
@@ -712,13 +702,15 @@ var OpenseadragonViewModel = /** @class */ (function () {
         if (null == document.fullscreenElement) {
             // out of fullscreen
             viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+            captionsElement = viewer_captions_template_1.default(image);
             this.fullscreen = false;
         }
         else {
             // inside fullscreen
-            viewerElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-            newBaseElement.classList.add('flat-gallery-openseadragon-fullscreen');
             this.fullscreen = true;
+            viewerElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+            captionsElement = fullscreen_captions_template_1.default(image);
+            newBaseElement.classList.add('flat-gallery-openseadragon-fullscreen');
         }
         if (null != baseElement) {
             // removing current baseElement
@@ -730,8 +722,49 @@ var OpenseadragonViewModel = /** @class */ (function () {
         }
         // and adding new base element
         viewerElement.appendChild(newBaseElement);
+        // and adding captions
+        if (false !== captionsElement) {
+            viewerElement.appendChild(captionsElement);
+        }
         // finally removing it from cache
         delete Drupal.IslandoraOpenSeadragonViewer[this.base];
+    };
+    OpenseadragonViewModel.prototype.renderFullscreenElement = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        var openseadragonElement = document.querySelector(this.base);
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
+        }
+        fullscreenElement.appendChild(openseadragonElement);
+        openseadragonElement.classList.add('flat-gallery-openseadragon-fullscreen');
+        this.renderFullscreenCaptions(image);
+    };
+    OpenseadragonViewModel.prototype.renderViewerElement = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        var viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+        var openseadragonElement = document.querySelector(this.base);
+        while (viewerElement.lastChild) {
+            viewerElement.removeChild(viewerElement.lastChild);
+        }
+        openseadragonElement.classList.remove('flat-gallery-openseadragon-fullscreen');
+        viewerElement.appendChild(viewer_template_1.default(openseadragonElement, image));
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
+        }
+    };
+    OpenseadragonViewModel.prototype.renderFullscreenCaptions = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        var captionsElement = fullscreen_captions_template_1.default(image);
+        if (false !== captionsElement) {
+            fullscreenElement.appendChild(captionsElement);
+        }
+    };
+    OpenseadragonViewModel.prototype.renderViewerCaptions = function (image) {
+        var viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+        var captionsElement = viewer_captions_template_1.default(image);
+        if (false !== captionsElement) {
+            viewerElement.appendChild(captionsElement);
+        }
     };
     return OpenseadragonViewModel;
 }());
@@ -1184,10 +1217,10 @@ exports.default = ModalTemplate;
 
 /***/ }),
 
-/***/ "./src/models/viewer-template.ts":
-/*!***************************************!*\
-  !*** ./src/models/viewer-template.ts ***!
-  \***************************************/
+/***/ "./src/models/viewer-captions-template.ts":
+/*!************************************************!*\
+  !*** ./src/models/viewer-captions-template.ts ***!
+  \************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1205,22 +1238,56 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * @return Element
  */
-var ViewerTemplate = function (view, image) {
-    var template = "\n        <div class=\"flat-gallery-caption\" data-role=\"flat-gallery-viewer-captions\">\n            <small class=\"flat-gallery-caption-filename\">" + image.filename + "</small>\n    ";
+var ViewerCaptionsTemplate = function (image) {
     if (image.descriptions.length > 0) {
+        var template_1 = "\n            <div class=\"flat-gallery-caption\">\n                <small class=\"flat-gallery-caption-filename\">" + image.filename + "</small>\n        ";
         image.descriptions.forEach(function (description) {
-            template += "<h4>" + description + "</h4>";
+            template_1 += "<h4>" + description + "</h4>";
         });
+        template_1 += '</div>';
+        var element = document.createElement('div');
+        element.innerHTML = template_1.trim();
+        return element.firstChild;
     }
-    template += '</div>';
+    return false;
+};
+exports.default = ViewerCaptionsTemplate;
+
+
+/***/ }),
+
+/***/ "./src/models/viewer-template.ts":
+/*!***************************************!*\
+  !*** ./src/models/viewer-template.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var viewer_captions_template_1 = __webpack_require__(/*! ./viewer-captions-template */ "./src/models/viewer-captions-template.ts");
+/**
+ * Creating captions from template
+ *
+ * @author  Ibrahim Abdullah <ibrahim.abdullah@mpi.nl>
+ * @package Flat Gallery
+ */
+/**
+ * @param url string
+ *
+ * @return Element
+ */
+var ViewerTemplate = function (view, image) {
     var element = document.createElement('div');
     var viewer = document.createElement('div');
+    var captions = viewer_captions_template_1.default(image);
     viewer.classList.add('flat-gallery-viewer');
     viewer.appendChild(view);
-    var captions = document.createElement('div');
-    captions.innerHTML = template.trim();
     element.appendChild(viewer);
-    element.appendChild(captions.firstChild);
+    if (false !== captions) {
+        element.appendChild(captions);
+    }
     return element;
 };
 exports.default = ViewerTemplate;

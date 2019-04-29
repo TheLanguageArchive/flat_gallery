@@ -6,6 +6,7 @@ import FetchLargeImage from "@fg-services/fetch-large-image";
 import { FedoraModel } from "@fg-models/fedora-model";
 import ViewerTemplate from "@fg-models/viewer-template";
 import FullscreenCaptionsTemplate from "@fg-models/fullscreen-captions-template";
+import ViewerCaptionsTemplate from "@fg-models/viewer-captions-template";
 
 export default class OpenseadragonViewModel {
 
@@ -91,25 +92,10 @@ export default class OpenseadragonViewModel {
     enterFullscreen() {
 
         let navigation = ServiceLocator.get('navigation') as Navigation;
-        let image      = navigation.current();
         navigation.show();
         navigation.render();
 
-        let fullscreenElement    = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-        let openseadragonElement = document.querySelector(this.base);
-
-        while (fullscreenElement.lastChild) {
-            fullscreenElement.removeChild(fullscreenElement.lastChild);
-        }
-
-        fullscreenElement.appendChild(openseadragonElement);
-        openseadragonElement.classList.add('flat-gallery-openseadragon-fullscreen');
-
-        let captionsElement = FullscreenCaptionsTemplate(image);
-
-        if (false !== captionsElement) {
-            fullscreenElement.appendChild(captionsElement);
-        }
+        this.renderFullscreenElement(navigation.current());
     }
 
     leaveFullscreen() {
@@ -122,24 +108,7 @@ export default class OpenseadragonViewModel {
             this.fullscreen = false;
 
             navigation.hide();
-
-            let viewerElement        = document.querySelector('[data-role="flat-gallery-viewer"]');
-            let openseadragonElement = document.querySelector(this.base);
-
-            while (viewerElement.lastChild) {
-                viewerElement.removeChild(viewerElement.lastChild);
-            }
-
-            openseadragonElement.classList.remove('flat-gallery-openseadragon-fullscreen');
-
-            let viewer = ViewerTemplate(openseadragonElement, image);
-            viewerElement.appendChild(viewer);
-
-            let fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-
-            while (fullscreenElement.lastChild) {
-                fullscreenElement.removeChild(fullscreenElement.lastChild);
-            }
+            this.renderViewerElement(image);
         }
     }
 
@@ -156,6 +125,12 @@ export default class OpenseadragonViewModel {
                 ServiceLocator.set('openseadragon', Drupal.settings.islandora_open_seadragon_viewer);
 
                 this.setup();
+
+                // if (false === this.fullscreen) {
+                //     this.renderViewerCaptions(image);
+                // } else {
+                //     this.renderFullscreenCaptions(image);
+                // }
             });
     }
 
@@ -165,9 +140,11 @@ export default class OpenseadragonViewModel {
             return;
         }
 
-        let viewerElement  = null;
-        let baseElement    = document.querySelector(this.base);
-        let newBaseElement = document.createElement('div');
+        let viewerElement   = null;
+        let captionsElement = null;
+        let image           = (ServiceLocator.get('navigation') as Navigation).current();
+        let baseElement     = document.querySelector(this.base);
+        let newBaseElement  = document.createElement('div');
 
         newBaseElement.setAttribute('id', this.base.substring(1)); // removing # from base name
         newBaseElement.classList.add('islandora-openseadragon');
@@ -175,17 +152,19 @@ export default class OpenseadragonViewModel {
         if (null == document.fullscreenElement) {
 
             // out of fullscreen
-            viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+            viewerElement   = document.querySelector('[data-role="flat-gallery-viewer"]');
+            captionsElement = ViewerCaptionsTemplate(image);
 
             this.fullscreen = false;
 
         } else {
 
             // inside fullscreen
-            viewerElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-            newBaseElement.classList.add('flat-gallery-openseadragon-fullscreen');
-
             this.fullscreen = true;
+            viewerElement   = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+            captionsElement = FullscreenCaptionsTemplate(image);
+
+            newBaseElement.classList.add('flat-gallery-openseadragon-fullscreen');
         }
 
         if (null != baseElement) {
@@ -202,7 +181,66 @@ export default class OpenseadragonViewModel {
         // and adding new base element
         viewerElement.appendChild(newBaseElement);
 
+        // and adding captions
+        if (false !== captionsElement) {
+            viewerElement.appendChild(captionsElement);
+        }
+
         // finally removing it from cache
         delete Drupal.IslandoraOpenSeadragonViewer[this.base];
+    }
+
+    renderFullscreenElement(image: Image) {
+
+        let fullscreenElement    = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        let openseadragonElement = document.querySelector(this.base);
+
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
+        }
+
+        fullscreenElement.appendChild(openseadragonElement);
+        openseadragonElement.classList.add('flat-gallery-openseadragon-fullscreen');
+
+        this.renderFullscreenCaptions(image);
+    }
+
+    renderViewerElement(image: Image) {
+
+        let fullscreenElement    = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        let viewerElement        = document.querySelector('[data-role="flat-gallery-viewer"]');
+        let openseadragonElement = document.querySelector(this.base);
+
+        while (viewerElement.lastChild) {
+            viewerElement.removeChild(viewerElement.lastChild);
+        }
+
+        openseadragonElement.classList.remove('flat-gallery-openseadragon-fullscreen');
+
+        viewerElement.appendChild(ViewerTemplate(openseadragonElement, image));
+
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
+        }
+    }
+
+    renderFullscreenCaptions(image: Image) {
+
+        let fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        let captionsElement   = FullscreenCaptionsTemplate(image);
+
+        if (false !== captionsElement) {
+            fullscreenElement.appendChild(captionsElement);
+        }
+    }
+
+    renderViewerCaptions(image: Image) {
+
+        let viewerElement   = document.querySelector('[data-role="flat-gallery-viewer"]');
+        let captionsElement = ViewerCaptionsTemplate(image);
+
+        if (false !== captionsElement) {
+            viewerElement.appendChild(captionsElement);
+        }
     }
 }

@@ -130,7 +130,6 @@ class FlatGallery
                 'pid' => 'lat:12345_cdb3e493_499a_4bc9_9999_dc5c8baf2b97',
                 'descriptions' => [
                     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
                 ],
             ],
 

@@ -1,4 +1,5 @@
 import Image from "@fg-models/image";
+import ViewerCaptionsTemplate from "./viewer-captions-template";
 
 /**
  * Creating captions from template
@@ -13,31 +14,18 @@ import Image from "@fg-models/image";
  */
 const ViewerTemplate = (view: Element, image: Image) : Node => {
 
-    let template = `
-        <div class="flat-gallery-caption" data-role="flat-gallery-viewer-captions">
-            <small class="flat-gallery-caption-filename">${image.filename}</small>
-    `;
+    let element  = document.createElement('div');
+    let viewer   = document.createElement('div');
+    let captions = ViewerCaptionsTemplate(image);
 
-    if (image.descriptions.length > 0) {
-
-        image.descriptions.forEach((description) => {
-            template += `<h4>${description}</h4>`;
-        });
-    }
-
-    template += '</div>';
-
-    let element = document.createElement('div');
-
-    let viewer  = document.createElement('div');
     viewer.classList.add('flat-gallery-viewer');
     viewer.appendChild(view);
 
-    let captions = document.createElement('div');
-    captions.innerHTML = template.trim();
-
     element.appendChild(viewer);
-    element.appendChild(captions.firstChild);
+
+    if (false !== captions) {
+        element.appendChild(captions);
+    }
 
     return element;
 };

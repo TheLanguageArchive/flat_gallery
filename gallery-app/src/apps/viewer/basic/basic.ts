@@ -115,16 +115,22 @@ export default class BasicViewModel {
         }
     }
 
-    renderFullscreenImage(image: Image) {
+    renderImage(image: Image) {
 
-        let fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-        let imageElement      = document.createElement('img');
-        let captionsElement   = FullscreenCaptionsTemplate(image);
-
+        let imageElement = document.createElement('img');
         imageElement.setAttribute('data-role', 'flat-gallery-toggle-fullscreen');
         imageElement.setAttribute('data-flat-gallery-id', image.id.toString());
         imageElement.setAttribute('src', image.object);
         imageElement.classList.add('flat-gallery-basic-image');
+
+        return imageElement;
+    }
+
+    renderFullscreenImage(image: Image) {
+
+        let fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        let captionsElement   = FullscreenCaptionsTemplate(image);
+        let imageElement      = this.renderImage(image);
 
         while (fullscreenElement.lastChild) {
             fullscreenElement.removeChild(fullscreenElement.lastChild);
@@ -141,7 +147,7 @@ export default class BasicViewModel {
 
         let fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
         let viewerElement     = document.querySelector('[data-role="flat-gallery-viewer"]');
-        let imageElement      = document.querySelector('[data-role="flat-gallery-toggle-fullscreen"]');
+        let imageElement      = this.renderImage(image);
         let viewer            = ViewerTemplate(imageElement, image);
 
         while (viewerElement.lastChild) {
