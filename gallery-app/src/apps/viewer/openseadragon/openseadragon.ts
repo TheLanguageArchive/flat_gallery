@@ -31,7 +31,7 @@ export default class OpenseadragonViewModel {
                 button.addHandler('click', (options) => {
 
                     if (false === this.fullscreen) {
-                        this.enterFullscreen();
+                        this.requestFullscreen();
                     } else {
                         // calling document.exitFullscreen instead of this.leaveFullscreen
                         // because listeners on fullscreenchange already call it
@@ -45,7 +45,7 @@ export default class OpenseadragonViewModel {
             options.preventDefaultAction = true;
         });
 
-        let fullscreenchange = this.leaveFullscreen.bind(this);
+        let fullscreenchange = this.fullscreenChange.bind(this);
 
         document.addEventListener('fullscreenchange', fullscreenchange);
         document.addEventListener('webkitfullscreenchange', fullscreenchange);
@@ -53,40 +53,55 @@ export default class OpenseadragonViewModel {
         document.addEventListener('MSFullscreenChange', fullscreenchange);
     }
 
-    enterFullscreen() {
+    fullscreenChange() {
+
+        console.log(document.fullscreenElement);
+        if (null == document.fullscreenElement) {
+
+            // exiting fullscreen
+            this.leaveFullscreen();
+
+        } else {
+
+            // entering fullscreen
+            this.enterFullscreen();
+        }
+    }
+
+    requestFullscreen() {
 
         if (true === this.fullscreen) {
             return;
         }
 
         this.fullscreen = true;
+
         let fullscreenRequestElement = document.querySelector('[data-role="flat-gallery-fullscreen"]');
+        fullscreenRequestElement.requestFullscreen();
+    }
 
-        fullscreenRequestElement
-            .requestFullscreen()
-            .then(() => {
+    enterFullscreen() {
 
-                let fullscreenElement    = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-                let openseadragonElement = document.querySelector(this.base);
+        let fullscreenElement    = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        let openseadragonElement = document.querySelector(this.base);
 
-                while (fullscreenElement.lastChild) {
-                    fullscreenElement.removeChild(fullscreenElement.lastChild);
-                }
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
+        }
 
-                fullscreenElement.appendChild(openseadragonElement);
-                openseadragonElement.classList.add('flat-gallery-openseadragon-fullscreen');
+        fullscreenElement.appendChild(openseadragonElement);
+        openseadragonElement.classList.add('flat-gallery-openseadragon-fullscreen');
 
-                let navigation = ServiceLocator.get('navigation') as Navigation;
-                navigation.show();
-                navigation.render();
-            });
+        let navigation = ServiceLocator.get('navigation') as Navigation;
+        navigation.show();
+        navigation.render();
     }
 
     leaveFullscreen() {
 
         let navigation = ServiceLocator.get('navigation') as Navigation;
 
-        if (null === document.fullscreenElement && true === this.fullscreen && navigation.current().model === FedoraModel.Large) {
+        if (null == document.fullscreenElement && true === this.fullscreen && navigation.current().model === FedoraModel.Large) {
 
             this.fullscreen = false;
 
@@ -133,7 +148,7 @@ export default class OpenseadragonViewModel {
         newBaseElement.setAttribute('id', this.base.substring(1)); // removing # from base name
         newBaseElement.classList.add('islandora-openseadragon');
 
-        if (null === document.fullscreenElement) {
+        if (null == document.fullscreenElement) {
 
             // out of fullscreen
             viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');

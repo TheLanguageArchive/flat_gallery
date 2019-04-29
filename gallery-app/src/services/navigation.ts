@@ -132,7 +132,7 @@ export default class Navigation {
 
     stopHidingNavigation() {
 
-        if (null === document.fullscreenElement) {
+        if (null == document.fullscreenElement) {
 
             // out of fullscreen
             return;

@@ -1,7 +1,7 @@
 import { Application } from "./application";
 import Settings, { DefaultSettings } from "@fg-services/settings";
 
-(function (jq, Drupal) {
+(function (jq, Drupal, document, Element) {
 
     Drupal.behaviors.FlatGalleryNew = {
 

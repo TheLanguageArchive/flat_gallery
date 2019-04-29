@@ -67,7 +67,7 @@ export default class BasicViewModel {
 
         let navigation = ServiceLocator.get('navigation') as Navigation;
 
-        if (null === document.fullscreenElement && true === this.fullscreen && navigation.current().model === FedoraModel.Basic) {
+        if (null == document.fullscreenElement && true === this.fullscreen && navigation.current().model === FedoraModel.Basic) {
 
             this.fullscreen = false;
 
@@ -103,7 +103,7 @@ export default class BasicViewModel {
 
         captionsElement.classList.add('hidden');
 
-        if (null === document.fullscreenElement) {
+        if (null == document.fullscreenElement) {
 
             viewerElement   = document.querySelector('[data-role="flat-gallery-viewer"]');
             this.fullscreen = false;

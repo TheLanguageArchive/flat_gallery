@@ -1,14 +1,38 @@
 export default function FixFullscreenCompatibility() {
 
-    if (!Element.prototype.requestFullscreen) {
-        Element.prototype.requestFullscreen = Element.prototype.mozRequestFullscreen || Element.prototype.webkitRequestFullscreen || Element.prototype.msRequestFullscreen;
+  if (typeof document.fullscreenElement == 'undefined') {
+
+    Object.defineProperty(document, 'fullscreenElement', {
+      get() {
+        if (typeof document.mozFullScreenElement != 'undefined') {
+          return document.mozFullScreenElement;
+        }
+
+        if (typeof document.webkitFullscreenElement != 'undefined') {
+          return document.webkitFullscreenElement;
+        }
+
+        if (typeof document.msFullscreenElement != 'undefined') {
+          return document.msFullscreenElement;
+        }
+
+        return undefined;
+      }
+    });
+  }
+
+  if (typeof Element.prototype.requestFullscreen == 'undefined') {
+
+    if (typeof Element.prototype.mozRequestFullscreen != 'undefined') {
+      Element.prototype.requestFullscreen = Element.prototype.mozRequestFullscreen;
     }
 
-    if (!document.exitFullscreen) {
-        document.exitFullscreen = document.mozExitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+    if (typeof Element.prototype.webkitRequestFullscreen != 'undefined') {
+      Element.prototype.requestFullscreen = Element.prototype.webkitRequestFullscreen;
     }
 
-    if (!document.fullscreenElement) {
-        document.fullscreenElement = document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    if (typeof Element.prototype.msRequestFullscreen != 'undefined') {
+      Element.prototype.requestFullscreen = Element.prototype.msRequestFullscreen;
     }
+  }
 }

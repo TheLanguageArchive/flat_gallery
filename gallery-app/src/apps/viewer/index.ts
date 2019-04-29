@@ -1,4 +1,3 @@
-import FixFullscreenCompatibility from "@fg-services/fullscreen";
 import App from "@fg-apps/app";
 import Viewer from "@fg-apps/viewer/viewer";
 import OpenseadragonViewer from "./openseadragon";
@@ -14,6 +13,7 @@ import LoadImageAction from "./actions/load-image";
 import ServiceLocator from "@fg-services/locator";
 import LinkGenerator from "@fg-services/link-generator";
 import NavTextualViewModel from "@fg-apps/viewer/nav-textual";
+import FixFullscreenCompatibility from "@fg-services/fullscreen";
 
 export default class ViewerApp implements App {
 
