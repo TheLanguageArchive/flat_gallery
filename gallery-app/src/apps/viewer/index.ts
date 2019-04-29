@@ -15,6 +15,9 @@ import LinkGenerator from "@fg-services/link-generator";
 import NavTextualViewModel from "@fg-apps/viewer/nav-textual";
 import FixFullscreenCompatibility from "@fg-services/fullscreen";
 import ClickThumbnailEvent from "@fg-events/navigation/click-thumbnail";
+import PopStateEvent from "@fg-events/navigation/pop-state";
+import Navigation from "@fg-services/navigation";
+import PushImageToHistory from "@fg-services/history";
 
 export default class ViewerApp implements App {
 
@@ -29,6 +32,7 @@ export default class ViewerApp implements App {
     bootstrap() {
 
         FixFullscreenCompatibility();
+        PushImageToHistory((ServiceLocator.get('navigation') as Navigation).current());
 
         EventManager.add(new NavigationNextEvent());
         EventManager.add(new NavigationPreviousEvent());
@@ -36,6 +40,7 @@ export default class ViewerApp implements App {
         EventManager.add(new KeyboardPreviousEvent());
         EventManager.add(new MouseMoveEvent());
         EventManager.add(new ClickThumbnailEvent());
+        EventManager.add(new PopStateEvent());
 
         this.navTextual = new NavTextualViewModel(ServiceLocator.get('link-generator') as LinkGenerator);
     }

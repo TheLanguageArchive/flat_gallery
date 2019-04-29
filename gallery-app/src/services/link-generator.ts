@@ -1,4 +1,5 @@
 import Navigation from "@fg-services/navigation";
+import Image from "@fg-models/image";
 
 export default class LinkGenerator {
 
@@ -50,5 +51,9 @@ export default class LinkGenerator {
     }
 
     return links;
+  }
+
+  generateImageUrl(image: Image) {
+    return `${this.baseUrl}/${image.id}`;
   }
 }

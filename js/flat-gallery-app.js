@@ -484,6 +484,8 @@ var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/
 var nav_textual_1 = __webpack_require__(/*! @fg-apps/viewer/nav-textual */ "./src/apps/viewer/nav-textual.ts");
 var fullscreen_1 = __webpack_require__(/*! @fg-services/fullscreen */ "./src/services/fullscreen.ts");
 var click_thumbnail_1 = __webpack_require__(/*! @fg-events/navigation/click-thumbnail */ "./src/events/navigation/click-thumbnail.ts");
+var pop_state_1 = __webpack_require__(/*! @fg-events/navigation/pop-state */ "./src/events/navigation/pop-state.ts");
+var history_1 = __webpack_require__(/*! @fg-services/history */ "./src/services/history.ts");
 var ViewerApp = /** @class */ (function () {
     function ViewerApp() {
         this.viewers = [
@@ -493,12 +495,14 @@ var ViewerApp = /** @class */ (function () {
     }
     ViewerApp.prototype.bootstrap = function () {
         fullscreen_1.default();
+        history_1.default(locator_1.default.get('navigation').current());
         manager_1.default.add(new next_1.default());
         manager_1.default.add(new previous_1.default());
         manager_1.default.add(new keyboard_next_1.default());
         manager_1.default.add(new keyboard_previous_1.default());
         manager_1.default.add(new mouse_move_1.default());
         manager_1.default.add(new click_thumbnail_1.default());
+        manager_1.default.add(new pop_state_1.default());
         this.navTextual = new nav_textual_1.default(locator_1.default.get('link-generator'));
     };
     ViewerApp.prototype.run = function () {
@@ -893,6 +897,7 @@ exports.default = ModalOpenEvent;
 Object.defineProperty(exports, "__esModule", { value: true });
 var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
 var load_image_1 = __webpack_require__(/*! @fg-apps/viewer/actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var history_1 = __webpack_require__(/*! @fg-services/history */ "./src/services/history.ts");
 var ClickThumbnailEvent = /** @class */ (function () {
     function ClickThumbnailEvent() {
         this.type = 'click';
@@ -900,6 +905,7 @@ var ClickThumbnailEvent = /** @class */ (function () {
         this.target = document;
         this.application = locator_1.default.get('app');
         this.navigation = locator_1.default.get('navigation');
+        this.generator = locator_1.default.get('link-generator');
     }
     ClickThumbnailEvent.prototype.listener = function (event) {
         var target = event.target;
@@ -907,11 +913,13 @@ var ClickThumbnailEvent = /** @class */ (function () {
             event.preventDefault();
             var id = +target.getAttribute('data-load-image');
             var changed = this.navigation.setImage(id);
+            var image = this.navigation.current();
             if (false === changed) {
                 return;
             }
             this.navigation.render();
-            this.application.action(new load_image_1.default(this.navigation.current()));
+            this.application.action(new load_image_1.default(image));
+            history_1.default(image);
         }
     };
     return ClickThumbnailEvent;
@@ -1053,6 +1061,45 @@ var NavigationNextEvent = /** @class */ (function () {
     return NavigationNextEvent;
 }());
 exports.default = NavigationNextEvent;
+
+
+/***/ }),
+
+/***/ "./src/events/navigation/pop-state.ts":
+/*!********************************************!*\
+  !*** ./src/events/navigation/pop-state.ts ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var load_image_1 = __webpack_require__(/*! @fg-apps/viewer/actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var ClickThumbnailEvent = /** @class */ (function () {
+    function ClickThumbnailEvent() {
+        this.type = 'popstate';
+        this.useCapture = false;
+        this.target = window;
+        this.application = locator_1.default.get('app');
+        this.navigation = locator_1.default.get('navigation');
+        this.generator = locator_1.default.get('link-generator');
+    }
+    ClickThumbnailEvent.prototype.listener = function (event) {
+        console.log(event);
+        var id = event.state.id;
+        var changed = this.navigation.setImage(id);
+        var image = this.navigation.current();
+        if (false === changed) {
+            return;
+        }
+        this.navigation.render();
+        this.application.action(new load_image_1.default(image));
+    };
+    return ClickThumbnailEvent;
+}());
+exports.default = ClickThumbnailEvent;
 
 
 /***/ }),
@@ -1448,6 +1495,28 @@ exports.default = FixFullscreenCompatibility;
 
 /***/ }),
 
+/***/ "./src/services/history.ts":
+/*!*********************************!*\
+  !*** ./src/services/history.ts ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! ./locator */ "./src/services/locator.ts");
+function PushImageToHistory(image) {
+    var generator = locator_1.default.get('link-generator');
+    history.pushState({
+        id: image.id
+    }, '', generator.generateImageUrl(image));
+}
+exports.default = PushImageToHistory;
+
+
+/***/ }),
+
 /***/ "./src/services/link-generator.ts":
 /*!****************************************!*\
   !*** ./src/services/link-generator.ts ***!
@@ -1491,6 +1560,9 @@ var LinkGenerator = /** @class */ (function () {
             links.push(link);
         }
         return links;
+    };
+    LinkGenerator.prototype.generateImageUrl = function (image) {
+        return this.baseUrl + "/" + image.id;
     };
     return LinkGenerator;
 }());
