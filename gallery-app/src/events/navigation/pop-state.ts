@@ -26,7 +26,6 @@ export default class ClickThumbnailEvent implements CustomEvent {
 
     listener(event: PopStateEvent) {
 
-        console.log(event);
         let id      = event.state.id;
         let changed = this.navigation.setImage(id);
         let image   = this.navigation.current();

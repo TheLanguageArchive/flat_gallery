@@ -3,6 +3,7 @@ import ServiceLocator from "@fg-services/locator";
 import Navigation from "@fg-services/navigation";
 import { Application } from "@fg-application";
 import LoadImageAction from "@fg-apps/viewer/actions/load-image";
+import PushImageToHistory from "@fg-services/history";
 
 export default class KeyboardNextEvent implements CustomEvent {
 
@@ -37,6 +38,8 @@ export default class KeyboardNextEvent implements CustomEvent {
                     this.navigation.current()
                 )
             );
+
+            PushImageToHistory(this.navigation.current());
         }
     }
 }
