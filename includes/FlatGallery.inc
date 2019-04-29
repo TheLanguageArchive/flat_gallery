@@ -124,43 +124,6 @@ class FlatGallery
      */
     public function getLabels()
     {
-        return [
-            'lat:12345_cdb3e493_499a_4bc9_9999_dc5c8baf2b97' => [
-                'id' => 0,
-                'pid' => 'lat:12345_cdb3e493_499a_4bc9_9999_dc5c8baf2b97',
-                'descriptions' => [
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
-                ],
-            ],
-
-            'lat:12345_1ab1bacc_af76_45e0_8fcb_3e5356665b09' => [
-                'id' => 1,
-                'pid' => 'lat:12345_1ab1bacc_af76_45e0_8fcb_3e5356665b09',
-                'descriptions' => [
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
-                ],
-            ],
-
-            'lat:12345_a68514dc_0719_480f_b22f_849b81b86d5d' => [
-                'id' => 2,
-                'pid' => 'lat:12345_a68514dc_0719_480f_b22f_849b81b86d5d',
-                'descriptions' => [
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
-                ],
-            ],
-
-            'lat:12345_99a3db07_b3f0_4506_b3aa_46f189a122ab' => [
-                'id' => 3,
-                'pid' => 'lat:12345_99a3db07_b3f0_4506_b3aa_46f189a122ab',
-                'descriptions' => [
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed malesuada mattis diam, posuere ornare magna.',
-                ],
-            ],
-        ];
-
         if ($this->labels !== null) {
             return $this->labels;
         }
