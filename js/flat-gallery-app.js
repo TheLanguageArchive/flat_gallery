@@ -305,6 +305,8 @@ exports.default = LoadImageAction;
 Object.defineProperty(exports, "__esModule", { value: true });
 var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
 var fedora_model_1 = __webpack_require__(/*! @fg-models/fedora-model */ "./src/models/fedora-model.ts");
+var fullscreen_captions_template_1 = __webpack_require__(/*! @fg-models/fullscreen-captions-template */ "./src/models/fullscreen-captions-template.ts");
+var viewer_template_1 = __webpack_require__(/*! @fg-models/viewer-template */ "./src/models/viewer-template.ts");
 var BasicViewModel = /** @class */ (function () {
     function BasicViewModel() {
         this.fullscreen = false;
@@ -327,6 +329,10 @@ var BasicViewModel = /** @class */ (function () {
         this.eventsBound = true;
     };
     BasicViewModel.prototype.fullscreenChange = function () {
+        var navigation = locator_1.default.get('navigation');
+        if (navigation.current().model !== fedora_model_1.FedoraModel.Basic) {
+            return;
+        }
         if (null == document.fullscreenElement) {
             // exiting fullscreen
             this.leaveFullscreen();
@@ -361,57 +367,45 @@ var BasicViewModel = /** @class */ (function () {
         var navigation = locator_1.default.get('navigation');
         navigation.show();
         navigation.render();
-        this.renderImage(navigation.current());
+        this.renderFullscreenImage(navigation.current());
     };
     BasicViewModel.prototype.leaveFullscreen = function () {
         var navigation = locator_1.default.get('navigation');
-        if (null == document.fullscreenElement && true === this.fullscreen && navigation.current().model === fedora_model_1.FedoraModel.Basic) {
+        var image = navigation.current();
+        if (null == document.fullscreenElement && true === this.fullscreen && image.model === fedora_model_1.FedoraModel.Basic) {
             this.fullscreen = false;
             navigation.hide();
-            var viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
-            var basicElement = document.querySelector('[data-role="flat-gallery-toggle-fullscreen"]');
-            while (viewerElement.lastChild) {
-                viewerElement.removeChild(viewerElement.lastChild);
-            }
-            viewerElement.appendChild(basicElement);
-            var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-            while (fullscreenElement.lastChild) {
-                fullscreenElement.removeChild(fullscreenElement.lastChild);
-            }
+            this.renderViewerImage(image);
         }
     };
-    BasicViewModel.prototype.renderImage = function (image) {
-        var viewerElement = null;
+    BasicViewModel.prototype.renderFullscreenImage = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
         var imageElement = document.createElement('img');
-        var captionsElement = document.createElement('div');
+        var captionsElement = fullscreen_captions_template_1.default(image);
         imageElement.setAttribute('data-role', 'flat-gallery-toggle-fullscreen');
         imageElement.setAttribute('data-flat-gallery-id', image.id.toString());
         imageElement.setAttribute('src', image.object);
         imageElement.classList.add('flat-gallery-basic-image');
-        captionsElement.classList.add('hidden');
-        if (null == document.fullscreenElement) {
-            viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
-            this.fullscreen = false;
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
         }
-        else {
-            viewerElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-            this.fullscreen = true;
+        fullscreenElement.appendChild(imageElement);
+        if (false !== captionsElement) {
+            fullscreenElement.appendChild(captionsElement);
         }
+    };
+    BasicViewModel.prototype.renderViewerImage = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        var viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+        var imageElement = document.querySelector('[data-role="flat-gallery-toggle-fullscreen"]');
+        var viewer = viewer_template_1.default(imageElement, image);
         while (viewerElement.lastChild) {
             viewerElement.removeChild(viewerElement.lastChild);
         }
-        if (image.descriptions.length > 0 && true === this.fullscreen) {
-            captionsElement.classList.remove('hidden');
-            captionsElement.classList.add('flat-gallery-viewer-caption');
-            captionsElement.setAttribute('data-role', 'flat-gallery-captions');
-            image.descriptions.forEach(function (description) {
-                var captionElement = document.createElement('span');
-                captionElement.textContent = description;
-                captionsElement.appendChild(captionElement);
-            });
+        viewerElement.appendChild(viewer);
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
         }
-        viewerElement.appendChild(imageElement);
-        viewerElement.appendChild(captionsElement);
     };
     return BasicViewModel;
 }());
@@ -443,7 +437,14 @@ var BasicViewer = /** @class */ (function () {
     BasicViewer.prototype.action = function (action) {
         if (action instanceof load_image_1.default && action.getImage().model === fedora_model_1.FedoraModel.Basic) {
             this.basic.setup();
-            this.basic.renderImage(action.getImage());
+            if (null == document.fullscreenElement) {
+                // outside of fullscreen
+                this.basic.renderViewerImage(action.getImage());
+            }
+            else {
+                // inside of fullscreen
+                this.basic.renderFullscreenImage(action.getImage());
+            }
         }
     };
     return BasicViewer;
@@ -590,6 +591,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
 var fetch_large_image_1 = __webpack_require__(/*! @fg-services/fetch-large-image */ "./src/services/fetch-large-image.ts");
 var fedora_model_1 = __webpack_require__(/*! @fg-models/fedora-model */ "./src/models/fedora-model.ts");
+var viewer_template_1 = __webpack_require__(/*! @fg-models/viewer-template */ "./src/models/viewer-template.ts");
+var fullscreen_captions_template_1 = __webpack_require__(/*! @fg-models/fullscreen-captions-template */ "./src/models/fullscreen-captions-template.ts");
 var OpenseadragonViewModel = /** @class */ (function () {
     function OpenseadragonViewModel(base) {
         this.base = '#' + base;
@@ -625,6 +628,10 @@ var OpenseadragonViewModel = /** @class */ (function () {
         document.addEventListener('MSFullscreenChange', fullscreenchange);
     };
     OpenseadragonViewModel.prototype.fullscreenChange = function () {
+        var navigation = locator_1.default.get('navigation');
+        if (navigation.current().model !== fedora_model_1.FedoraModel.Large) {
+            return;
+        }
         if (null == document.fullscreenElement) {
             // exiting fullscreen
             this.leaveFullscreen();
@@ -643,6 +650,10 @@ var OpenseadragonViewModel = /** @class */ (function () {
         fullscreenRequestElement.requestFullscreen();
     };
     OpenseadragonViewModel.prototype.enterFullscreen = function () {
+        var navigation = locator_1.default.get('navigation');
+        var image = navigation.current();
+        navigation.show();
+        navigation.render();
         var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
         var openseadragonElement = document.querySelector(this.base);
         while (fullscreenElement.lastChild) {
@@ -650,13 +661,15 @@ var OpenseadragonViewModel = /** @class */ (function () {
         }
         fullscreenElement.appendChild(openseadragonElement);
         openseadragonElement.classList.add('flat-gallery-openseadragon-fullscreen');
-        var navigation = locator_1.default.get('navigation');
-        navigation.show();
-        navigation.render();
+        var captionsElement = fullscreen_captions_template_1.default(image);
+        if (false !== captionsElement) {
+            fullscreenElement.appendChild(captionsElement);
+        }
     };
     OpenseadragonViewModel.prototype.leaveFullscreen = function () {
         var navigation = locator_1.default.get('navigation');
-        if (null == document.fullscreenElement && true === this.fullscreen && navigation.current().model === fedora_model_1.FedoraModel.Large) {
+        var image = navigation.current();
+        if (null == document.fullscreenElement && true === this.fullscreen && image.model === fedora_model_1.FedoraModel.Large) {
             this.fullscreen = false;
             navigation.hide();
             var viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
@@ -665,7 +678,12 @@ var OpenseadragonViewModel = /** @class */ (function () {
                 viewerElement.removeChild(viewerElement.lastChild);
             }
             openseadragonElement.classList.remove('flat-gallery-openseadragon-fullscreen');
-            viewerElement.appendChild(openseadragonElement);
+            var viewer = viewer_template_1.default(openseadragonElement, image);
+            viewerElement.appendChild(viewer);
+            var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+            while (fullscreenElement.lastChild) {
+                fullscreenElement.removeChild(fullscreenElement.lastChild);
+            }
         }
     };
     OpenseadragonViewModel.prototype.create = function (image) {
@@ -1090,6 +1108,47 @@ var FedoraModel;
 
 /***/ }),
 
+/***/ "./src/models/fullscreen-captions-template.ts":
+/*!****************************************************!*\
+  !*** ./src/models/fullscreen-captions-template.ts ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Creating captions from template
+ *
+ * @author  Ibrahim Abdullah <ibrahim.abdullah@mpi.nl>
+ * @package Flat Gallery
+ */
+/**
+ * @param url string
+ *
+ * @return Element
+ */
+var FullscreenCaptionsTemplate = function (image) {
+    if (image.descriptions.length > 0) {
+        var captionsElement_1 = document.createElement('div');
+        captionsElement_1.classList.add('hidden');
+        captionsElement_1.classList.remove('hidden');
+        captionsElement_1.classList.add('flat-gallery-viewer-caption');
+        image.descriptions.forEach(function (description) {
+            var captionElement = document.createElement('span');
+            captionElement.textContent = description;
+            captionsElement_1.appendChild(captionElement);
+        });
+        return captionsElement_1;
+    }
+    return false;
+};
+exports.default = FullscreenCaptionsTemplate;
+
+
+/***/ }),
+
 /***/ "./src/models/modal-template.ts":
 /*!**************************************!*\
   !*** ./src/models/modal-template.ts ***!
@@ -1118,6 +1177,50 @@ var ModalTemplate = function (url) {
     return element.firstChild;
 };
 exports.default = ModalTemplate;
+
+
+/***/ }),
+
+/***/ "./src/models/viewer-template.ts":
+/*!***************************************!*\
+  !*** ./src/models/viewer-template.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Creating captions from template
+ *
+ * @author  Ibrahim Abdullah <ibrahim.abdullah@mpi.nl>
+ * @package Flat Gallery
+ */
+/**
+ * @param url string
+ *
+ * @return Element
+ */
+var ViewerTemplate = function (view, image) {
+    var template = "\n        <div class=\"flat-gallery-caption\" data-role=\"flat-gallery-viewer-captions\">\n            <small class=\"flat-gallery-caption-filename\">" + image.filename + "</small>\n    ";
+    if (image.descriptions.length > 0) {
+        image.descriptions.forEach(function (description) {
+            template += "<h4>" + description + "</h4>";
+        });
+    }
+    template += '</div>';
+    var element = document.createElement('div');
+    var viewer = document.createElement('div');
+    viewer.classList.add('flat-gallery-viewer');
+    viewer.appendChild(view);
+    var captions = document.createElement('div');
+    captions.innerHTML = template.trim();
+    element.appendChild(viewer);
+    element.appendChild(captions.firstChild);
+    return element;
+};
+exports.default = ViewerTemplate;
 
 
 /***/ }),

@@ -21,7 +21,17 @@ export default class BasicViewer implements Viewer {
         if (action instanceof LoadImageAction && action.getImage().model === FedoraModel.Basic) {
 
             this.basic.setup();
-            this.basic.renderImage(action.getImage());
+
+            if (null == document.fullscreenElement) {
+
+                // outside of fullscreen
+                this.basic.renderViewerImage(action.getImage());
+
+            } else {
+
+                // inside of fullscreen
+                this.basic.renderFullscreenImage(action.getImage());
+            }
         }
     }
 }

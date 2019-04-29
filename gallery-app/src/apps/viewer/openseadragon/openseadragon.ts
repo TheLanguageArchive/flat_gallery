@@ -4,6 +4,8 @@ import Navigation from "@fg-services/navigation";
 import Image from "@fg-models/image";
 import FetchLargeImage from "@fg-services/fetch-large-image";
 import { FedoraModel } from "@fg-models/fedora-model";
+import ViewerTemplate from "@fg-models/viewer-template";
+import FullscreenCaptionsTemplate from "@fg-models/fullscreen-captions-template";
 
 export default class OpenseadragonViewModel {
 
@@ -56,6 +58,12 @@ export default class OpenseadragonViewModel {
 
     fullscreenChange() {
 
+        let navigation = (ServiceLocator.get('navigation') as Navigation);
+
+        if (navigation.current().model !== FedoraModel.Large) {
+            return;
+        }
+
         if (null == document.fullscreenElement) {
 
             // exiting fullscreen
@@ -82,6 +90,11 @@ export default class OpenseadragonViewModel {
 
     enterFullscreen() {
 
+        let navigation = ServiceLocator.get('navigation') as Navigation;
+        let image      = navigation.current();
+        navigation.show();
+        navigation.render();
+
         let fullscreenElement    = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
         let openseadragonElement = document.querySelector(this.base);
 
@@ -92,16 +105,19 @@ export default class OpenseadragonViewModel {
         fullscreenElement.appendChild(openseadragonElement);
         openseadragonElement.classList.add('flat-gallery-openseadragon-fullscreen');
 
-        let navigation = ServiceLocator.get('navigation') as Navigation;
-        navigation.show();
-        navigation.render();
+        let captionsElement = FullscreenCaptionsTemplate(image);
+
+        if (false !== captionsElement) {
+            fullscreenElement.appendChild(captionsElement);
+        }
     }
 
     leaveFullscreen() {
 
         let navigation = ServiceLocator.get('navigation') as Navigation;
+        let image      = navigation.current();
 
-        if (null == document.fullscreenElement && true === this.fullscreen && navigation.current().model === FedoraModel.Large) {
+        if (null == document.fullscreenElement && true === this.fullscreen && image.model === FedoraModel.Large) {
 
             this.fullscreen = false;
 
@@ -115,7 +131,15 @@ export default class OpenseadragonViewModel {
             }
 
             openseadragonElement.classList.remove('flat-gallery-openseadragon-fullscreen');
-            viewerElement.appendChild(openseadragonElement);
+
+            let viewer = ViewerTemplate(openseadragonElement, image);
+            viewerElement.appendChild(viewer);
+
+            let fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+
+            while (fullscreenElement.lastChild) {
+                fullscreenElement.removeChild(fullscreenElement.lastChild);
+            }
         }
     }
 

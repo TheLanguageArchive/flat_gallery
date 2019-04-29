@@ -2,6 +2,8 @@ import ServiceLocator from "@fg-services/locator";
 import Navigation from "@fg-services/navigation";
 import { FedoraModel } from "@fg-models/fedora-model";
 import Image from "@fg-models/image";
+import FullscreenCaptionsTemplate from "@fg-models/fullscreen-captions-template";
+import ViewerTemplate from "@fg-models/viewer-template";
 
 export default class BasicViewModel {
 
@@ -39,6 +41,12 @@ export default class BasicViewModel {
     }
 
     fullscreenChange() {
+
+        let navigation = (ServiceLocator.get('navigation') as Navigation);
+
+        if (navigation.current().model !== FedoraModel.Basic) {
+            return;
+        }
 
         if (null == document.fullscreenElement) {
 
@@ -86,80 +94,60 @@ export default class BasicViewModel {
         navigation.show();
         navigation.render();
 
-        this.renderImage(navigation.current());
+        this.renderFullscreenImage(navigation.current());
     }
 
     leaveFullscreen() {
 
         let navigation = ServiceLocator.get('navigation') as Navigation;
+        let image      = navigation.current();
 
-        if (null == document.fullscreenElement && true === this.fullscreen && navigation.current().model === FedoraModel.Basic) {
+        if (null == document.fullscreenElement && true === this.fullscreen && image.model === FedoraModel.Basic) {
 
             this.fullscreen = false;
 
             navigation.hide();
-
-            let viewerElement  = document.querySelector('[data-role="flat-gallery-viewer"]');
-            let basicElement   = document.querySelector('[data-role="flat-gallery-toggle-fullscreen"]');
-
-            while (viewerElement.lastChild) {
-                viewerElement.removeChild(viewerElement.lastChild);
-            }
-
-            viewerElement.appendChild(basicElement);
-
-            let fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-
-            while (fullscreenElement.lastChild) {
-                fullscreenElement.removeChild(fullscreenElement.lastChild);
-            }
+            this.renderViewerImage(image);
         }
     }
 
-    renderImage(image: Image) {
+    renderFullscreenImage(image: Image) {
 
-        let viewerElement   =  null;
-        let imageElement    = document.createElement('img');
-        let captionsElement = document.createElement('div');
+        let fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        let imageElement      = document.createElement('img');
+        let captionsElement   = FullscreenCaptionsTemplate(image);
 
         imageElement.setAttribute('data-role', 'flat-gallery-toggle-fullscreen');
         imageElement.setAttribute('data-flat-gallery-id', image.id.toString());
         imageElement.setAttribute('src', image.object);
         imageElement.classList.add('flat-gallery-basic-image');
 
-        captionsElement.classList.add('hidden');
-
-        if (null == document.fullscreenElement) {
-
-            viewerElement   = document.querySelector('[data-role="flat-gallery-viewer"]');
-            this.fullscreen = false;
-
-        } else {
-
-            viewerElement   = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
-            this.fullscreen = true;
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
         }
+
+        fullscreenElement.appendChild(imageElement);
+
+        if (false !== captionsElement) {
+            fullscreenElement.appendChild(captionsElement);
+        }
+    }
+
+    renderViewerImage(image: Image) {
+
+        let fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        let viewerElement     = document.querySelector('[data-role="flat-gallery-viewer"]');
+        let imageElement      = document.querySelector('[data-role="flat-gallery-toggle-fullscreen"]');
+        let viewer            = ViewerTemplate(imageElement, image);
 
         while (viewerElement.lastChild) {
             viewerElement.removeChild(viewerElement.lastChild);
         }
 
-        if (image.descriptions.length > 0 && true === this.fullscreen) {
+        viewerElement.appendChild(viewer);
 
-            captionsElement.classList.remove('hidden');
-            captionsElement.classList.add('flat-gallery-viewer-caption');
-            captionsElement.setAttribute('data-role', 'flat-gallery-captions');
-
-            image.descriptions.forEach((description) => {
-
-                let captionElement = document.createElement('span');
-                captionElement.textContent = description;
-
-                captionsElement.appendChild(captionElement);
-            });
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
         }
-
-        viewerElement.appendChild(imageElement);
-        viewerElement.appendChild(captionsElement);
     }
 }
