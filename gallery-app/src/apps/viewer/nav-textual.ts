@@ -18,7 +18,6 @@ export default class NavTextualViewModel {
         }
 
         links.forEach((link) => {
-            console.log(link);
             navTextualElement.appendChild(link);
         });
     }
