@@ -14,6 +14,7 @@ import ServiceLocator from "@fg-services/locator";
 import LinkGenerator from "@fg-services/link-generator";
 import NavTextualViewModel from "@fg-apps/viewer/nav-textual";
 import FixFullscreenCompatibility from "@fg-services/fullscreen";
+import ClickThumbnailEvent from "@fg-events/navigation/click-thumbnail";
 
 export default class ViewerApp implements App {
 
@@ -34,6 +35,7 @@ export default class ViewerApp implements App {
         EventManager.add(new KeyboardNextEvent());
         EventManager.add(new KeyboardPreviousEvent());
         EventManager.add(new MouseMoveEvent());
+        EventManager.add(new ClickThumbnailEvent());
 
         this.navTextual = new NavTextualViewModel(ServiceLocator.get('link-generator') as LinkGenerator);
     }

@@ -72,6 +72,16 @@ export default class Navigation {
         return this.images[this.id];
     }
 
+    setImage(id: number) {
+
+        if (null == this.images[id]) {
+            return false;
+        }
+
+        this.id = id;
+        return true;
+    }
+
     show() {
 
         let navigationElement = document.querySelector('[data-role="flat-gallery-nav"]');
