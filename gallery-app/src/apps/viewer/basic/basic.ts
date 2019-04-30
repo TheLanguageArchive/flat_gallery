@@ -81,7 +81,7 @@ export default class BasicViewModel {
         let target = (event.target as Element);
         if (target.getAttribute('data-role') === 'flat-gallery-toggle-fullscreen') {
 
-            if (false === this.fullscreen) {
+            if (null == document.fullscreenElement) {
                 this.requestFullscreen();
             } else {
 

@@ -1,2 +1,1754 @@
-!function(e){var t={};function n(a){if(t[a])return t[a].exports;var r=t[a]={i:a,l:!1,exports:{}};return e[a].call(r.exports,r,r.exports,n),r.l=!0,r.exports}n.m=e,n.c=t,n.d=function(e,t,a){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:a})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var a=Object.create(null);if(n.r(a),Object.defineProperty(a,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var r in e)n.d(a,r,function(t){return e[t]}.bind(null,r));return a},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="",n(n.s=8)}([function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.ServiceLocator=new Map,t.default=t.ServiceLocator},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=function(){function e(e){this.image=e}return e.prototype.getImage=function(){return this.image},e}();t.default=a},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0);t.default=function(e){var t=a.default.get("link-generator");history.pushState({id:e.id},"",t.generateImageUrl(e))}},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),function(e){e.Basic="islandora:sp_basic_image",e.Large="islandora:sp_large_image_cmodel"}(t.FedoraModel||(t.FedoraModel={}))},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(5);t.default=function(e,t){var n=document.createElement("div"),r=document.createElement("div"),i=a.default(t);return r.classList.add("flat-gallery-viewer"),r.appendChild(e),n.appendChild(r),!1!==i&&n.appendChild(i),n}},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});t.default=function(e){if(e.descriptions.length>0){var t='\n            <div class="flat-gallery-caption">\n                <small class="flat-gallery-caption-filename">'+e.filename+"</small>\n        ";e.descriptions.forEach(function(e){t+="<h4>"+e+"</h4>"}),t+="</div>";var n=document.createElement("div");return n.innerHTML=t.trim(),n.firstChild}return!1}},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});t.default=function(e){if(e.descriptions.length>0){var t=document.createElement("div");return t.classList.add("hidden"),t.classList.remove("hidden"),t.classList.add("flat-gallery-viewer-caption"),e.descriptions.forEach(function(e){var n=document.createElement("span");n.textContent=e,t.appendChild(n)}),t}return!1}},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=function(){function e(){}return e.prototype.add=function(e){e.target.addEventListener(e.type,e.listener.bind(e),e.useCapture)},e.prototype.remove=function(e){e.target.removeEventListener(e.type,e.listener.bind(e),e.useCapture)},e}();t.EventManager=a,t.default=new a},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(9);!function(e,t,n,r){t.behaviors.FlatGalleryNew={attach:function(e,t){(new a.Application).run(t)},detach:function(e){}}}(jQuery,Drupal)},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),r=n(10),i=n(11),l=n(12),o=n(27),u=n(31),s=n(34),c=function(){function e(){this.apps=[]}return e.prototype.bootstrap=function(e){if(a.default.set("app",this),a.default.set("settings",e.flat_gallery),a.default.set("openseadragon",e.islandora_open_seadragon_viewer),null==e.flat_gallery)throw new i.default("FLAT Gallery settings missing (Drupal.settings.flat_gallery)");if(!0===r.isModalSettings(e.flat_gallery)&&this.apps.push(new o.default),!0===r.isDefaultSettings(e.flat_gallery)){var t=e.flat_gallery,n=new u.default(t.current_id,t.images);a.default.set("link-generator",new s.default(n,t.fedora.base_url)),a.default.set("navigation",n),this.apps.push(new l.default)}},e.prototype.run=function(e){this.bootstrap(e),this.apps.forEach(function(e){e.run()})},e.prototype.action=function(e){this.apps.forEach(function(t){t.action(e)})},e}();t.Application=c},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.isModalSettings=function(e){return void 0!==e.modal&&void 0!==e.url},t.isDefaultSettings=function(e){return void 0!==e.images&&void 0!==e.openseadragon}},function(e,t,n){"use strict";var a,r=this&&this.__extends||(a=function(e,t){return(a=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n])})(e,t)},function(e,t){function n(){this.constructor=e}a(e,t),e.prototype=null===t?Object.create(t):(n.prototype=t.prototype,new n)});Object.defineProperty(t,"__esModule",{value:!0});var i=function(e){function t(){return null!==e&&e.apply(this,arguments)||this}return r(t,e),t}(Error);t.default=i},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(13),r=n(7),i=n(16),l=n(17),o=n(18),u=n(19),s=n(20),c=n(22),d=n(1),f=n(0),p=n(23),h=n(24),g=n(25),v=n(26),m=n(2),y=function(){function e(){this.viewers=[new a.default,new s.default]}return e.prototype.bootstrap=function(){h.default(),m.default(f.default.get("navigation").current()),r.default.add(new i.default),r.default.add(new l.default),r.default.add(new o.default),r.default.add(new u.default),r.default.add(new c.default),r.default.add(new g.default),r.default.add(new v.default),this.navTextual=new p.default(f.default.get("link-generator"))},e.prototype.run=function(){this.bootstrap(),this.viewers.forEach(function(e){e.run()})},e.prototype.action=function(e){e instanceof d.default&&this.navTextual.render(),this.viewers.forEach(function(t){t.action(e)})},e}();t.default=y},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(14),r=n(1),i=n(3),l=n(0),o=function(){function e(){}return e.prototype.run=function(){var e=l.default.get("settings");this.openseadragon=new a.default(e.openseadragon.options.id),this.openseadragon.setup()},e.prototype.action=function(e){e instanceof r.default&&e.getImage().model===i.FedoraModel.Large&&this.openseadragon.create(e.getImage())},e}();t.default=o},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),r=n(15),i=n(3),l=n(4),o=n(6),u=n(5),s=function(){function e(e){this.base="#"+e,this.fullscreen=!1}return e.prototype.setup=function(){var e=this,t=a.default.get("openseadragon");if(null!=t){t.buttons.buttons.forEach(function(t){"Toggle full page"===t.tooltip&&t.addHandler("click",function(t){!1===e.fullscreen?e.requestFullscreen():document.exitFullscreen()})}),t.addHandler("pre-full-screen",function(e){e.preventDefaultAction=!0});var n=this.fullscreenChange.bind(this);document.addEventListener("fullscreenchange",n),document.addEventListener("webkitfullscreenchange",n),document.addEventListener("mozfullscreenchange",n),document.addEventListener("MSFullscreenChange",n)}},e.prototype.fullscreenChange=function(){a.default.get("navigation").current().model===i.FedoraModel.Large&&(null==document.fullscreenElement?this.leaveFullscreen():this.enterFullscreen())},e.prototype.requestFullscreen=function(){!0!==this.fullscreen&&(this.fullscreen=!0,document.querySelector('[data-role="flat-gallery-fullscreen"]').requestFullscreen())},e.prototype.enterFullscreen=function(){var e=a.default.get("navigation");e.show(),e.render(),this.renderFullscreenElement(e.current())},e.prototype.leaveFullscreen=function(){var e=a.default.get("navigation"),t=e.current();null==document.fullscreenElement&&!0===this.fullscreen&&t.model===i.FedoraModel.Large&&(this.fullscreen=!1,e.hide(),this.renderViewerElement(t))},e.prototype.create=function(e){var t=this;this.cleanBaseElement(),r.default(e).then(function(e){Drupal.settings.islandoraOpenSeadragon.djatokaServerBaseURL=e.djatokaServerBaseURL,Drupal.IslandoraOpenSeadragonViewer[t.base]=new Drupal.IslandoraOpenSeadragonViewer(t.base,e),a.default.set("openseadragon",Drupal.settings.islandora_open_seadragon_viewer),t.setup()})},e.prototype.cleanBaseElement=function(){if(void 0!==Drupal.IslandoraOpenSeadragonViewer){var e=null,t=null,n=a.default.get("navigation").current(),r=document.querySelector(this.base),i=document.createElement("div");for(i.setAttribute("id",this.base.substring(1)),i.classList.add("islandora-openseadragon"),null==document.fullscreenElement?(e=document.querySelector('[data-role="flat-gallery-viewer"]'),t=u.default(n),this.fullscreen=!1):(this.fullscreen=!0,e=document.querySelector('[data-role="flat-gallery-fullscreen-element"]'),t=o.default(n),i.classList.add("flat-gallery-openseadragon-fullscreen")),null!=r&&r.remove();e.lastChild;)e.removeChild(e.lastChild);e.appendChild(i),!1!==t&&e.appendChild(t),delete Drupal.IslandoraOpenSeadragonViewer[this.base]}},e.prototype.renderFullscreenElement=function(e){for(var t=document.querySelector('[data-role="flat-gallery-fullscreen-element"]'),n=document.querySelector(this.base);t.lastChild;)t.removeChild(t.lastChild);t.appendChild(n),n.classList.add("flat-gallery-openseadragon-fullscreen"),this.renderFullscreenCaptions(e)},e.prototype.renderViewerElement=function(e){for(var t=document.querySelector('[data-role="flat-gallery-fullscreen-element"]'),n=document.querySelector('[data-role="flat-gallery-viewer"]'),a=document.querySelector(this.base);n.lastChild;)n.removeChild(n.lastChild);for(a.classList.remove("flat-gallery-openseadragon-fullscreen"),n.appendChild(l.default(a,e));t.lastChild;)t.removeChild(t.lastChild)},e.prototype.renderFullscreenCaptions=function(e){var t=document.querySelector('[data-role="flat-gallery-fullscreen-element"]'),n=o.default(e);!1!==n&&t.appendChild(n)},e.prototype.renderViewerCaptions=function(e){var t=document.querySelector('[data-role="flat-gallery-viewer"]'),n=u.default(e);!1!==n&&t.appendChild(n)},e}();t.default=s},function(e,t,n){"use strict";var a=this&&this.__awaiter||function(e,t,n,a){return new(n||(n=Promise))(function(r,i){function l(e){try{u(a.next(e))}catch(e){i(e)}}function o(e){try{u(a.throw(e))}catch(e){i(e)}}function u(e){e.done?r(e.value):new n(function(t){t(e.value)}).then(l,o)}u((a=a.apply(e,t||[])).next())})},r=this&&this.__generator||function(e,t){var n,a,r,i,l={label:0,sent:function(){if(1&r[0])throw r[1];return r[1]},trys:[],ops:[]};return i={next:o(0),throw:o(1),return:o(2)},"function"==typeof Symbol&&(i[Symbol.iterator]=function(){return this}),i;function o(i){return function(o){return function(i){if(n)throw new TypeError("Generator is already executing.");for(;l;)try{if(n=1,a&&(r=2&i[0]?a.return:i[0]?a.throw||((r=a.return)&&r.call(a),0):a.next)&&!(r=r.call(a,i[1])).done)return r;switch(a=0,r&&(i=[2&i[0],r.value]),i[0]){case 0:case 1:r=i;break;case 4:return l.label++,{value:i[1],done:!1};case 5:l.label++,a=i[1],i=[0];continue;case 7:i=l.ops.pop(),l.trys.pop();continue;default:if(!(r=(r=l.trys).length>0&&r[r.length-1])&&(6===i[0]||2===i[0])){l=0;continue}if(3===i[0]&&(!r||i[1]>r[0]&&i[1]<r[3])){l.label=i[1];break}if(6===i[0]&&l.label<r[1]){l.label=r[1],r=i;break}if(r&&l.label<r[2]){l.label=r[2],l.ops.push(i);break}r[2]&&l.ops.pop(),l.trys.pop();continue}i=t.call(e,l)}catch(e){i=[6,e],a=0}finally{n=r=0}if(5&i[0])throw i[1];return{value:i[0]?i[1]:void 0,done:!0}}([i,o])}}};Object.defineProperty(t,"__esModule",{value:!0});var i=n(0);t.default=function(e){return a(this,void 0,void 0,function(){var t;return r(this,function(n){switch(n.label){case 0:return t=i.default.get("settings").fedora.base_url+"/ajax",[4,fetch(t+"/"+e.id)];case 1:return[4,n.sent().json()];case 2:return[2,n.sent()]}})})}},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),r=n(1),i=n(2),l=function(){function e(){this.type="click",this.useCapture=!1,this.target=document,this.application=a.default.get("app"),this.navigation=a.default.get("navigation")}return e.prototype.listener=function(e){var t=e.target;t.hasAttribute("data-flat-gallery-nav")&&"next"===t.getAttribute("data-flat-gallery-nav")&&(e.preventDefault(),this.navigation.next(),this.navigation.render(),this.application.action(new r.default(this.navigation.current())),i.default(this.navigation.current()))},e}();t.default=l},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),r=n(1),i=n(2),l=function(){function e(){this.type="click",this.useCapture=!1,this.target=document,this.application=a.default.get("app"),this.navigation=a.default.get("navigation")}return e.prototype.listener=function(e){var t=e.target;t.hasAttribute("data-flat-gallery-nav")&&"previous"===t.getAttribute("data-flat-gallery-nav")&&(e.preventDefault(),this.navigation.previous(),this.navigation.render(),this.application.action(new r.default(this.navigation.current())),i.default(this.navigation.current()))},e}();t.default=l},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),r=n(1),i=n(2),l=function(){function e(){this.type="keyup",this.useCapture=!1,this.target=document,this.application=a.default.get("app"),this.navigation=a.default.get("navigation")}return e.prototype.listener=function(e){39===(e.which||e.keyCode||0)&&(e.preventDefault(),this.navigation.next(),this.navigation.render(),this.application.action(new r.default(this.navigation.current())),i.default(this.navigation.current()))},e}();t.default=l},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),r=n(1),i=n(2),l=function(){function e(){this.type="keyup",this.useCapture=!1,this.target=document,this.application=a.default.get("app"),this.navigation=a.default.get("navigation")}return e.prototype.listener=function(e){37===(e.which||e.keyCode||0)&&(e.preventDefault(),this.navigation.previous(),this.navigation.render(),this.application.action(new r.default(this.navigation.current())),i.default(this.navigation.current()))},e}();t.default=l},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(21),r=n(1),i=n(3),l=function(){function e(){}return e.prototype.run=function(){this.basic=new a.default,this.basic.setup()},e.prototype.action=function(e){e instanceof r.default&&e.getImage().model===i.FedoraModel.Basic&&(this.basic.setup(),null==document.fullscreenElement?this.basic.renderViewerImage(e.getImage()):this.basic.renderFullscreenImage(e.getImage()))},e}();t.default=l},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),r=n(3),i=n(6),l=n(4),o=function(){function e(){this.fullscreen=!1,this.eventsBound=!1}return e.prototype.setup=function(){if((null!=document.fullscreenElement&&(this.fullscreen=!0),!0!==this.eventsBound)&&a.default.get("navigation").current().model===r.FedoraModel.Basic){document.addEventListener("click",this.toggleFullscreen.bind(this));var e=this.fullscreenChange.bind(this);document.addEventListener("fullscreenchange",e),document.addEventListener("webkitfullscreenchange",e),document.addEventListener("mozfullscreenchange",e),document.addEventListener("MSFullscreenChange",e),this.eventsBound=!0}},e.prototype.fullscreenChange=function(){a.default.get("navigation").current().model===r.FedoraModel.Basic&&(null==document.fullscreenElement?this.leaveFullscreen():this.enterFullscreen())},e.prototype.requestFullscreen=function(){!0!==this.fullscreen&&(this.fullscreen=!0,document.querySelector('[data-role="flat-gallery-fullscreen"]').requestFullscreen())},e.prototype.toggleFullscreen=function(){"flat-gallery-toggle-fullscreen"===event.target.getAttribute("data-role")&&(!1===this.fullscreen?this.requestFullscreen():document.exitFullscreen())},e.prototype.enterFullscreen=function(){var e=a.default.get("navigation");e.show(),e.render(),this.renderFullscreenImage(e.current())},e.prototype.leaveFullscreen=function(){var e=a.default.get("navigation"),t=e.current();null==document.fullscreenElement&&!0===this.fullscreen&&t.model===r.FedoraModel.Basic&&(this.fullscreen=!1,e.hide(),this.renderViewerImage(t))},e.prototype.renderImage=function(e){var t=document.createElement("img");return t.setAttribute("data-role","flat-gallery-toggle-fullscreen"),t.setAttribute("data-flat-gallery-id",e.id.toString()),t.setAttribute("src",e.object),t.classList.add("flat-gallery-basic-image"),t},e.prototype.renderFullscreenImage=function(e){for(var t=document.querySelector('[data-role="flat-gallery-fullscreen-element"]'),n=i.default(e),a=this.renderImage(e);t.lastChild;)t.removeChild(t.lastChild);t.appendChild(a),!1!==n&&t.appendChild(n)},e.prototype.renderViewerImage=function(e){for(var t=document.querySelector('[data-role="flat-gallery-fullscreen-element"]'),n=document.querySelector('[data-role="flat-gallery-viewer"]'),a=this.renderImage(e),r=l.default(a,e);n.lastChild;)n.removeChild(n.lastChild);for(n.appendChild(r);t.lastChild;)t.removeChild(t.lastChild)},e}();t.default=o},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),r=function(){function e(){this.type="mousemove",this.useCapture=!1,this.target=document,this.navigation=a.default.get("navigation")}return e.prototype.listener=function(e){this.navigation.stopHidingNavigation()},e}();t.default=r},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=function(){function e(e){this.generator=e}return e.prototype.render=function(){for(var e=this.generator.generateNavigationLinks(),t=document.querySelector('[data-role="flat-gallery-nav-textual"]');t.lastChild;)t.removeChild(t.lastChild);e.forEach(function(e){t.appendChild(e)})},e}();t.default=a},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=function(){void 0===document.fullscreenElement&&Object.defineProperty(document,"fullscreenElement",{get:function(){return void 0!==document.mozFullScreenElement?document.mozFullScreenElement:void 0!==document.webkitFullscreenElement?document.webkitFullscreenElement:void 0!==document.msFullscreenElement?document.msFullscreenElement:void 0}}),void 0===Element.prototype.requestFullscreen&&(void 0!==Element.prototype.mozRequestFullscreen&&(Element.prototype.requestFullscreen=Element.prototype.mozRequestFullscreen),void 0!==Element.prototype.webkitRequestFullscreen&&(Element.prototype.requestFullscreen=Element.prototype.webkitRequestFullscreen),void 0!==Element.prototype.msRequestFullscreen&&(Element.prototype.requestFullscreen=Element.prototype.msRequestFullscreen))}},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),r=n(1),i=n(2),l=function(){function e(){this.type="click",this.useCapture=!1,this.target=document,this.application=a.default.get("app"),this.navigation=a.default.get("navigation"),this.generator=a.default.get("link-generator")}return e.prototype.listener=function(e){var t=e.target;if(t.hasAttribute("data-load-image")){e.preventDefault();var n=+t.getAttribute("data-load-image"),a=this.navigation.setImage(n),l=this.navigation.current();if(!1===a)return;this.navigation.render(),this.application.action(new r.default(l)),i.default(l)}},e}();t.default=l},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),r=n(1),i=function(){function e(){this.type="popstate",this.useCapture=!1,this.target=window,this.application=a.default.get("app"),this.navigation=a.default.get("navigation"),this.generator=a.default.get("link-generator")}return e.prototype.listener=function(e){var t=e.state.id,n=this.navigation.setImage(t),a=this.navigation.current();!1!==n&&(this.navigation.render(),this.application.action(new r.default(a)))},e}();t.default=i},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(7),r=n(28),i=n(30),l=function(){function e(){}return e.prototype.action=function(){},e.prototype.run=function(){a.default.add(new r.default),a.default.add(new i.default)},e}();t.default=l},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(29),r=n(0),i=function(){function e(){this.type="click",this.useCapture=!1,this.target=document}return e.prototype.listener=function(e){if("flat-gallery-modal"===e.target.getAttribute("data-role")){e.preventDefault();var t=a.default(r.default.get("settings").url),n=document.querySelector("body");window.scrollTo(0,0),n.appendChild(t),setTimeout(function(){document.querySelector('[data-role="flat-gallery-modal-content"]').parentNode.classList.add("fade-to")})}},e}();t.default=i},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});t.default=function(e){var t='\n        <div class="flat-gallery-modal" data-role="flat-gallery-modal-container">\n            <div class="flat-gallery-modal-overlay"></div>\n            <div class="flat-gallery-modal-content-container">\n                <a href="#" class="flat-gallery-modal-close" data-role="flat-gallery-modal-close"></a>\n                <div class="flat-gallery-modal-content" data-role="flat-gallery-modal-content">\n                    <iframe allowfullscreen="true" allow="fullscreen" src="'+e+'"></iframe>\n                </div>\n            </div>\n        </div>\n    ',n=document.createElement("div");return n.innerHTML=t.trim(),n.firstChild}},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=function(){function e(){this.type="click",this.useCapture=!1,this.target=document}return e.prototype.listener=function(e){if("flat-gallery-modal-close"===e.target.getAttribute("data-role")){var t=document.querySelector('[data-role="flat-gallery-modal-content"]').parentNode,n=document.querySelector('[data-role="flat-gallery-modal-container"]'),a=n.remove.bind(n);t.addEventListener("transitionend",a),t.addEventListener("webkitTransitionEnd",a),t.addEventListener("mozTransitionEnd",a),t.addEventListener("oTransitionEnd",a),t.addEventListener("MSTransitionEnd",a),t.classList.remove("fade-to")}},e}();t.default=a},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n(32),r=n(33),i=function(){function e(e,t){this.id=e,this.images=t,this.animation=new a.default}return e.prototype.all=function(){return this.images},e.prototype.current=function(){return this.images[this.id]},e.prototype.getNextImage=function(){return!1!==this.nextImageAvailable()&&this.images[this.id+1]},e.prototype.nextImageAvailable=function(){return null!=this.images[this.id+1]},e.prototype.next=function(){return!1!==this.nextImageAvailable()&&(this.id+=1,this.images[this.id])},e.prototype.getPreviousImage=function(){return!1!==this.previousImageAvailable()&&this.images[this.id-1]},e.prototype.previousImageAvailable=function(){return null!=this.images[this.id-1]},e.prototype.previous=function(){return!1!==this.previousImageAvailable()&&(this.id-=1,this.images[this.id])},e.prototype.setImage=function(e){return null!=this.images[e]&&(this.id=e,!0)},e.prototype.show=function(){document.querySelector('[data-role="flat-gallery-nav"]').classList.remove("hidden")},e.prototype.hide=function(){document.querySelector('[data-role="flat-gallery-nav"]').classList.add("hidden")},e.prototype.render=function(){var e=document.querySelector('[data-flat-gallery-nav="next"]'),t=document.querySelector('[data-flat-gallery-nav="previous"]'),n=this.nextImageAvailable(),a=this.previousImageAvailable(),r=this.current();e.classList.add("hidden"),t.classList.add("hidden"),!0===n&&e.classList.remove("hidden"),!0===a&&t.classList.remove("hidden"),document.querySelectorAll('[data-role="flat-gallery-thumbnail"] a').forEach(function(e){e.classList.remove("active")}),document.querySelector('[data-role="flat-gallery-thumbnail"][data-flat-gallery-id="'+r.id+'"] a').classList.add("active"),this.stopHidingNavigation()},e.prototype.hideNavigation=function(){if(!1===this.animation.running){var e=document.querySelector('[data-flat-gallery-nav="next"]'),t=document.querySelector('[data-flat-gallery-nav="previous"]'),n=document.querySelector('[data-role="flat-gallery-captions"]');this.animation.enqueue(new r.default(t,100,0,1)),this.animation.enqueue(new r.default(e,100,0,1)),this.animation.enqueue(new r.default(n,100,0,1)),this.animation.animate()}},e.prototype.stopHidingNavigation=function(){var e=this;if(null!=document.fullscreenElement){var t=document.querySelector('[data-flat-gallery-nav="next"]'),n=document.querySelector('[data-flat-gallery-nav="previous"]'),a=document.querySelector('[data-role="flat-gallery-captions"]');null!==a&&(t.style.opacity="1",n.style.opacity="1",a.style.opacity="1",!0===this.animation.running&&this.animation.stop(),clearTimeout(this.hideNavigationTimeout),this.hideNavigationTimeout=setTimeout(function(){e.hideNavigation()},5e3))}},e}();t.default=i},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=function(){function e(){this.queue=[],this.framerate=60,this.running=!1}return e.prototype.enqueue=function(e){this.queue.push(e)},e.prototype.animate=function(){!1===this.running&&(this.running=!0,this.frame=-1,this.timer=setInterval(this.process.bind(this),1e3/this.framerate))},e.prototype.process=function(){var e=this;this.frame+=1;var t=[];this.queue.forEach(function(n){0==n.run(e.frame)&&t.push(n)}),t.length===this.queue.length&&this.stop()},e.prototype.stop=function(){this.queue=[],this.running=!1,clearInterval(this.timer)},e}();t.default=a},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=function(){function e(e,t,n,a){this.element=e,this.from=t,this.to=n,this.speed=a,this.framerate=60*a,this.frames=this.tween()}return e.prototype.run=function(e){return null!=this.frames[e]&&(null!==this.element&&(this.element.style.opacity=this.frames[e].toString(),!0))},e.prototype.tween=function(){for(var e=[],t=(this.to-this.from)/this.framerate,n=0;n<=this.framerate;n++)e[n]=(this.from+t*n)/100;return e},e}();t.default=a},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=function(){function e(e,t){this.baseUrl=t,this.navigation=e}return e.prototype.generateNavigationLinks=function(){var e=this.navigation.getPreviousImage(),t=this.navigation.getNextImage(),n=[];if(!1!==e){(a=document.createElement("a")).textContent="Previous",a.setAttribute("href",this.baseUrl+"/"+e.id),a.setAttribute("data-flat-gallery-nav","previous"),n.push(a)}else{var a=document.createTextNode("Previous");n.push(a)}if(n.push(document.createTextNode(" | ")),!1!==t){(a=document.createElement("a")).textContent="Next",a.setAttribute("href",this.baseUrl+"/"+t.id),a.setAttribute("data-flat-gallery-nav","next"),n.push(a)}else{a=document.createTextNode("Next");n.push(a)}return n},e.prototype.generateImageUrl=function(e){return this.baseUrl+"/"+e.id},e}();t.default=a}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.ts");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./src/animations/animation.ts":
+/*!*************************************!*\
+  !*** ./src/animations/animation.ts ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Animation = /** @class */ (function () {
+    function Animation() {
+        this.queue = [];
+        this.framerate = 60;
+        this.running = false;
+    }
+    Animation.prototype.enqueue = function (effect) {
+        this.queue.push(effect);
+    };
+    Animation.prototype.animate = function () {
+        if (false === this.running) {
+            this.running = true;
+            this.frame = -1;
+            this.timer = setInterval(this.process.bind(this), 1000 / this.framerate);
+        }
+    };
+    Animation.prototype.process = function () {
+        var _this = this;
+        this.frame += 1;
+        var done = [];
+        this.queue.forEach(function (effect) {
+            var result = effect.run(_this.frame);
+            if (false == result) {
+                done.push(effect);
+            }
+        });
+        if (done.length === this.queue.length) {
+            this.stop();
+        }
+    };
+    Animation.prototype.stop = function () {
+        this.queue = [];
+        this.running = false;
+        clearInterval(this.timer);
+    };
+    return Animation;
+}());
+exports.default = Animation;
+
+
+/***/ }),
+
+/***/ "./src/animations/fade-out.ts":
+/*!************************************!*\
+  !*** ./src/animations/fade-out.ts ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var FadeOutAnimation = /** @class */ (function () {
+    function FadeOutAnimation(element, from, to, speed) {
+        this.element = element;
+        this.from = from;
+        this.to = to;
+        this.speed = speed;
+        this.framerate = 60 * speed;
+        this.frames = this.tween();
+    }
+    FadeOutAnimation.prototype.run = function (frame) {
+        if (null != this.frames[frame]) {
+            if (null === this.element) {
+                return false;
+            }
+            this.element.style.opacity = this.frames[frame].toString();
+            return true;
+        }
+        return false;
+    };
+    FadeOutAnimation.prototype.tween = function () {
+        var frames = [];
+        var tween = (this.to - this.from) / this.framerate;
+        for (var i = 0; i <= this.framerate; i++) {
+            frames[i] = (this.from + (tween * i)) / 100;
+        }
+        return frames;
+    };
+    return FadeOutAnimation;
+}());
+exports.default = FadeOutAnimation;
+
+
+/***/ }),
+
+/***/ "./src/application.ts":
+/*!****************************!*\
+  !*** ./src/application.ts ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var settings_1 = __webpack_require__(/*! @fg-services/settings */ "./src/services/settings.ts");
+var application_not_run_1 = __webpack_require__(/*! @fg-exceptions/application-not-run */ "./src/exceptions/application-not-run.ts");
+var viewer_1 = __webpack_require__(/*! @fg-apps/viewer */ "./src/apps/viewer/index.ts");
+var modal_1 = __webpack_require__(/*! @fg-apps/modal */ "./src/apps/modal.ts");
+var navigation_1 = __webpack_require__(/*! @fg-services/navigation */ "./src/services/navigation.ts");
+var link_generator_1 = __webpack_require__(/*! @fg-services/link-generator */ "./src/services/link-generator.ts");
+var Application = /** @class */ (function () {
+    function Application() {
+        this.apps = [];
+    }
+    Application.prototype.bootstrap = function (settings) {
+        locator_1.default.set('app', this);
+        locator_1.default.set('settings', settings.flat_gallery);
+        locator_1.default.set('openseadragon', settings.islandora_open_seadragon_viewer);
+        if (null == settings.flat_gallery) {
+            // application should not run if
+            // settings aren't passed through
+            throw new application_not_run_1.default('FLAT Gallery settings missing (Drupal.settings.flat_gallery)');
+        }
+        if (true === settings_1.isModalSettings(settings.flat_gallery)) {
+            this.apps.push(new modal_1.default());
+        }
+        if (true === settings_1.isDefaultSettings(settings.flat_gallery)) {
+            var default_settings = settings.flat_gallery;
+            var navigation = new navigation_1.default(default_settings.current_id, default_settings.images);
+            locator_1.default.set('link-generator', new link_generator_1.default(navigation, default_settings.fedora.base_url));
+            locator_1.default.set('navigation', navigation);
+            this.apps.push(new viewer_1.default());
+        }
+    };
+    Application.prototype.run = function (settings) {
+        this.bootstrap(settings);
+        this.apps.forEach(function (app) {
+            app.run();
+        });
+    };
+    Application.prototype.action = function (action) {
+        this.apps.forEach(function (app) {
+            app.action(action);
+        });
+    };
+    return Application;
+}());
+exports.Application = Application;
+
+
+/***/ }),
+
+/***/ "./src/apps/modal.ts":
+/*!***************************!*\
+  !*** ./src/apps/modal.ts ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var manager_1 = __webpack_require__(/*! @fg-events/manager */ "./src/events/manager.ts");
+var open_1 = __webpack_require__(/*! @fg-events/modal/open */ "./src/events/modal/open.ts");
+var close_1 = __webpack_require__(/*! @fg-events/modal/close */ "./src/events/modal/close.ts");
+var ModalApp = /** @class */ (function () {
+    function ModalApp() {
+    }
+    ModalApp.prototype.action = function () { };
+    ModalApp.prototype.run = function () {
+        manager_1.default.add(new open_1.default());
+        manager_1.default.add(new close_1.default());
+    };
+    return ModalApp;
+}());
+exports.default = ModalApp;
+
+
+/***/ }),
+
+/***/ "./src/apps/viewer/actions/load-image.ts":
+/*!***********************************************!*\
+  !*** ./src/apps/viewer/actions/load-image.ts ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LoadImageAction = /** @class */ (function () {
+    function LoadImageAction(image) {
+        this.image = image;
+    }
+    LoadImageAction.prototype.getImage = function () {
+        return this.image;
+    };
+    return LoadImageAction;
+}());
+exports.default = LoadImageAction;
+
+
+/***/ }),
+
+/***/ "./src/apps/viewer/basic/basic.ts":
+/*!****************************************!*\
+  !*** ./src/apps/viewer/basic/basic.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var fedora_model_1 = __webpack_require__(/*! @fg-models/fedora-model */ "./src/models/fedora-model.ts");
+var fullscreen_captions_template_1 = __webpack_require__(/*! @fg-models/fullscreen-captions-template */ "./src/models/fullscreen-captions-template.ts");
+var viewer_template_1 = __webpack_require__(/*! @fg-models/viewer-template */ "./src/models/viewer-template.ts");
+var BasicViewModel = /** @class */ (function () {
+    function BasicViewModel() {
+        this.fullscreen = false;
+        this.eventsBound = false;
+    }
+    BasicViewModel.prototype.setup = function () {
+        if (null != document.fullscreenElement) {
+            this.fullscreen = true;
+        }
+        if (true === this.eventsBound) {
+            return;
+        }
+        var navigation = locator_1.default.get('navigation');
+        if (navigation.current().model !== fedora_model_1.FedoraModel.Basic) {
+            return;
+        }
+        document.addEventListener('click', this.toggleFullscreen.bind(this));
+        var fullscreenchange = this.fullscreenChange.bind(this);
+        document.addEventListener('fullscreenchange', fullscreenchange);
+        document.addEventListener('webkitfullscreenchange', fullscreenchange);
+        document.addEventListener('mozfullscreenchange', fullscreenchange);
+        document.addEventListener('MSFullscreenChange', fullscreenchange);
+        this.eventsBound = true;
+    };
+    BasicViewModel.prototype.fullscreenChange = function () {
+        var navigation = locator_1.default.get('navigation');
+        if (navigation.current().model !== fedora_model_1.FedoraModel.Basic) {
+            return;
+        }
+        if (null == document.fullscreenElement) {
+            // exiting fullscreen
+            this.leaveFullscreen();
+        }
+        else {
+            // entering fullscreen
+            this.enterFullscreen();
+        }
+    };
+    BasicViewModel.prototype.requestFullscreen = function () {
+        if (true === this.fullscreen) {
+            return;
+        }
+        this.fullscreen = true;
+        var fullscreenRequestElement = document.querySelector('[data-role="flat-gallery-fullscreen"]');
+        fullscreenRequestElement.requestFullscreen();
+    };
+    BasicViewModel.prototype.toggleFullscreen = function () {
+        var target = event.target;
+        if (target.getAttribute('data-role') === 'flat-gallery-toggle-fullscreen') {
+            if (null == document.fullscreenElement) {
+                this.requestFullscreen();
+            }
+            else {
+                // calling document.exitFullscreen instead of this.leaveFullscreen
+                // because listeners on fullscreenchange already call it
+                document.exitFullscreen();
+            }
+        }
+    };
+    BasicViewModel.prototype.enterFullscreen = function () {
+        var navigation = locator_1.default.get('navigation');
+        navigation.show();
+        navigation.render();
+        this.renderFullscreenImage(navigation.current());
+    };
+    BasicViewModel.prototype.leaveFullscreen = function () {
+        var navigation = locator_1.default.get('navigation');
+        var image = navigation.current();
+        if (null == document.fullscreenElement && true === this.fullscreen && image.model === fedora_model_1.FedoraModel.Basic) {
+            this.fullscreen = false;
+            navigation.hide();
+            this.renderViewerImage(image);
+        }
+    };
+    BasicViewModel.prototype.renderImage = function (image) {
+        var imageElement = document.createElement('img');
+        imageElement.setAttribute('data-role', 'flat-gallery-toggle-fullscreen');
+        imageElement.setAttribute('data-flat-gallery-id', image.id.toString());
+        imageElement.setAttribute('src', image.object);
+        imageElement.classList.add('flat-gallery-basic-image');
+        return imageElement;
+    };
+    BasicViewModel.prototype.renderFullscreenImage = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        var captionsElement = fullscreen_captions_template_1.default(image);
+        var imageElement = this.renderImage(image);
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
+        }
+        fullscreenElement.appendChild(imageElement);
+        if (false !== captionsElement) {
+            fullscreenElement.appendChild(captionsElement);
+        }
+    };
+    BasicViewModel.prototype.renderViewerImage = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        var viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+        var imageElement = this.renderImage(image);
+        var viewer = viewer_template_1.default(imageElement, image);
+        while (viewerElement.lastChild) {
+            viewerElement.removeChild(viewerElement.lastChild);
+        }
+        viewerElement.appendChild(viewer);
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
+        }
+    };
+    return BasicViewModel;
+}());
+exports.default = BasicViewModel;
+
+
+/***/ }),
+
+/***/ "./src/apps/viewer/basic/index.ts":
+/*!****************************************!*\
+  !*** ./src/apps/viewer/basic/index.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var basic_1 = __webpack_require__(/*! @fg-apps/viewer/basic/basic */ "./src/apps/viewer/basic/basic.ts");
+var load_image_1 = __webpack_require__(/*! @fg-apps/viewer/actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var fedora_model_1 = __webpack_require__(/*! @fg-models/fedora-model */ "./src/models/fedora-model.ts");
+var BasicViewer = /** @class */ (function () {
+    function BasicViewer() {
+    }
+    BasicViewer.prototype.run = function () {
+        this.basic = new basic_1.default();
+        this.basic.setup();
+    };
+    BasicViewer.prototype.action = function (action) {
+        if (action instanceof load_image_1.default && action.getImage().model === fedora_model_1.FedoraModel.Basic) {
+            this.basic.setup();
+            if (null == document.fullscreenElement) {
+                // outside of fullscreen
+                this.basic.renderViewerImage(action.getImage());
+            }
+            else {
+                // inside of fullscreen
+                this.basic.renderFullscreenImage(action.getImage());
+            }
+        }
+    };
+    return BasicViewer;
+}());
+exports.default = BasicViewer;
+
+
+/***/ }),
+
+/***/ "./src/apps/viewer/index.ts":
+/*!**********************************!*\
+  !*** ./src/apps/viewer/index.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var openseadragon_1 = __webpack_require__(/*! ./openseadragon */ "./src/apps/viewer/openseadragon/index.ts");
+var manager_1 = __webpack_require__(/*! @fg-events/manager */ "./src/events/manager.ts");
+var next_1 = __webpack_require__(/*! @fg-events/navigation/next */ "./src/events/navigation/next.ts");
+var previous_1 = __webpack_require__(/*! @fg-events/navigation/previous */ "./src/events/navigation/previous.ts");
+var keyboard_next_1 = __webpack_require__(/*! @fg-events/navigation/keyboard-next */ "./src/events/navigation/keyboard-next.ts");
+var keyboard_previous_1 = __webpack_require__(/*! @fg-events/navigation/keyboard-previous */ "./src/events/navigation/keyboard-previous.ts");
+var basic_1 = __webpack_require__(/*! @fg-apps/viewer/basic */ "./src/apps/viewer/basic/index.ts");
+var mouse_move_1 = __webpack_require__(/*! @fg-events/navigation/mouse-move */ "./src/events/navigation/mouse-move.ts");
+var load_image_1 = __webpack_require__(/*! ./actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var nav_textual_1 = __webpack_require__(/*! @fg-apps/viewer/nav-textual */ "./src/apps/viewer/nav-textual.ts");
+var fullscreen_1 = __webpack_require__(/*! @fg-services/fullscreen */ "./src/services/fullscreen.ts");
+var click_thumbnail_1 = __webpack_require__(/*! @fg-events/navigation/click-thumbnail */ "./src/events/navigation/click-thumbnail.ts");
+var pop_state_1 = __webpack_require__(/*! @fg-events/navigation/pop-state */ "./src/events/navigation/pop-state.ts");
+var history_1 = __webpack_require__(/*! @fg-services/history */ "./src/services/history.ts");
+var ViewerApp = /** @class */ (function () {
+    function ViewerApp() {
+        this.viewers = [
+            new openseadragon_1.default(),
+            new basic_1.default(),
+        ];
+    }
+    ViewerApp.prototype.bootstrap = function () {
+        fullscreen_1.default();
+        history_1.default(locator_1.default.get('navigation').current());
+        manager_1.default.add(new next_1.default());
+        manager_1.default.add(new previous_1.default());
+        manager_1.default.add(new keyboard_next_1.default());
+        manager_1.default.add(new keyboard_previous_1.default());
+        manager_1.default.add(new mouse_move_1.default());
+        manager_1.default.add(new click_thumbnail_1.default());
+        manager_1.default.add(new pop_state_1.default());
+        this.navTextual = new nav_textual_1.default(locator_1.default.get('link-generator'));
+    };
+    ViewerApp.prototype.run = function () {
+        this.bootstrap();
+        this.viewers.forEach(function (viewer) {
+            viewer.run();
+        });
+    };
+    ViewerApp.prototype.action = function (action) {
+        if (action instanceof load_image_1.default) {
+            this.navTextual.render();
+        }
+        this.viewers.forEach(function (viewer) {
+            viewer.action(action);
+        });
+    };
+    return ViewerApp;
+}());
+exports.default = ViewerApp;
+
+
+/***/ }),
+
+/***/ "./src/apps/viewer/nav-textual.ts":
+/*!****************************************!*\
+  !*** ./src/apps/viewer/nav-textual.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var NavTextualViewModel = /** @class */ (function () {
+    function NavTextualViewModel(generator) {
+        this.generator = generator;
+    }
+    NavTextualViewModel.prototype.render = function () {
+        var links = this.generator.generateNavigationLinks();
+        var navTextualElement = document.querySelector('[data-role="flat-gallery-nav-textual"]');
+        while (navTextualElement.lastChild) {
+            navTextualElement.removeChild(navTextualElement.lastChild);
+        }
+        links.forEach(function (link) {
+            navTextualElement.appendChild(link);
+        });
+    };
+    return NavTextualViewModel;
+}());
+exports.default = NavTextualViewModel;
+
+
+/***/ }),
+
+/***/ "./src/apps/viewer/openseadragon/index.ts":
+/*!************************************************!*\
+  !*** ./src/apps/viewer/openseadragon/index.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var openseadragon_1 = __webpack_require__(/*! @fg-apps/viewer/openseadragon/openseadragon */ "./src/apps/viewer/openseadragon/openseadragon.ts");
+var load_image_1 = __webpack_require__(/*! ../actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var fedora_model_1 = __webpack_require__(/*! @fg-models/fedora-model */ "./src/models/fedora-model.ts");
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var OpenseadragonViewer = /** @class */ (function () {
+    function OpenseadragonViewer() {
+    }
+    OpenseadragonViewer.prototype.run = function () {
+        var settings = locator_1.default.get('settings');
+        this.openseadragon = new openseadragon_1.default(settings.openseadragon.options.id);
+        this.openseadragon.setup();
+    };
+    OpenseadragonViewer.prototype.action = function (action) {
+        if (action instanceof load_image_1.default && action.getImage().model === fedora_model_1.FedoraModel.Large) {
+            this.openseadragon.create(action.getImage());
+        }
+    };
+    return OpenseadragonViewer;
+}());
+exports.default = OpenseadragonViewer;
+
+
+/***/ }),
+
+/***/ "./src/apps/viewer/openseadragon/openseadragon.ts":
+/*!********************************************************!*\
+  !*** ./src/apps/viewer/openseadragon/openseadragon.ts ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var fetch_large_image_1 = __webpack_require__(/*! @fg-services/fetch-large-image */ "./src/services/fetch-large-image.ts");
+var fedora_model_1 = __webpack_require__(/*! @fg-models/fedora-model */ "./src/models/fedora-model.ts");
+var viewer_template_1 = __webpack_require__(/*! @fg-models/viewer-template */ "./src/models/viewer-template.ts");
+var fullscreen_captions_template_1 = __webpack_require__(/*! @fg-models/fullscreen-captions-template */ "./src/models/fullscreen-captions-template.ts");
+var viewer_captions_template_1 = __webpack_require__(/*! @fg-models/viewer-captions-template */ "./src/models/viewer-captions-template.ts");
+var OpenseadragonViewModel = /** @class */ (function () {
+    function OpenseadragonViewModel(base) {
+        this.base = '#' + base;
+        this.fullscreen = false;
+    }
+    OpenseadragonViewModel.prototype.setup = function () {
+        var _this = this;
+        var openseadragon = locator_1.default.get('openseadragon');
+        if (null == openseadragon) {
+            return;
+        }
+        openseadragon.buttons.buttons.forEach(function (button) {
+            if (button.tooltip === 'Toggle full page') {
+                button.addHandler('click', function (options) {
+                    if (false === _this.fullscreen) {
+                        _this.requestFullscreen();
+                    }
+                    else {
+                        // calling document.exitFullscreen instead of this.leaveFullscreen
+                        // because listeners on fullscreenchange already call it
+                        document.exitFullscreen();
+                    }
+                });
+            }
+        });
+        openseadragon.addHandler('pre-full-screen', function (options) {
+            options.preventDefaultAction = true;
+        });
+        var fullscreenchange = this.fullscreenChange.bind(this);
+        document.addEventListener('fullscreenchange', fullscreenchange);
+        document.addEventListener('webkitfullscreenchange', fullscreenchange);
+        document.addEventListener('mozfullscreenchange', fullscreenchange);
+        document.addEventListener('MSFullscreenChange', fullscreenchange);
+    };
+    OpenseadragonViewModel.prototype.fullscreenChange = function () {
+        var navigation = locator_1.default.get('navigation');
+        if (navigation.current().model !== fedora_model_1.FedoraModel.Large) {
+            return;
+        }
+        if (null == document.fullscreenElement) {
+            // exiting fullscreen
+            this.leaveFullscreen();
+        }
+        else {
+            // entering fullscreen
+            this.enterFullscreen();
+        }
+    };
+    OpenseadragonViewModel.prototype.requestFullscreen = function () {
+        if (true === this.fullscreen) {
+            return;
+        }
+        this.fullscreen = true;
+        var fullscreenRequestElement = document.querySelector('[data-role="flat-gallery-fullscreen"]');
+        fullscreenRequestElement.requestFullscreen();
+    };
+    OpenseadragonViewModel.prototype.enterFullscreen = function () {
+        var navigation = locator_1.default.get('navigation');
+        navigation.show();
+        navigation.render();
+        this.renderFullscreenElement(navigation.current());
+    };
+    OpenseadragonViewModel.prototype.leaveFullscreen = function () {
+        var navigation = locator_1.default.get('navigation');
+        var image = navigation.current();
+        if (null == document.fullscreenElement && true === this.fullscreen && image.model === fedora_model_1.FedoraModel.Large) {
+            this.fullscreen = false;
+            navigation.hide();
+            this.renderViewerElement(image);
+        }
+    };
+    OpenseadragonViewModel.prototype.create = function (image) {
+        var _this = this;
+        this.cleanBaseElement();
+        fetch_large_image_1.default(image)
+            .then(function (settings) {
+            Drupal.settings.islandoraOpenSeadragon.djatokaServerBaseURL = settings.djatokaServerBaseURL;
+            Drupal.IslandoraOpenSeadragonViewer[_this.base] = new Drupal.IslandoraOpenSeadragonViewer(_this.base, settings);
+            locator_1.default.set('openseadragon', Drupal.settings.islandora_open_seadragon_viewer);
+            _this.setup();
+            // if (false === this.fullscreen) {
+            //     this.renderViewerCaptions(image);
+            // } else {
+            //     this.renderFullscreenCaptions(image);
+            // }
+        });
+    };
+    OpenseadragonViewModel.prototype.cleanBaseElement = function () {
+        if (typeof Drupal.IslandoraOpenSeadragonViewer === 'undefined') {
+            return;
+        }
+        var viewerElement = null;
+        var captionsElement = null;
+        var image = locator_1.default.get('navigation').current();
+        var baseElement = document.querySelector(this.base);
+        var newBaseElement = document.createElement('div');
+        newBaseElement.setAttribute('id', this.base.substring(1)); // removing # from base name
+        newBaseElement.classList.add('islandora-openseadragon');
+        if (null == document.fullscreenElement) {
+            // out of fullscreen
+            viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+            captionsElement = viewer_captions_template_1.default(image);
+            this.fullscreen = false;
+        }
+        else {
+            // inside fullscreen
+            this.fullscreen = true;
+            viewerElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+            captionsElement = fullscreen_captions_template_1.default(image);
+            newBaseElement.classList.add('flat-gallery-openseadragon-fullscreen');
+        }
+        if (null != baseElement) {
+            // removing current baseElement
+            baseElement.remove();
+        }
+        // cleaning viewer element
+        while (viewerElement.lastChild) {
+            viewerElement.removeChild(viewerElement.lastChild);
+        }
+        // and adding new base element
+        viewerElement.appendChild(newBaseElement);
+        // and adding captions
+        if (false !== captionsElement) {
+            viewerElement.appendChild(captionsElement);
+        }
+        // finally removing it from cache
+        delete Drupal.IslandoraOpenSeadragonViewer[this.base];
+    };
+    OpenseadragonViewModel.prototype.renderFullscreenElement = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        var openseadragonElement = document.querySelector(this.base);
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
+        }
+        fullscreenElement.appendChild(openseadragonElement);
+        openseadragonElement.classList.add('flat-gallery-openseadragon-fullscreen');
+        this.renderFullscreenCaptions(image);
+    };
+    OpenseadragonViewModel.prototype.renderViewerElement = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        var viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+        var openseadragonElement = document.querySelector(this.base);
+        while (viewerElement.lastChild) {
+            viewerElement.removeChild(viewerElement.lastChild);
+        }
+        openseadragonElement.classList.remove('flat-gallery-openseadragon-fullscreen');
+        viewerElement.appendChild(viewer_template_1.default(openseadragonElement, image));
+        while (fullscreenElement.lastChild) {
+            fullscreenElement.removeChild(fullscreenElement.lastChild);
+        }
+    };
+    OpenseadragonViewModel.prototype.renderFullscreenCaptions = function (image) {
+        var fullscreenElement = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
+        var captionsElement = fullscreen_captions_template_1.default(image);
+        if (false !== captionsElement) {
+            fullscreenElement.appendChild(captionsElement);
+        }
+    };
+    OpenseadragonViewModel.prototype.renderViewerCaptions = function (image) {
+        var viewerElement = document.querySelector('[data-role="flat-gallery-viewer"]');
+        var captionsElement = viewer_captions_template_1.default(image);
+        if (false !== captionsElement) {
+            viewerElement.appendChild(captionsElement);
+        }
+    };
+    return OpenseadragonViewModel;
+}());
+exports.default = OpenseadragonViewModel;
+
+
+/***/ }),
+
+/***/ "./src/events/manager.ts":
+/*!*******************************!*\
+  !*** ./src/events/manager.ts ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var EventManager = /** @class */ (function () {
+    function EventManager() {
+    }
+    EventManager.prototype.add = function (event) {
+        event.target.addEventListener(event.type, event.listener.bind(event), event.useCapture);
+    };
+    EventManager.prototype.remove = function (event) {
+        event.target.removeEventListener(event.type, event.listener.bind(event), event.useCapture);
+    };
+    return EventManager;
+}());
+exports.EventManager = EventManager;
+exports.default = new EventManager();
+
+
+/***/ }),
+
+/***/ "./src/events/modal/close.ts":
+/*!***********************************!*\
+  !*** ./src/events/modal/close.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ModalCloseEvent = /** @class */ (function () {
+    function ModalCloseEvent() {
+        this.type = 'click';
+        this.useCapture = false;
+        this.target = document;
+    }
+    ModalCloseEvent.prototype.listener = function (event) {
+        var target = event.target;
+        if (target.getAttribute('data-role') === 'flat-gallery-modal-close') {
+            var content = document.querySelector('[data-role="flat-gallery-modal-content"]');
+            var container = content.parentNode;
+            var modal = document.querySelector('[data-role="flat-gallery-modal-container"]');
+            var transitionend = modal.remove.bind(modal);
+            container.addEventListener('transitionend', transitionend);
+            container.addEventListener('webkitTransitionEnd', transitionend);
+            container.addEventListener('mozTransitionEnd', transitionend);
+            container.addEventListener('oTransitionEnd', transitionend);
+            container.addEventListener('MSTransitionEnd', transitionend);
+            container.classList.remove('fade-to');
+        }
+    };
+    return ModalCloseEvent;
+}());
+exports.default = ModalCloseEvent;
+
+
+/***/ }),
+
+/***/ "./src/events/modal/open.ts":
+/*!**********************************!*\
+  !*** ./src/events/modal/open.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var modal_template_1 = __webpack_require__(/*! @fg-models/modal-template */ "./src/models/modal-template.ts");
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var ModalOpenEvent = /** @class */ (function () {
+    function ModalOpenEvent() {
+        this.type = 'click';
+        this.useCapture = false;
+        this.target = document;
+    }
+    ModalOpenEvent.prototype.listener = function (event) {
+        var target = event.target;
+        if (target.getAttribute('data-role') === 'flat-gallery-modal') {
+            event.preventDefault();
+            var template = modal_template_1.default(locator_1.default.get('settings').url);
+            var body = document.querySelector('body');
+            window.scrollTo(0, 0);
+            body.appendChild(template);
+            setTimeout(function () {
+                // adding timeout to allow for css transition
+                // to be called
+                var content = document.querySelector('[data-role="flat-gallery-modal-content"]');
+                content.parentNode.classList.add('fade-to');
+            });
+        }
+    };
+    return ModalOpenEvent;
+}());
+exports.default = ModalOpenEvent;
+
+
+/***/ }),
+
+/***/ "./src/events/navigation/click-thumbnail.ts":
+/*!**************************************************!*\
+  !*** ./src/events/navigation/click-thumbnail.ts ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var load_image_1 = __webpack_require__(/*! @fg-apps/viewer/actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var history_1 = __webpack_require__(/*! @fg-services/history */ "./src/services/history.ts");
+var ClickThumbnailEvent = /** @class */ (function () {
+    function ClickThumbnailEvent() {
+        this.type = 'click';
+        this.useCapture = false;
+        this.target = document;
+        this.application = locator_1.default.get('app');
+        this.navigation = locator_1.default.get('navigation');
+        this.generator = locator_1.default.get('link-generator');
+    }
+    ClickThumbnailEvent.prototype.listener = function (event) {
+        var target = event.target;
+        if (target.hasAttribute('data-load-image')) {
+            event.preventDefault();
+            var id = +target.getAttribute('data-load-image');
+            var changed = this.navigation.setImage(id);
+            var image = this.navigation.current();
+            if (false === changed) {
+                return;
+            }
+            this.navigation.render();
+            this.application.action(new load_image_1.default(image));
+            history_1.default(image);
+        }
+    };
+    return ClickThumbnailEvent;
+}());
+exports.default = ClickThumbnailEvent;
+
+
+/***/ }),
+
+/***/ "./src/events/navigation/keyboard-next.ts":
+/*!************************************************!*\
+  !*** ./src/events/navigation/keyboard-next.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var load_image_1 = __webpack_require__(/*! @fg-apps/viewer/actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var history_1 = __webpack_require__(/*! @fg-services/history */ "./src/services/history.ts");
+var KeyboardNextEvent = /** @class */ (function () {
+    function KeyboardNextEvent() {
+        this.type = 'keyup';
+        this.useCapture = false;
+        this.target = document;
+        this.application = locator_1.default.get('app');
+        this.navigation = locator_1.default.get('navigation');
+    }
+    KeyboardNextEvent.prototype.listener = function (event) {
+        var keyboard = event.which || event.keyCode || 0;
+        if (keyboard === 39) {
+            event.preventDefault();
+            this.navigation.next();
+            this.navigation.render();
+            this.application.action(new load_image_1.default(this.navigation.current()));
+            history_1.default(this.navigation.current());
+        }
+    };
+    return KeyboardNextEvent;
+}());
+exports.default = KeyboardNextEvent;
+
+
+/***/ }),
+
+/***/ "./src/events/navigation/keyboard-previous.ts":
+/*!****************************************************!*\
+  !*** ./src/events/navigation/keyboard-previous.ts ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var load_image_1 = __webpack_require__(/*! @fg-apps/viewer/actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var history_1 = __webpack_require__(/*! @fg-services/history */ "./src/services/history.ts");
+var KeyboardPreviousEvent = /** @class */ (function () {
+    function KeyboardPreviousEvent() {
+        this.type = 'keyup';
+        this.useCapture = false;
+        this.target = document;
+        this.application = locator_1.default.get('app');
+        this.navigation = locator_1.default.get('navigation');
+    }
+    KeyboardPreviousEvent.prototype.listener = function (event) {
+        var keyboard = event.which || event.keyCode || 0;
+        if (keyboard === 37) {
+            event.preventDefault();
+            this.navigation.previous();
+            this.navigation.render();
+            this.application.action(new load_image_1.default(this.navigation.current()));
+            history_1.default(this.navigation.current());
+        }
+    };
+    return KeyboardPreviousEvent;
+}());
+exports.default = KeyboardPreviousEvent;
+
+
+/***/ }),
+
+/***/ "./src/events/navigation/mouse-move.ts":
+/*!*********************************************!*\
+  !*** ./src/events/navigation/mouse-move.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var MouseMoveEvent = /** @class */ (function () {
+    function MouseMoveEvent() {
+        this.type = 'mousemove';
+        this.useCapture = false;
+        this.target = document;
+        this.navigation = locator_1.default.get('navigation');
+    }
+    MouseMoveEvent.prototype.listener = function (event) {
+        this.navigation.stopHidingNavigation();
+    };
+    return MouseMoveEvent;
+}());
+exports.default = MouseMoveEvent;
+
+
+/***/ }),
+
+/***/ "./src/events/navigation/next.ts":
+/*!***************************************!*\
+  !*** ./src/events/navigation/next.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var load_image_1 = __webpack_require__(/*! @fg-apps/viewer/actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var history_1 = __webpack_require__(/*! @fg-services/history */ "./src/services/history.ts");
+var NavigationNextEvent = /** @class */ (function () {
+    function NavigationNextEvent() {
+        this.type = 'click';
+        this.useCapture = false;
+        this.target = document;
+        this.application = locator_1.default.get('app');
+        this.navigation = locator_1.default.get('navigation');
+    }
+    NavigationNextEvent.prototype.listener = function (event) {
+        var target = event.target;
+        if (target.hasAttribute('data-flat-gallery-nav') && target.getAttribute('data-flat-gallery-nav') === 'next') {
+            event.preventDefault();
+            this.navigation.next();
+            this.navigation.render();
+            this.application.action(new load_image_1.default(this.navigation.current()));
+            history_1.default(this.navigation.current());
+        }
+    };
+    return NavigationNextEvent;
+}());
+exports.default = NavigationNextEvent;
+
+
+/***/ }),
+
+/***/ "./src/events/navigation/pop-state.ts":
+/*!********************************************!*\
+  !*** ./src/events/navigation/pop-state.ts ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var load_image_1 = __webpack_require__(/*! @fg-apps/viewer/actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var ClickThumbnailEvent = /** @class */ (function () {
+    function ClickThumbnailEvent() {
+        this.type = 'popstate';
+        this.useCapture = false;
+        this.target = window;
+        this.application = locator_1.default.get('app');
+        this.navigation = locator_1.default.get('navigation');
+        this.generator = locator_1.default.get('link-generator');
+    }
+    ClickThumbnailEvent.prototype.listener = function (event) {
+        var id = event.state.id;
+        var changed = this.navigation.setImage(id);
+        var image = this.navigation.current();
+        if (false === changed) {
+            return;
+        }
+        this.navigation.render();
+        this.application.action(new load_image_1.default(image));
+    };
+    return ClickThumbnailEvent;
+}());
+exports.default = ClickThumbnailEvent;
+
+
+/***/ }),
+
+/***/ "./src/events/navigation/previous.ts":
+/*!*******************************************!*\
+  !*** ./src/events/navigation/previous.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! @fg-services/locator */ "./src/services/locator.ts");
+var load_image_1 = __webpack_require__(/*! @fg-apps/viewer/actions/load-image */ "./src/apps/viewer/actions/load-image.ts");
+var history_1 = __webpack_require__(/*! @fg-services/history */ "./src/services/history.ts");
+var NavigationPreviousEvent = /** @class */ (function () {
+    function NavigationPreviousEvent() {
+        this.type = 'click';
+        this.useCapture = false;
+        this.target = document;
+        this.application = locator_1.default.get('app');
+        this.navigation = locator_1.default.get('navigation');
+    }
+    NavigationPreviousEvent.prototype.listener = function (event) {
+        var target = event.target;
+        if (target.hasAttribute('data-flat-gallery-nav') && target.getAttribute('data-flat-gallery-nav') === 'previous') {
+            event.preventDefault();
+            this.navigation.previous();
+            this.navigation.render();
+            this.application.action(new load_image_1.default(this.navigation.current()));
+            history_1.default(this.navigation.current());
+        }
+    };
+    return NavigationPreviousEvent;
+}());
+exports.default = NavigationPreviousEvent;
+
+
+/***/ }),
+
+/***/ "./src/exceptions/application-not-run.ts":
+/*!***********************************************!*\
+  !*** ./src/exceptions/application-not-run.ts ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var ApplicationNotRun = /** @class */ (function (_super) {
+    __extends(ApplicationNotRun, _super);
+    function ApplicationNotRun() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ApplicationNotRun;
+}(Error));
+exports.default = ApplicationNotRun;
+
+
+/***/ }),
+
+/***/ "./src/index.ts":
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var application_1 = __webpack_require__(/*! ./application */ "./src/application.ts");
+(function (jq, Drupal, document, Element) {
+    Drupal.behaviors.FlatGalleryNew = {
+        attach: function (context, settings) {
+            var application = new application_1.Application();
+            application.run(settings);
+        },
+        detach: function (context) {
+        }
+    };
+}(jQuery, Drupal));
+
+
+/***/ }),
+
+/***/ "./src/models/fedora-model.ts":
+/*!************************************!*\
+  !*** ./src/models/fedora-model.ts ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Defining which kinds of models this application
+ * supports, we use this enum.
+ *
+ * @author  Ibrahim Abdullah <ibrahim.abdullah@mpi.nl>
+ * @package Flat Gallery
+ */
+var FedoraModel;
+(function (FedoraModel) {
+    /**
+     * Simple {@link HTMLImageElement} will be displayed
+     */
+    FedoraModel["Basic"] = "islandora:sp_basic_image";
+    /**
+     * Openseadragon viewer will be displayed
+     */
+    FedoraModel["Large"] = "islandora:sp_large_image_cmodel";
+})(FedoraModel = exports.FedoraModel || (exports.FedoraModel = {}));
+;
+
+
+/***/ }),
+
+/***/ "./src/models/fullscreen-captions-template.ts":
+/*!****************************************************!*\
+  !*** ./src/models/fullscreen-captions-template.ts ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Creating captions from template
+ *
+ * @author  Ibrahim Abdullah <ibrahim.abdullah@mpi.nl>
+ * @package Flat Gallery
+ */
+/**
+ * @param url string
+ *
+ * @return Element
+ */
+var FullscreenCaptionsTemplate = function (image) {
+    if (image.descriptions.length > 0) {
+        var captionsElement_1 = document.createElement('div');
+        captionsElement_1.classList.add('flat-gallery-viewer-caption');
+        captionsElement_1.setAttribute('data-role', 'flat-gallery-captions');
+        image.descriptions.forEach(function (description) {
+            var captionElement = document.createElement('span');
+            captionElement.textContent = description;
+            captionsElement_1.appendChild(captionElement);
+        });
+        return captionsElement_1;
+    }
+    return false;
+};
+exports.default = FullscreenCaptionsTemplate;
+
+
+/***/ }),
+
+/***/ "./src/models/modal-template.ts":
+/*!**************************************!*\
+  !*** ./src/models/modal-template.ts ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Creating modal from template
+ *
+ * @author  Ibrahim Abdullah <ibrahim.abdullah@mpi.nl>
+ * @package Flat Gallery
+ */
+/**
+ * @param url string
+ *
+ * @return Element
+ */
+var ModalTemplate = function (url) {
+    var template = "\n        <div class=\"flat-gallery-modal\" data-role=\"flat-gallery-modal-container\">\n            <div class=\"flat-gallery-modal-overlay\"></div>\n            <div class=\"flat-gallery-modal-content-container\">\n                <a href=\"#\" class=\"flat-gallery-modal-close\" data-role=\"flat-gallery-modal-close\"></a>\n                <div class=\"flat-gallery-modal-content\" data-role=\"flat-gallery-modal-content\">\n                    <iframe allowfullscreen=\"true\" allow=\"fullscreen\" src=\"" + url + "\"></iframe>\n                </div>\n            </div>\n        </div>\n    ";
+    var element = document.createElement('div');
+    element.innerHTML = template.trim();
+    return element.firstChild;
+};
+exports.default = ModalTemplate;
+
+
+/***/ }),
+
+/***/ "./src/models/viewer-captions-template.ts":
+/*!************************************************!*\
+  !*** ./src/models/viewer-captions-template.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Creating captions from template
+ *
+ * @author  Ibrahim Abdullah <ibrahim.abdullah@mpi.nl>
+ * @package Flat Gallery
+ */
+/**
+ * @param url string
+ *
+ * @return Element
+ */
+var ViewerCaptionsTemplate = function (image) {
+    if (image.descriptions.length > 0) {
+        var template_1 = "\n            <div class=\"flat-gallery-caption\">\n                <small class=\"flat-gallery-caption-filename\">" + image.filename + "</small>\n        ";
+        image.descriptions.forEach(function (description) {
+            template_1 += "<h4>" + description + "</h4>";
+        });
+        template_1 += '</div>';
+        var element = document.createElement('div');
+        element.innerHTML = template_1.trim();
+        return element.firstChild;
+    }
+    return false;
+};
+exports.default = ViewerCaptionsTemplate;
+
+
+/***/ }),
+
+/***/ "./src/models/viewer-template.ts":
+/*!***************************************!*\
+  !*** ./src/models/viewer-template.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var viewer_captions_template_1 = __webpack_require__(/*! ./viewer-captions-template */ "./src/models/viewer-captions-template.ts");
+/**
+ * Creating captions from template
+ *
+ * @author  Ibrahim Abdullah <ibrahim.abdullah@mpi.nl>
+ * @package Flat Gallery
+ */
+/**
+ * @param url string
+ *
+ * @return Element
+ */
+var ViewerTemplate = function (view, image) {
+    var element = document.createElement('div');
+    var viewer = document.createElement('div');
+    var captions = viewer_captions_template_1.default(image);
+    viewer.classList.add('flat-gallery-viewer');
+    viewer.appendChild(view);
+    element.appendChild(viewer);
+    if (false !== captions) {
+        element.appendChild(captions);
+    }
+    return element;
+};
+exports.default = ViewerTemplate;
+
+
+/***/ }),
+
+/***/ "./src/services/fetch-large-image.ts":
+/*!*******************************************!*\
+  !*** ./src/services/fetch-large-image.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! ./locator */ "./src/services/locator.ts");
+function FetchLargeImage(image) {
+    return __awaiter(this, void 0, void 0, function () {
+        var url, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    url = locator_1.default.get('settings').fedora.base_url + '/ajax';
+                    return [4 /*yield*/, fetch(url + "/" + image.id)];
+                case 1:
+                    response = _a.sent();
+                    return [4 /*yield*/, response.json()];
+                case 2: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.default = FetchLargeImage;
+
+
+/***/ }),
+
+/***/ "./src/services/fullscreen.ts":
+/*!************************************!*\
+  !*** ./src/services/fullscreen.ts ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function FixFullscreenCompatibility() {
+    if (typeof document.fullscreenElement == 'undefined') {
+        Object.defineProperty(document, 'fullscreenElement', {
+            get: function () {
+                if (typeof document.mozFullScreenElement != 'undefined') {
+                    return document.mozFullScreenElement;
+                }
+                if (typeof document.webkitFullscreenElement != 'undefined') {
+                    return document.webkitFullscreenElement;
+                }
+                if (typeof document.msFullscreenElement != 'undefined') {
+                    return document.msFullscreenElement;
+                }
+                return undefined;
+            }
+        });
+    }
+    if (typeof Element.prototype.requestFullscreen == 'undefined') {
+        if (typeof Element.prototype.mozRequestFullscreen != 'undefined') {
+            Element.prototype.requestFullscreen = Element.prototype.mozRequestFullscreen;
+        }
+        if (typeof Element.prototype.webkitRequestFullscreen != 'undefined') {
+            Element.prototype.requestFullscreen = Element.prototype.webkitRequestFullscreen;
+        }
+        if (typeof Element.prototype.msRequestFullscreen != 'undefined') {
+            Element.prototype.requestFullscreen = Element.prototype.msRequestFullscreen;
+        }
+    }
+}
+exports.default = FixFullscreenCompatibility;
+
+
+/***/ }),
+
+/***/ "./src/services/history.ts":
+/*!*********************************!*\
+  !*** ./src/services/history.ts ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locator_1 = __webpack_require__(/*! ./locator */ "./src/services/locator.ts");
+function PushImageToHistory(image) {
+    var generator = locator_1.default.get('link-generator');
+    history.pushState({
+        id: image.id
+    }, '', generator.generateImageUrl(image));
+}
+exports.default = PushImageToHistory;
+
+
+/***/ }),
+
+/***/ "./src/services/link-generator.ts":
+/*!****************************************!*\
+  !*** ./src/services/link-generator.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LinkGenerator = /** @class */ (function () {
+    function LinkGenerator(navigation, baseUrl) {
+        this.baseUrl = baseUrl;
+        this.navigation = navigation;
+    }
+    LinkGenerator.prototype.generateNavigationLinks = function () {
+        var previous = this.navigation.getPreviousImage();
+        var next = this.navigation.getNextImage();
+        var links = [];
+        if (false !== previous) {
+            var link = document.createElement('a');
+            link.textContent = 'Previous';
+            link.setAttribute('href', this.baseUrl + "/" + previous.id);
+            link.setAttribute('data-flat-gallery-nav', 'previous');
+            links.push(link);
+        }
+        else {
+            var link = document.createTextNode('Previous');
+            links.push(link);
+        }
+        links.push(document.createTextNode(' | '));
+        if (false !== next) {
+            var link = document.createElement('a');
+            link.textContent = 'Next';
+            link.setAttribute('href', this.baseUrl + "/" + next.id);
+            link.setAttribute('data-flat-gallery-nav', 'next');
+            links.push(link);
+        }
+        else {
+            var link = document.createTextNode('Next');
+            links.push(link);
+        }
+        return links;
+    };
+    LinkGenerator.prototype.generateImageUrl = function (image) {
+        return this.baseUrl + "/" + image.id;
+    };
+    return LinkGenerator;
+}());
+exports.default = LinkGenerator;
+
+
+/***/ }),
+
+/***/ "./src/services/locator.ts":
+/*!*********************************!*\
+  !*** ./src/services/locator.ts ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ServiceLocator = new Map();
+exports.default = exports.ServiceLocator;
+
+
+/***/ }),
+
+/***/ "./src/services/navigation.ts":
+/*!************************************!*\
+  !*** ./src/services/navigation.ts ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var animation_1 = __webpack_require__(/*! @fg-animations/animation */ "./src/animations/animation.ts");
+var fade_out_1 = __webpack_require__(/*! @fg-animations/fade-out */ "./src/animations/fade-out.ts");
+var Navigation = /** @class */ (function () {
+    function Navigation(current_id, images) {
+        this.id = current_id;
+        this.images = images;
+        this.animation = new animation_1.default();
+    }
+    Navigation.prototype.all = function () {
+        return this.images;
+    };
+    Navigation.prototype.current = function () {
+        return this.images[this.id];
+    };
+    Navigation.prototype.getNextImage = function () {
+        if (false === this.nextImageAvailable()) {
+            return false;
+        }
+        return this.images[this.id + 1];
+    };
+    Navigation.prototype.nextImageAvailable = function () {
+        return null != this.images[this.id + 1];
+    };
+    Navigation.prototype.next = function () {
+        if (false === this.nextImageAvailable()) {
+            return false;
+        }
+        this.id += 1;
+        return this.images[this.id];
+    };
+    Navigation.prototype.getPreviousImage = function () {
+        if (false === this.previousImageAvailable()) {
+            return false;
+        }
+        return this.images[this.id - 1];
+    };
+    Navigation.prototype.previousImageAvailable = function () {
+        return null != this.images[this.id - 1];
+    };
+    Navigation.prototype.previous = function () {
+        if (false === this.previousImageAvailable()) {
+            return false;
+        }
+        this.id -= 1;
+        return this.images[this.id];
+    };
+    Navigation.prototype.setImage = function (id) {
+        if (null == this.images[id]) {
+            return false;
+        }
+        this.id = id;
+        return true;
+    };
+    Navigation.prototype.show = function () {
+        var navigationElement = document.querySelector('[data-role="flat-gallery-nav"]');
+        navigationElement.classList.remove('hidden');
+    };
+    Navigation.prototype.hide = function () {
+        var navigationElement = document.querySelector('[data-role="flat-gallery-nav"]');
+        navigationElement.classList.add('hidden');
+    };
+    Navigation.prototype.render = function () {
+        var nextElement = document.querySelector('[data-flat-gallery-nav="next"]');
+        var previousElement = document.querySelector('[data-flat-gallery-nav="previous"]');
+        var nextImageAvailable = this.nextImageAvailable();
+        var previousImageAvailable = this.previousImageAvailable();
+        var currentImage = this.current();
+        nextElement.classList.add('hidden');
+        previousElement.classList.add('hidden');
+        if (true === nextImageAvailable) {
+            nextElement.classList.remove('hidden');
+        }
+        if (true === previousImageAvailable) {
+            previousElement.classList.remove('hidden');
+        }
+        document.querySelectorAll('[data-role="flat-gallery-thumbnail"] a').forEach(function (thumbnail) {
+            thumbnail.classList.remove('active');
+        });
+        var currentThumbnailElement = document.querySelector("[data-role=\"flat-gallery-thumbnail\"][data-flat-gallery-id=\"" + currentImage.id + "\"] a");
+        currentThumbnailElement.classList.add('active');
+        // starting up animating arrow fade out
+        this.stopHidingNavigation();
+    };
+    Navigation.prototype.hideNavigation = function () {
+        if (false === this.animation.running) {
+            var nextElement = document.querySelector('[data-flat-gallery-nav="next"]');
+            var previousElement = document.querySelector('[data-flat-gallery-nav="previous"]');
+            var captionsElement = document.querySelector('[data-role="flat-gallery-captions"]');
+            this.animation.enqueue(new fade_out_1.default(previousElement, 100, 0, 1));
+            this.animation.enqueue(new fade_out_1.default(nextElement, 100, 0, 1));
+            if (captionsElement) {
+                this.animation.enqueue(new fade_out_1.default(captionsElement, 100, 0, 1));
+            }
+            this.animation.animate();
+        }
+    };
+    Navigation.prototype.stopHidingNavigation = function () {
+        var _this = this;
+        if (null == document.fullscreenElement) {
+            // out of fullscreen
+            return;
+        }
+        var nextElement = document.querySelector('[data-flat-gallery-nav="next"]');
+        var previousElement = document.querySelector('[data-flat-gallery-nav="previous"]');
+        var captionsElement = document.querySelector('[data-role="flat-gallery-captions"]');
+        nextElement.style.opacity = '1';
+        previousElement.style.opacity = '1';
+        if (captionsElement) {
+            captionsElement.style.opacity = '1';
+        }
+        if (true === this.animation.running) {
+            this.animation.stop();
+        }
+        clearTimeout(this.hideNavigationTimeout);
+        this.hideNavigationTimeout = setTimeout(function () {
+            _this.hideNavigation();
+        }, 5000);
+    };
+    return Navigation;
+}());
+exports.default = Navigation;
+
+
+/***/ }),
+
+/***/ "./src/services/settings.ts":
+/*!**********************************!*\
+  !*** ./src/services/settings.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function isModalSettings(item) {
+    return item.modal !== undefined && item.url !== undefined;
+}
+exports.isModalSettings = isModalSettings;
+function isDefaultSettings(item) {
+    return item.images !== undefined && item.openseadragon !== undefined;
+}
+exports.isDefaultSettings = isDefaultSettings;
+
+
+/***/ })
+
+/******/ });
 //# sourceMappingURL=flat-gallery-app.js.map

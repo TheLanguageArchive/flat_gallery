@@ -135,7 +135,11 @@ export default class Navigation {
 
             this.animation.enqueue(new FadeOutAnimation(previousElement, 100, 0, 1));
             this.animation.enqueue(new FadeOutAnimation(nextElement, 100, 0, 1));
-            this.animation.enqueue(new FadeOutAnimation(captionsElement, 100, 0, 1));
+
+            if (captionsElement) {
+              this.animation.enqueue(new FadeOutAnimation(captionsElement, 100, 0, 1));
+            }
+
             this.animation.animate();
         }
     }
@@ -152,15 +156,12 @@ export default class Navigation {
         let previousElement = document.querySelector('[data-flat-gallery-nav="previous"]') as HTMLElement;
         let captionsElement = document.querySelector('[data-role="flat-gallery-captions"]') as HTMLElement;
 
-        if (null === captionsElement) {
-
-            // not rendered yet
-            return;
-        }
-
         nextElement.style.opacity     = '1';
         previousElement.style.opacity = '1';
-        captionsElement.style.opacity = '1';
+
+        if (captionsElement) {
+          captionsElement.style.opacity = '1';
+        }
 
         if (true === this.animation.running) {
             this.animation.stop();

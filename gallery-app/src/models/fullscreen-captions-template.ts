@@ -16,10 +16,8 @@ const FullscreenCaptionsTemplate = (image: Image) : Node | false => {
     if (image.descriptions.length > 0) {
 
         let captionsElement = document.createElement('div');
-        captionsElement.classList.add('hidden');
-
-        captionsElement.classList.remove('hidden');
         captionsElement.classList.add('flat-gallery-viewer-caption');
+        captionsElement.setAttribute('data-role', 'flat-gallery-captions');
 
         image.descriptions.forEach((description) => {
 
