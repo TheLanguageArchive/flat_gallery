@@ -7,20 +7,13 @@ import ViewerTemplate from "@fg-models/viewer-template";
 
 export default class BasicViewModel {
 
-    private fullscreen: boolean;
     private eventsBound: boolean;
 
     constructor() {
-
-        this.fullscreen  = false;
         this.eventsBound = false;
     }
 
     setup() {
-
-        if (null != document.fullscreenElement) {
-            this.fullscreen = true;
-        }
 
         if (true === this.eventsBound) {
             return;
@@ -66,11 +59,9 @@ export default class BasicViewModel {
 
     requestFullscreen() {
 
-        if (true === this.fullscreen) {
+        if (null != document.fullscreenElement) {
             return;
         }
-
-        this.fullscreen = true;
 
         let fullscreenRequestElement = document.querySelector('[data-role="flat-gallery-fullscreen"]');
         fullscreenRequestElement.requestFullscreen();
@@ -106,9 +97,7 @@ export default class BasicViewModel {
         let navigation = ServiceLocator.get('navigation') as Navigation;
         let image      = navigation.current();
 
-        if (null == document.fullscreenElement && true === this.fullscreen && image.model === FedoraModel.Basic) {
-
-            this.fullscreen = false;
+        if (null == document.fullscreenElement && image.model === FedoraModel.Basic) {
 
             navigation.hide();
             this.renderViewerImage(image);

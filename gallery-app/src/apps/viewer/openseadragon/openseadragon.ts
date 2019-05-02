@@ -11,12 +11,9 @@ import ViewerCaptionsTemplate from "@fg-models/viewer-captions-template";
 export default class OpenseadragonViewModel {
 
     private base: string;
-    private fullscreen: boolean;
 
     constructor(base) {
-
-        this.base       = '#' + base;
-        this.fullscreen = false;
+        this.base = '#' + base;
     }
 
     setup() {
@@ -33,7 +30,7 @@ export default class OpenseadragonViewModel {
 
                 button.addHandler('click', (options) => {
 
-                    if (false === this.fullscreen) {
+                    if (null == document.fullscreenElement) {
                         this.requestFullscreen();
                     } else {
 
@@ -79,11 +76,9 @@ export default class OpenseadragonViewModel {
 
     requestFullscreen() {
 
-        if (true === this.fullscreen) {
+        if (null != document.fullscreenElement) {
             return;
         }
-
-        this.fullscreen = true;
 
         let fullscreenRequestElement = document.querySelector('[data-role="flat-gallery-fullscreen"]');
         fullscreenRequestElement.requestFullscreen();
@@ -103,9 +98,7 @@ export default class OpenseadragonViewModel {
         let navigation = ServiceLocator.get('navigation') as Navigation;
         let image      = navigation.current();
 
-        if (null == document.fullscreenElement && true === this.fullscreen && image.model === FedoraModel.Large) {
-
-            this.fullscreen = false;
+        if (null == document.fullscreenElement && image.model === FedoraModel.Large) {
 
             navigation.hide();
             this.renderViewerElement(image);
@@ -125,12 +118,6 @@ export default class OpenseadragonViewModel {
                 ServiceLocator.set('openseadragon', Drupal.settings.islandora_open_seadragon_viewer);
 
                 this.setup();
-
-                // if (false === this.fullscreen) {
-                //     this.renderViewerCaptions(image);
-                // } else {
-                //     this.renderFullscreenCaptions(image);
-                // }
             });
     }
 
@@ -155,12 +142,9 @@ export default class OpenseadragonViewModel {
             viewerElement   = document.querySelector('[data-role="flat-gallery-viewer"]');
             captionsElement = ViewerCaptionsTemplate(image);
 
-            this.fullscreen = false;
-
         } else {
 
             // inside fullscreen
-            this.fullscreen = true;
             viewerElement   = document.querySelector('[data-role="flat-gallery-fullscreen-element"]');
             captionsElement = FullscreenCaptionsTemplate(image);
 
