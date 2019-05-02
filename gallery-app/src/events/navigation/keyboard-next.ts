@@ -30,6 +30,10 @@ export default class KeyboardNextEvent implements CustomEvent {
 
             event.preventDefault();
 
+            if (false === this.navigation.nextImageAvailable()) {
+                return;
+            }
+
             this.navigation.next();
             this.navigation.render();
 

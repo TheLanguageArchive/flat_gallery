@@ -30,6 +30,10 @@ export default class NavigationNextEvent implements CustomEvent {
 
             event.preventDefault();
 
+            if (false === this.navigation.nextImageAvailable()) {
+                return;
+            }
+
             this.navigation.next();
             this.navigation.render();
 

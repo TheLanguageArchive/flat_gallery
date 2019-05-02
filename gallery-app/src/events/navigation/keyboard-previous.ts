@@ -30,6 +30,10 @@ export default class KeyboardPreviousEvent implements CustomEvent {
 
             event.preventDefault();
 
+            if (false === this.navigation.previousImageAvailable()) {
+                return;
+            }
+
             this.navigation.previous();
             this.navigation.render();
 
