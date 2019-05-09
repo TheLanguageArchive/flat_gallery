@@ -4,4 +4,4 @@
  * FLAT Gallery modal template.
  */
 ?>
-<a href="#" data-role="flat-gallery-modal">Open Gallery</a>
+<a href="#" class="flat-gallery-link" data-role="flat-gallery-modal">Open Gallery</a>
