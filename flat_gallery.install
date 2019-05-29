@@ -1,0 +1,24 @@
+<?php
+/**
+ * Installation script
+ *
+ * @return void
+ */
+function flat_gallery_install() {
+
+    // setting default settings
+    variable_set('flat_gallery_pagination_limit', FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT);
+    variable_set('flat_gallery_delay_fade_out', FLAT_GALLERY_DEFAULT_DELAY_FADE_OUT);
+}
+
+/**
+ * Removing request form
+ *
+ * @return void
+ */
+function flat_gallery_uninstall() {
+
+    // removing default settings
+    variable_del('flat_gallery_pagination_limit');
+    variable_del('flat_gallery_delay_fade_out');
+}

@@ -29,6 +29,9 @@ export default class ModalOpenEvent implements CustomEvent {
             window.scrollTo(0, 0);
             body.appendChild(template);
 
+            let iframe = document.querySelector('[data-role="flat-gallery-modal-iframe"]') as HTMLElement;
+            iframe.focus();
+
             setTimeout(() => {
 
                 // adding timeout to allow for css transition

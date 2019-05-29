@@ -60,8 +60,19 @@ export interface FedoraSettings {
 
 export interface DefaultSettings {
 
+    /**
+     * Some general fedora data
+     */
     fedora: FedoraSettings;
 
+    /**
+     * Current delay when fading out navigation
+     */
+    delay: number;
+
+    /**
+     * Current image
+     */
     current_id: number;
 
     /**

@@ -1,6 +1,6 @@
 import Image from "@fg-models/image";
-import { DefaultSettings } from "./settings";
-import ServiceLocator from "./locator";
+import { DefaultSettings } from "@fg-services/settings";
+import ServiceLocator from "@fg-services/locator";
 
 export default async function FetchLargeImage(image: Image) {
 

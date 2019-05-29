@@ -1,6 +1,8 @@
 import Image from "@fg-models/image";
 import Animation from "@fg-animations/animation";
 import FadeOutAnimation from "@fg-animations/fade-out";
+import ServiceLocator from "@fg-services/locator";
+import { DefaultSettings } from "@fg-services/settings";
 
 export default class Navigation {
 
@@ -169,8 +171,10 @@ export default class Navigation {
 
         clearTimeout(this.hideNavigationTimeout);
 
+        let delay = (ServiceLocator.get('settings') as DefaultSettings).delay * 1000;
+
         this.hideNavigationTimeout = setTimeout(() => {
             this.hideNavigation();
-        }, 5000);
+        }, delay);
     }
 }

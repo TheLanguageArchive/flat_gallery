@@ -6,8 +6,6 @@ import ModalApp from "@fg-apps/modal";
 import App from "@fg-apps/app";
 import Navigation from "@fg-services/navigation";
 import Action from "@fg-apps/viewer/actions/action";
-import Animation from "@fg-animations/animation";
-import FadeOutAnimation from "@fg-animations/fade-out";
 import LinkGenerator from "@fg-services/link-generator";
 
 export class Application {

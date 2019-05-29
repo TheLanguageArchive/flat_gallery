@@ -63,6 +63,61 @@ class FlatGallerySolr
     }
 
     /**
+     * Fetching parent pid
+     *
+     * @param string $child
+     *
+     * @return string
+     */
+    public function getParentPid($child)
+    {
+        $data   = $this->query($this->parentQuery($child), $this->parentParams());
+        $parent = $child;
+
+        foreach ($data['response']['docs'] as $doc) {
+
+            if (!isset($doc['RELS_EXT_isConstituentOf_uri_ms'])) {
+                continue;
+            }
+
+            $parent = array_map([$this, 'removeFedoraPrefix'], $doc['RELS_EXT_isConstituentOf_uri_ms']);
+            $parent = current($parent);
+        }
+
+        return $parent;
+    }
+
+    /**
+     * Get parent query
+     *
+     * @param string $child
+     *
+     * @return string
+     */
+    public function parentQuery($child)
+    {
+        return format_string('!pid_field:("info:fedora/!pid" OR "!pid")', [
+
+            '!pid_field' => 'PID',
+            '!pid'       => $child,
+        ]);
+    }
+
+    /**
+     * Parent params
+     *
+     * @return array
+     */
+    public function parentParams()
+    {
+        return [
+            'fl' => [
+                'PID, fgs_label_s, RELS_EXT_isConstituentOf_uri_ms',
+            ],
+        ];
+    }
+
+    /**
      * Fetching gallery items from solr
      *
      * @param string $parent
@@ -71,7 +126,7 @@ class FlatGallerySolr
      */
     public function getItems($parent)
     {
-        $data   = $this->query($this->childrenQuery($parent), $this->childrenParams($parent));
+        $data  = $this->query($this->childrenQuery($parent), $this->childrenParams($parent));
         $items = [];
 
         foreach ($data['response']['docs'] as $doc) {

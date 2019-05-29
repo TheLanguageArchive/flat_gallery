@@ -1,5 +1,6 @@
 <?php
 define('FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT', 10);
+define('FLAT_GALLERY_DEFAULT_DELAY_FADE_OUT', 5);
 module_load_include('inc', 'islandora', 'includes/authtokens');
 module_load_include('inc', 'islandora', 'includes/solution_packs');
 /**
@@ -58,6 +59,7 @@ function flat_gallery_prepare_settings_js($object, $items, $current_image) {
 
         'flat_gallery' => [
 
+            'delay'         => variable_get('flat_gallery_delay_fade_out'),
             'current_id'    => $current_image['id'],
             'images'        => $items,
             'openseadragon' => flat_gallery_setup_openseadragon($current_image),
@@ -186,6 +188,7 @@ function flat_gallery_preprocess_block(&$variables) {
 
         $pid     = urldecode(arg(2));
         $solr    = new FlatGallerySolr();
+        $pid     = $solr->getParentPid($pid);
         $results = $solr->getItems($pid);
 
         if ($results['total'] > 0) {

@@ -17,7 +17,7 @@ const ModalTemplate = (url: string) : Node => {
             <div class="flat-gallery-modal-content-container">
                 <a href="#" class="flat-gallery-modal-close" data-role="flat-gallery-modal-close"></a>
                 <div class="flat-gallery-modal-content" data-role="flat-gallery-modal-content">
-                    <iframe allowfullscreen="true" allow="fullscreen" src="${url}"></iframe>
+                    <iframe allowfullscreen="true" allow="fullscreen" src="${url}" data-role="flat-gallery-modal-iframe"></iframe>
                 </div>
             </div>
         </div>
