@@ -1,8 +1,6 @@
 <?php
 define('FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT', 10);
 define('FLAT_GALLERY_DEFAULT_DELAY_FADE_OUT', 5);
-module_load_include('inc', 'islandora', 'includes/authtokens');
-module_load_include('inc', 'islandora', 'includes/solution_packs');
 /**
  * FLAT gallery
  *
@@ -95,10 +93,11 @@ function flat_gallery_setup_openseadragon($image) {
             ],
         ];
 
-        template_process_islandora_openseadragon_viewer($openseadragon);
-
         return $openseadragon['settings'];
     }
+
+    module_load_include('inc', 'islandora_openseadragon', 'theme/theme');
+    module_load_include('inc', 'islandora_openseadragon', 'includes/utilities');
 
     $params = [
 
@@ -107,18 +106,14 @@ function flat_gallery_setup_openseadragon($image) {
         'dsid'  => 'JP2',
     ];
 
-    $params['jp2_url'] = url('islandora/object/' . $params['pid'] . '/datastream/JP2/view', [
-
-        'absolute' => true,
-        'query'    => [
-            'token' => $params['token']
-        ],
-    ]);
+    $token_header = variable_get('islandora_openseadragon_tilesource', 'djatoka') == 'iiif'
+        && variable_get('islandora_openseadragon_iiif_token_header', FALSE);
 
     $openseadragon = [
-
-        'pid'          => $params['pid'],
-        'tile_sources' => islandora_openseadragon_identifier_tile_source($params['jp2_url']),
+        'pid' => $params['pid'],
+        'tile_sources' => islandora_openseadragon_tile_source($params['pid'], $params['dsid'], $params['token']),
+        'token' => $params['token'],
+        'token_header' => $token_header,
     ];
 
     template_preprocess_islandora_openseadragon_viewer($openseadragon);
