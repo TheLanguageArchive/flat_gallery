@@ -179,12 +179,15 @@ class FlatGallerySolr
             'fq' => [
 
                 0 => 'RELS_EXT_hasModel_uri_ms:("info:fedora/islandora:sp_large_image_cmodel" OR "islandora:sp_large_image_cmodel" OR "info:fedora/islandora:sp_basic_image" OR "islandora:sp_basic_image")',
-                1 => 'policy_datastream_users_ms:"' . $user->name . '"
-                        OR (
+                1 => '(
                             (*:* -policy_datastream_users_ms:[* TO *]) AND (*:* -policy_datastream_roles_ms:[* TO *])
                         )',
             ],
         ];
+
+        if ($user->uid != 0) {
+            $params['fq'][1] .= ' OR (policy_datastream_users_ms:"' . $user->name . '") ';
+        }
 
         foreach ($user->roles as $role) {
             $params['fq'][1] .= ' OR (policy_datastream_roles_ms:"' . $role . '") ';
