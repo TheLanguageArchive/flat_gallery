@@ -85,18 +85,25 @@ function flat_gallery_setup_openseadragon($image) {
 
     if ($image['viewer_type'] !== 'large') {
 
+        $library_path  = libraries_get_path('openseadragon');
         $openseadragon = [
 
             'settings' => [
 
                 'options' => [
 
-                    'id'   => 'islandora-openseadragon-new',
-                    'type' => 'image',
-                    'url'  => $image['object'],
+                    'id'          => 'islandora-openseadragon-new',
+                    'prefixUrl'   => file_create_url("{$library_path}/images/"),
+                    'tileSources' => [
+
+                        'type' => 'image',
+                        'url'  => $image['url'],
+                    ],
                 ],
             ],
         ];
+
+        template_process_islandora_openseadragon_viewer($openseadragon);
 
         return $openseadragon['settings'];
     }
@@ -166,7 +173,10 @@ function flat_gallery_fetch_large_image_ajax($object, $ig, $ajax, $id) {
 function flat_gallery_open_gallery_ajax($page_callback_result) {
 
     // Add CSS and JS files, add some markup
-    $html = '<html><head><title></title>' . drupal_get_css() . drupal_get_js() . '</head><body>' . $page_callback_result . '</body></html>';
+    $html  = drupal_get_css() . "\n\n\n";
+    $html .= drupal_get_js()  . "\n\n\n";
+    $html .= $page_callback_result;
+
     print $html;
 
     // Perform end-of-request tasks.

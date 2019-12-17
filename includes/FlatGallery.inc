@@ -249,14 +249,16 @@ class FlatGallery
 
                 // if basic image just display the contents of the object
                 // and load it into a html img tag
+
                 $this->current = [
 
                     'id'           => $currentItem['id'],
                     'pid'          => $currentItem['pid'],
                     'object'       => $current,
                     'filename'     => $currentItem['filename'],
-                    'viewer_type'  => 'basic',
-                    'viewer'       => '<img class="flat-gallery-basic-image" data-role="flat-gallery-toggle-fullscreen" data-flat-gallery-fullscreen="false" data-flat-gallery-id="' . $currentItem['id'] . '" src="' . url('islandora/object/' . $currentItem['pid'] . '/datastream/OBJ/view') . '" />',
+                    'url'          => $currentItem['object'],
+                    'viewer_type'  => 'openseadragon-basic',
+                    'viewer'       => '<div id="islandora-openseadragon-new" class="islandora-openseadragon"></div>',
                     'descriptions' => $currentItem['descriptions'],
                 ];
 

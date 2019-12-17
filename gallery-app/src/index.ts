@@ -1,18 +1,14 @@
 import { Application } from "./application";
 import Settings, { DefaultSettings } from "@fg-services/settings";
 
-(function (jq, Drupal, document, Element) {
+Drupal.behaviors.FlatGalleryNew = {
 
-    Drupal.behaviors.FlatGalleryNew = {
+    attach(context, settings: Settings) {
 
-        attach(context, settings: Settings) {
+        let application = new Application();
+        application.run(settings);
+    },
 
-            let application = new Application();
-            application.run(settings);
-        },
-
-        detach(context) {
-        }
-    };
-
-}(jQuery, Drupal));
+    detach(context) {
+    }
+};
