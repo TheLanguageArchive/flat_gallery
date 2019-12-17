@@ -1,4 +1,5 @@
-import { Image } from "../models/image";
+import { Image } from "@fg-models/image";
+import { Application } from "@fg-application";
 /**
  * All the settings interfaces applicable to Flat Gallery
  *
@@ -113,8 +114,19 @@ export interface OpenseadragonInstance {
  */
 export interface Settings {
 
+    /**
+     * Cache of gallery app
+     */
+    flat_gallery_app: Application;
+
+    /**
+     * Drupal Gallery settings
+     */
     flat_gallery: DefaultSettings | ModalSettings | null | undefined;
 
+    /**
+     * Openseadragon settings
+     */
     islandora_open_seadragon_viewer: OpenseadragonInstance | null | undefined;
 }
 

@@ -1,12 +1,16 @@
-import { Application } from "./application";
-import Settings, { DefaultSettings } from "@fg-services/settings";
+import { Application } from "@fg-application";
+import Settings, { DefaultSettings, isModalSettings } from "@fg-services/settings";
 
 Drupal.behaviors.FlatGalleryNew = {
 
     attach(context, settings: Settings) {
 
+        if (typeof window.parent['flat_gallery_app'] === 'undefined') {
+            // window.parent['flat_gallery_app'] = new Application();
+        }
+
         let application = new Application();
-        application.run(settings);
+        application.bootstrap(settings);
     },
 
     detach(context) {

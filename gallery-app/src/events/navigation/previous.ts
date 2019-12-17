@@ -3,7 +3,7 @@ import ServiceLocator from "@fg-services/locator";
 import Navigation from "@fg-services/navigation";
 import { Application } from "@fg-application";
 import LoadImageAction from "@fg-apps/viewer/actions/load-image";
-import PushImageToHistory from "@fg-services/history";
+import History from "@fg-services/history";
 
 export default class NavigationPreviousEvent implements CustomEvent {
 
@@ -12,6 +12,7 @@ export default class NavigationPreviousEvent implements CustomEvent {
     useCapture: boolean;
     application: Application;
     navigation: Navigation;
+    history: History;
 
     constructor() {
 
@@ -20,6 +21,7 @@ export default class NavigationPreviousEvent implements CustomEvent {
         this.target      = document;
         this.application = ServiceLocator.get('app') as Application;
         this.navigation  = ServiceLocator.get('navigation') as Navigation;
+        this.history     = ServiceLocator.get('history') as History;
     }
 
     listener(event: Event) {
@@ -43,7 +45,7 @@ export default class NavigationPreviousEvent implements CustomEvent {
                 )
             );
 
-            PushImageToHistory(this.navigation.current());
+            this.history.push(this.navigation.current());
         }
     }
 }

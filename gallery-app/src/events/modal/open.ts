@@ -1,19 +1,19 @@
 import { Event as CustomEvent } from "@fg-events/event";
 import ModalTemplate from "@fg-models/modal-template";
-import ServiceLocator from "@fg-services/locator";
-import { ModalSettings } from "@fg-services/settings";
 
 export default class ModalOpenEvent implements CustomEvent {
 
     type: string;
     target: EventTarget;
     useCapture: boolean;
+    url: string;
 
-    constructor() {
+    constructor(url: string) {
 
         this.type       = 'click';
         this.useCapture = false;
         this.target     = document;
+        this.url        = url;
     }
 
     listener(event: Event) {
@@ -23,7 +23,7 @@ export default class ModalOpenEvent implements CustomEvent {
 
             event.preventDefault();
 
-            let template = ModalTemplate((ServiceLocator.get('settings') as ModalSettings).url);
+            let template = ModalTemplate(this.url);
             let body     = document.querySelector('body');
 
             window.scrollTo(0, 0);

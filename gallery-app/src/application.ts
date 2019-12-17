@@ -1,22 +1,21 @@
 import ServiceLocator from "@fg-services/locator";
-import { Settings, isModalSettings, isDefaultSettings, DefaultSettings } from "@fg-services/settings";
+import { Settings, isModalSettings, isDefaultSettings, DefaultSettings, ModalSettings } from "@fg-services/settings";
 import ApplicationNotRun from "@fg-exceptions/application-not-run";
 import ViewerApp from "@fg-apps/viewer";
-import ModalApp from "@fg-apps/modal";
 import App from "@fg-apps/app";
 import Navigation from "@fg-services/navigation";
 import Action from "@fg-apps/viewer/actions/action";
 import LinkGenerator from "@fg-services/link-generator";
+import History from "@fg-services/history";
+import EventManager from "@fg-events/manager";
+import ModalOpenEvent from "@fg-events/modal/open";
+import ModalCloseEvent from "@fg-events/modal/close";
 
 export class Application {
 
   private apps: App[] = [];
 
   bootstrap(settings: Settings) {
-
-    ServiceLocator.set('app', this);
-    ServiceLocator.set('settings', settings.flat_gallery);
-    ServiceLocator.set('openseadragon', settings.islandora_open_seadragon_viewer);
 
     if (null == settings.flat_gallery) {
 
@@ -26,25 +25,36 @@ export class Application {
     }
 
     if (true === isModalSettings(settings.flat_gallery)) {
-      this.apps.push(new ModalApp());
+      this.modal(settings);
     }
 
     if (true === isDefaultSettings(settings.flat_gallery)) {
-
-      let default_settings = (settings.flat_gallery as DefaultSettings);
-      let navigation       = new Navigation(default_settings.current_id, default_settings.images);
-
-      ServiceLocator.set('link-generator', new LinkGenerator(navigation, default_settings.fedora.base_url));
-      ServiceLocator.set('navigation', navigation);
-
-      this.apps.push(new ViewerApp());
+      this.run(settings);
     }
+  }
+
+  modal(settings: Settings) {
+
+    let url = (settings.flat_gallery as ModalSettings).url;
+
+    EventManager.add(new ModalOpenEvent(url));
+    EventManager.add(new ModalCloseEvent());
   }
 
   run(settings: Settings) {
 
-    this.bootstrap(settings);
+    ServiceLocator.set('app', this);
+    ServiceLocator.set('settings', settings.flat_gallery);
+    ServiceLocator.set('openseadragon', settings.islandora_open_seadragon_viewer);
 
+    let default_settings = (settings.flat_gallery as DefaultSettings);
+    let navigation       = new Navigation(default_settings.current_id, default_settings.images);
+
+    ServiceLocator.set('link-generator', new LinkGenerator(navigation, default_settings.fedora.base_url));
+    ServiceLocator.set('navigation', navigation);
+    ServiceLocator.set('history', new History());
+
+    this.apps.push(new ViewerApp());
     this.apps.forEach((app) => {
       app.run();
     });

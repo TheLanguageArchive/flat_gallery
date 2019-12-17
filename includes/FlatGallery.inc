@@ -249,7 +249,6 @@ class FlatGallery
 
                 // if basic image just display the contents of the object
                 // and load it into a html img tag
-
                 $this->current = [
 
                     'id'           => $currentItem['id'],
@@ -257,6 +256,7 @@ class FlatGallery
                     'object'       => $current,
                     'filename'     => $currentItem['filename'],
                     'url'          => $currentItem['object'],
+                    'orientation'  => $this->getOrientation($current),
                     'viewer_type'  => 'openseadragon-basic',
                     'viewer'       => '<div id="islandora-openseadragon-new" class="islandora-openseadragon"></div>',
                     'descriptions' => $currentItem['descriptions'],
@@ -424,5 +424,25 @@ class FlatGallery
         $links['next'] = $this->generateNavigationLink('&raquo;', $next, ['page' => ($params['page'] + 1)]);
 
         return $links;
+    }
+
+    /**
+     * Get EXIF orientation
+     *
+     * @param AbstractObject $object
+     *
+     * @return integer
+     */
+    private function getOrientation(AbstractObject $object)
+    {
+        $file         = str_replace('file:', '', $object->getDatastream('OBJ')->url);
+        $exif         = @exif_read_data($file);
+        $orientations = [3 => 180, 6 => -90, 8 => 90];
+
+        if (!isset($exif['Orientation']) || empty($exif['Orientation'])) {
+            return 0;
+        }
+
+        return isset($orientations[$exif['Orientation']]) ? $orientations[$exif['Orientation']] : 0;
     }
 }

@@ -4,7 +4,7 @@ import Navigation from "@fg-services/navigation";
 import { Application } from "@fg-application";
 import LoadImageAction from "@fg-apps/viewer/actions/load-image";
 import LinkGenerator from "@fg-services/link-generator";
-import PushImageToHistory from "@fg-services/history";
+import History from "@fg-services/history";
 
 export default class ClickThumbnailEvent implements CustomEvent {
 
@@ -14,6 +14,7 @@ export default class ClickThumbnailEvent implements CustomEvent {
     application: Application;
     navigation: Navigation;
     generator: LinkGenerator;
+    history: History;
 
     constructor() {
 
@@ -23,6 +24,7 @@ export default class ClickThumbnailEvent implements CustomEvent {
         this.application = ServiceLocator.get('app') as Application;
         this.navigation  = ServiceLocator.get('navigation') as Navigation;
         this.generator   = ServiceLocator.get('link-generator') as LinkGenerator;
+        this.history     = ServiceLocator.get('history') as History;
     }
 
     listener(event: Event) {
@@ -49,7 +51,7 @@ export default class ClickThumbnailEvent implements CustomEvent {
                 )
             );
 
-            PushImageToHistory(image);
+            this.history.push(image);
         }
     }
 }

@@ -18,7 +18,7 @@ import FixFullscreenCompatibility from "@fg-services/fullscreen";
 import ClickThumbnailEvent from "@fg-events/navigation/click-thumbnail";
 import PopStateEvent from "@fg-events/navigation/pop-state";
 import Navigation from "@fg-services/navigation";
-import PushImageToHistory from "@fg-services/history";
+import History from "@fg-services/history";
 
 export default class ViewerApp implements App {
 
@@ -33,7 +33,10 @@ export default class ViewerApp implements App {
     bootstrap() {
 
         FixFullscreenCompatibility();
-        PushImageToHistory((ServiceLocator.get('navigation') as Navigation).current());
+
+        let history    = ServiceLocator.get('history') as History;
+        let navigation = ServiceLocator.get('navigation') as Navigation;
+        history.push(navigation.current());
 
         EventManager.add(new NavigationNextEvent());
         EventManager.add(new NavigationPreviousEvent());

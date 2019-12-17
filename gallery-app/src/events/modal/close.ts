@@ -1,16 +1,20 @@
 import { Event as CustomEvent } from "@fg-events/event";
+import ServiceLocator from "@fg-services/locator";
+import History from "@fg-services/history";
 
 export default class ModalCloseEvent implements CustomEvent {
 
     type: string;
     target: EventTarget;
     useCapture: boolean;
+    history: History;
 
     constructor() {
 
         this.type       = 'click';
-        this.useCapture = false;
         this.target     = document;
+        this.useCapture = false;
+        this.history    = ServiceLocator.get('history') as History;
     }
 
     listener(event: Event) {
@@ -31,6 +35,8 @@ export default class ModalCloseEvent implements CustomEvent {
             container.addEventListener('MSTransitionEnd', transitionend);
 
             container.classList.remove('fade-to');
+
+            this.history.clear();
         }
     }
 }
