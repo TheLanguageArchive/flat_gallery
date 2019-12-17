@@ -86,9 +86,14 @@ function flat_gallery_setup_openseadragon($image) {
     if ($image['viewer_type'] !== 'large') {
 
         $openseadragon = [
+
             'settings' => [
+
                 'options' => [
-                    'id' => 'islandora-openseadragon-new',
+
+                    'id'   => 'islandora-openseadragon-new',
+                    'type' => 'image',
+                    'url'  => $image['object'],
                 ],
             ],
         ];

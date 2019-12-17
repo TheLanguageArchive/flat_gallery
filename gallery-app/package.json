@@ -5,6 +5,7 @@
   "main": "webpack.config.js",
   "dependencies": {
     "awesome-typescript-loader": "^5.2.1",
+    "exif-js": "^2.3.0",
     "source-map-loader": "^0.2.4",
     "webpack-cli": "^3.3.0"
   },

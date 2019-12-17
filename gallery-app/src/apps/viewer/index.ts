@@ -1,6 +1,7 @@
 import App from "@fg-apps/app";
 import Viewer from "@fg-apps/viewer/viewer";
-import OpenseadragonViewer from "./openseadragon";
+import OpenseadragonViewer from "@fg-apps/viewer/openseadragon";
+import OpenseadragonBasicViewer from "@fg-apps/viewer/openseadragon-basic";
 import EventManager from "@fg-events/manager";
 import NavigationNextEvent from "@fg-events/navigation/next";
 import NavigationPreviousEvent from "@fg-events/navigation/previous";
@@ -26,7 +27,7 @@ export default class ViewerApp implements App {
     private viewers: Viewer[] = [
 
         new OpenseadragonViewer(),
-        new BasicViewer(),
+        new OpenseadragonBasicViewer(),
     ];
 
     bootstrap() {
