@@ -6,7 +6,6 @@ import App from "@fg-apps/app";
 import Navigation from "@fg-services/navigation";
 import Action from "@fg-apps/viewer/actions/action";
 import LinkGenerator from "@fg-services/link-generator";
-import History from "@fg-services/history";
 import EventManager from "@fg-events/manager";
 import ModalOpenEvent from "@fg-events/modal/open";
 import ModalCloseEvent from "@fg-events/modal/close";
@@ -52,7 +51,6 @@ export class Application {
 
     ServiceLocator.set('link-generator', new LinkGenerator(navigation, default_settings.fedora.base_url));
     ServiceLocator.set('navigation', navigation);
-    ServiceLocator.set('history', new History());
 
     this.apps.push(new ViewerApp());
     this.apps.forEach((app) => {

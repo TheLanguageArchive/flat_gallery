@@ -3,55 +3,44 @@ import ServiceLocator from "@fg-services/locator";
 import Navigation from "@fg-services/navigation";
 import { Application } from "@fg-application";
 import LoadImageAction from "@fg-apps/viewer/actions/load-image";
-import LinkGenerator from "@fg-services/link-generator";
-import History from "@fg-services/history";
 
-export default class ClickThumbnailEvent implements CustomEvent {
+export default class KeyboardNextEvent implements CustomEvent {
 
     type: string;
     target: EventTarget;
     useCapture: boolean;
     application: Application;
     navigation: Navigation;
-    generator: LinkGenerator;
-    history: History;
 
     constructor() {
 
-        this.type        = 'click';
+        this.type        = 'keyup';
         this.useCapture  = false;
         this.target      = document;
         this.application = ServiceLocator.get('app') as Application;
         this.navigation  = ServiceLocator.get('navigation') as Navigation;
-        this.generator   = ServiceLocator.get('link-generator') as LinkGenerator;
-        this.history     = ServiceLocator.get('history') as History;
     }
 
-    listener(event: Event) {
+    listener(event: KeyboardEvent) {
 
-        let target = (event.target as Element);
+        let keyboard = event.which || event.keyCode || 0;
 
-        if (target.hasAttribute('data-load-image')) {
+        if (keyboard === 39) {
 
             event.preventDefault();
 
-            let id      = +target.getAttribute('data-load-image');
-            let changed = this.navigation.setImage(id);
-            let image   = this.navigation.current();
-
-            if (false === changed) {
+            if (false === this.navigation.nextImageAvailable()) {
                 return;
             }
 
+            this.navigation.next();
             this.navigation.render();
 
             this.application.action(
                 new LoadImageAction(
-                    image
+                    this.navigation.current()
                 )
             );
-
-            this.history.push(image);
         }
     }
 }

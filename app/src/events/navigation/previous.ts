@@ -3,32 +3,29 @@ import ServiceLocator from "@fg-services/locator";
 import Navigation from "@fg-services/navigation";
 import { Application } from "@fg-application";
 import LoadImageAction from "@fg-apps/viewer/actions/load-image";
-import History from "@fg-services/history";
 
-export default class KeyboardPreviousEvent implements CustomEvent {
+export default class NavigationPreviousEvent implements CustomEvent {
 
     type: string;
     target: EventTarget;
     useCapture: boolean;
     application: Application;
     navigation: Navigation;
-    history: History;
 
     constructor() {
 
-        this.type        = 'keyup';
+        this.type        = 'click';
         this.useCapture  = false;
         this.target      = document;
         this.application = ServiceLocator.get('app') as Application;
         this.navigation  = ServiceLocator.get('navigation') as Navigation;
-        this.history     = ServiceLocator.get('history') as History;
     }
 
-    listener(event: KeyboardEvent) {
+    listener(event: Event) {
 
-        let keyboard = event.which || event.keyCode || 0;
+        let target = (event.target as Element);
 
-        if (keyboard === 37) {
+        if (target.hasAttribute('data-flat-gallery-nav') && target.getAttribute('data-flat-gallery-nav') === 'previous') {
 
             event.preventDefault();
 
@@ -44,8 +41,6 @@ export default class KeyboardPreviousEvent implements CustomEvent {
                     this.navigation.current()
                 )
             );
-
-            this.history.push(this.navigation.current());
         }
     }
 }

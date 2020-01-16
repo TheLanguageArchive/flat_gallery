@@ -97,12 +97,15 @@ class FlatGallery
                     continue;
                 }
 
+                $object = islandora_object_load($result['pid']);
+
                 $this->items[$id] = [
 
                     'id'           => $id,
                     'pid'          => $result['pid'],
                     'filename'     => $result['filename'],
                     'thumbnail'    => $thumbnail,
+                    'exif'         => $this->getExif($object),
                     'model'        => $model,
                     'viewer_type'  => $viewer_type,
                     'object'       => url('islandora/object/' . $result['pid'] . '/datastream/OBJ/view'),
@@ -435,14 +438,28 @@ class FlatGallery
      */
     private function getOrientation(AbstractObject $object)
     {
-        $file         = str_replace('file:', '', $object->getDatastream('OBJ')->url);
-        $exif         = @exif_read_data($file);
-        $orientations = [3 => 180, 6 => -90, 8 => 90];
+        $exif         = $this->getExif($object);
+        $orientations = [3 => 180, 6 => 90, 8 => -90];
+
+        return isset($orientations[$exif]) ? $orientations[$exif] : 0;
+    }
+
+    /**
+     * Get EXIF data
+     *
+     * @param AbstractObject $object
+     *
+     * @return integer
+     */
+    private function getExif(AbstractObject $object)
+    {
+        $file = str_replace('file:', '', $object->getDatastream('OBJ')->url);
+        $exif = @exif_read_data($file);
 
         if (!isset($exif['Orientation']) || empty($exif['Orientation'])) {
             return 0;
         }
 
-        return isset($orientations[$exif['Orientation']]) ? $orientations[$exif['Orientation']] : 0;
+        return $exif['Orientation'];
     }
 }

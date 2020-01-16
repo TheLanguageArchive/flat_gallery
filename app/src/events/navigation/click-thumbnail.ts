@@ -3,16 +3,16 @@ import ServiceLocator from "@fg-services/locator";
 import Navigation from "@fg-services/navigation";
 import { Application } from "@fg-application";
 import LoadImageAction from "@fg-apps/viewer/actions/load-image";
-import History from "@fg-services/history";
+import LinkGenerator from "@fg-services/link-generator";
 
-export default class NavigationPreviousEvent implements CustomEvent {
+export default class ClickThumbnailEvent implements CustomEvent {
 
     type: string;
     target: EventTarget;
     useCapture: boolean;
     application: Application;
     navigation: Navigation;
-    history: History;
+    generator: LinkGenerator;
 
     constructor() {
 
@@ -21,31 +21,32 @@ export default class NavigationPreviousEvent implements CustomEvent {
         this.target      = document;
         this.application = ServiceLocator.get('app') as Application;
         this.navigation  = ServiceLocator.get('navigation') as Navigation;
-        this.history     = ServiceLocator.get('history') as History;
+        this.generator   = ServiceLocator.get('link-generator') as LinkGenerator;
     }
 
     listener(event: Event) {
 
         let target = (event.target as Element);
 
-        if (target.hasAttribute('data-flat-gallery-nav') && target.getAttribute('data-flat-gallery-nav') === 'previous') {
+        if (target.hasAttribute('data-load-image')) {
 
             event.preventDefault();
 
-            if (false === this.navigation.previousImageAvailable()) {
+            let id      = +target.getAttribute('data-load-image');
+            let changed = this.navigation.setImage(id);
+            let image   = this.navigation.current();
+
+            if (false === changed) {
                 return;
             }
 
-            this.navigation.previous();
             this.navigation.render();
 
             this.application.action(
                 new LoadImageAction(
-                    this.navigation.current()
+                    image
                 )
             );
-
-            this.history.push(this.navigation.current());
         }
     }
 }

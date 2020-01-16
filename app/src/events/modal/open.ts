@@ -32,13 +32,8 @@ export default class ModalOpenEvent implements CustomEvent {
             let iframe = document.querySelector('[data-role="flat-gallery-modal-iframe"]') as HTMLElement;
             iframe.focus();
 
-            setTimeout(() => {
-
-                // adding timeout to allow for css transition
-                // to be called
-                let content = document.querySelector('[data-role="flat-gallery-modal-content"]');
-                (content.parentNode as Element).classList.add('fade-to');
-            });
+            let content = document.querySelector('[data-role="flat-gallery-modal-content"]');
+            (content.parentNode as Element).classList.add('fade-to');
         }
     }
 }

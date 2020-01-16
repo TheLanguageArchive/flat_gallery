@@ -26,22 +26,8 @@
 .center span {
   display: inline-block;
 }
-.flat-gallery-grid {
-  display: -ms-grid;
-  display: grid;
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-.flat-gallery-grid-column {
-  padding-left: 15px;
-  padding-right: 15px;
-}
 a.flat-gallery-thumbnail {
   height: 200px;
-}
-.flat-gallery-thumbnail-container {
-  height: 160px;
 }
 .flat-gallery-thumbnail {
   display: block;
@@ -100,15 +86,15 @@ a.flat-gallery-thumbnail.active {
   top: 2vh;
   opacity: 0;
   overflow-y: scroll;
-  transition: opacity linear 0.8s 0s;
+  /* transition: opacity linear 0.8s 0s; */
 }
 .fade-to {
   opacity: 1;
-  transition: opacity linear 0.8s 0s;
+  /* transition: opacity linear 0.8s 0s; */
 }
 .fade-out {
   opacity: 0;
-  transition: opacity linear 0.8s 0s;
+  /* transition: opacity linear 0.8s 0s; */
 }
 .flat-gallery-modal-content {
   background: white;
@@ -203,4 +189,58 @@ a.flat-gallery-thumbnail.active {
   padding: 0px;
   height: 100% !important;
   width: 100% !important;
+}
+.flat-gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flat-gallery-grid-item {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ecf0f1;
+  border-radius: 4px;
+  -webkit-transition: border 0.2s ease-in-out;
+  -o-transition: border 0.2s ease-in-out;
+  transition: border 0.2s ease-in-out;
+}
+.flat-gallery-grid-item:hover,
+.flat-gallery-grid-item:focus,
+.flat-gallery-grid-item.active {
+  border-color: #18bc9c;
+}
+.flat-gallery-grid-item-thumbnail {
+  padding: 5px;
+}
+.flat-gallery-grid-item-thumbnail img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+.flat-gallery-grid-item-thumbnail-exif-3 {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+.flat-gallery-grid-item-thumbnail-exif-6 {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.flat-gallery-grid-item-thumbnail-exif-8 {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+.flat-gallery-grid-item-caption {
+  padding: 9px;
+  color: #2c3e50;
 }

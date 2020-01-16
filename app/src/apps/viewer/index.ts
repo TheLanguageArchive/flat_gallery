@@ -7,7 +7,6 @@ import NavigationNextEvent from "@fg-events/navigation/next";
 import NavigationPreviousEvent from "@fg-events/navigation/previous";
 import KeyboardNextEvent from "@fg-events/navigation/keyboard-next";
 import KeyboardPreviousEvent from "@fg-events/navigation/keyboard-previous";
-import BasicViewer from "@fg-apps/viewer/basic";
 import Action from "@fg-apps/viewer/actions/action";
 import MouseMoveEvent from "@fg-events/navigation/mouse-move";
 import LoadImageAction from "./actions/load-image";
@@ -17,8 +16,6 @@ import NavTextualViewModel from "@fg-apps/viewer/nav-textual";
 import FixFullscreenCompatibility from "@fg-services/fullscreen";
 import ClickThumbnailEvent from "@fg-events/navigation/click-thumbnail";
 import PopStateEvent from "@fg-events/navigation/pop-state";
-import Navigation from "@fg-services/navigation";
-import History from "@fg-services/history";
 
 export default class ViewerApp implements App {
 
@@ -33,10 +30,6 @@ export default class ViewerApp implements App {
     bootstrap() {
 
         FixFullscreenCompatibility();
-
-        let history    = ServiceLocator.get('history') as History;
-        let navigation = ServiceLocator.get('navigation') as Navigation;
-        history.push(navigation.current());
 
         EventManager.add(new NavigationNextEvent());
         EventManager.add(new NavigationPreviousEvent());
