@@ -1,4 +1,4 @@
-.flat-gallery {
+html {
   background-color: white;
 }
 .flat-gallery-preview-container {
@@ -246,4 +246,13 @@ a.flat-gallery-thumbnail.active {
 .flat-gallery-grid-item-caption {
   padding: 9px;
   color: #2c3e50;
+}
+.flat-gallery-grid-item-caption-filename {
+  width: 150px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
+  font-size: 10px;
 }

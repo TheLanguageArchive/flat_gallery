@@ -16,8 +16,8 @@
     "webpack-merge": "^4.2.2"
   },
   "scripts": {
-    "wp": "webpack-cli -w --config webpack.dev.js",
-    "wpp": "webpack-cli --config webpack.prod.js"
+    "build:dev": "webpack-cli -w --config webpack.dev.js",
+    "build:prod": "webpack-cli --config webpack.prod.js"
   },
   "author": "",
   "license": "ISC"
