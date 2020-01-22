@@ -116,11 +116,11 @@ export default class Navigation {
             previousElement.classList.remove('hidden');
         }
 
-        document.querySelectorAll('[data-role="flat-gallery-thumbnail"] a').forEach((thumbnail) => {
+        document.querySelectorAll('[data-role="flat-gallery-thumbnail"]').forEach((thumbnail) => {
             thumbnail.classList.remove('active');
         });
 
-        let currentThumbnailElement = document.querySelector(`[data-role="flat-gallery-thumbnail"][data-flat-gallery-id="${currentImage.id}"] a`);
+        let currentThumbnailElement = document.querySelector(`[data-role="flat-gallery-thumbnail"][data-flat-gallery-id="${currentImage.id}"]`);
         currentThumbnailElement.classList.add('active');
 
         // starting up animating arrow fade out

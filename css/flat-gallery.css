@@ -214,7 +214,7 @@ a.flat-gallery-thumbnail.active {
 }
 .flat-gallery-grid-item:hover,
 .flat-gallery-grid-item:focus,
-.flat-gallery-grid-item.active {
+.flat-gallery-grid-item.flat-gallery-grid-item-active {
   border-color: #18bc9c;
 }
 .flat-gallery-grid-item-thumbnail {
@@ -249,13 +249,13 @@ a.flat-gallery-thumbnail.active {
 .flat-gallery-grid-item-caption {
   padding: 9px;
   color: #2c3e50;
-}
-.flat-gallery-grid-item-caption-filename {
   width: 150px;
-  display: block;
+  font-size: 10px;
+  display: inline-block;
+  word-wrap: break-word;
+  /*
   white-space: nowrap;
   overflow: hidden;
   -o-text-overflow: ellipsis;
-     text-overflow: ellipsis;
-  font-size: 10px;
+     text-overflow: ellipsis; */
 }
