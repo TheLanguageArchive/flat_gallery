@@ -453,7 +453,13 @@ class FlatGallery
      */
     private function getExif(AbstractObject $object)
     {
-        $file = str_replace('file:', '', $object->getDatastream('OBJ')->url);
+        $mimetype = $object->getDatastream('OBJ')->mimetype;
+        if ($mimetype == 'image/tiff') {
+            $file = str_replace('file:', '', $object->getDatastream('JP2')->url);
+        }
+        else {
+            $file = str_replace('file:', '', $object->getDatastream('OBJ')->url);
+        }
         $exif = @exif_read_data($file);
 
         if (!isset($exif['Orientation']) || empty($exif['Orientation'])) {
