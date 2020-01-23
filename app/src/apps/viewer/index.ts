@@ -56,6 +56,8 @@ export default class ViewerApp implements App {
     action(action: Action) {
 
         if (action instanceof LoadImageAction) {
+
+            window.scrollTo(0, 0);
             this.navTextual.render();
         }
 
