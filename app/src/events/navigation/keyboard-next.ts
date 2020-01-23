@@ -3,6 +3,7 @@ import ServiceLocator from "@fg-services/locator";
 import Navigation from "@fg-services/navigation";
 import { Application } from "@fg-application";
 import LoadImageAction from "@fg-apps/viewer/actions/load-image";
+import LoadImageLock from "@fg-models/load-image-lock";
 
 export default class KeyboardNextEvent implements CustomEvent {
 
@@ -28,6 +29,12 @@ export default class KeyboardNextEvent implements CustomEvent {
         if (keyboard === 39) {
 
             event.preventDefault();
+
+            let loadImageLock = ServiceLocator.get('load-image-lock') as LoadImageLock;
+
+            if (true === loadImageLock.isLocked()) {
+                return;
+            }
 
             if (false === this.navigation.nextImageAvailable()) {
                 return;

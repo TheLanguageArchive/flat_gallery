@@ -117,11 +117,11 @@ export default class Navigation {
         }
 
         document.querySelectorAll('[data-role="flat-gallery-thumbnail"]').forEach((thumbnail) => {
-            thumbnail.classList.remove('active');
+            thumbnail.classList.remove('flat-gallery-grid-item-active');
         });
 
         let currentThumbnailElement = document.querySelector(`[data-role="flat-gallery-thumbnail"][data-flat-gallery-id="${currentImage.id}"]`);
-        currentThumbnailElement.classList.add('active');
+        currentThumbnailElement.classList.add('flat-gallery-grid-item-active');
 
         // starting up animating arrow fade out
         this.stopHidingNavigation();

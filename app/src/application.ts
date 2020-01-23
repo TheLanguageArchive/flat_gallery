@@ -9,6 +9,7 @@ import LinkGenerator from "@fg-services/link-generator";
 import EventManager from "@fg-events/manager";
 import ModalOpenEvent from "@fg-events/modal/open";
 import ModalCloseEvent from "@fg-events/modal/close";
+import LoadImageLock from "@fg-models/load-image-lock";
 
 export class Application {
 
@@ -45,6 +46,7 @@ export class Application {
     ServiceLocator.set('app', this);
     ServiceLocator.set('settings', settings.flat_gallery);
     ServiceLocator.set('openseadragon', settings.islandora_open_seadragon_viewer);
+    ServiceLocator.set('load-image-lock', new LoadImageLock());
 
     let default_settings = (settings.flat_gallery as DefaultSettings);
     let navigation       = new Navigation(default_settings.current_id, default_settings.images);

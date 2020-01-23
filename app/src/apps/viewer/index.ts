@@ -31,6 +31,8 @@ export default class ViewerApp implements App {
 
         FixFullscreenCompatibility();
 
+        ServiceLocator.set('loading-image-lock', false);
+
         EventManager.add(new NavigationNextEvent());
         EventManager.add(new NavigationPreviousEvent());
         EventManager.add(new KeyboardNextEvent());

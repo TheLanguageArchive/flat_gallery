@@ -7,6 +7,7 @@ import { FedoraModel } from "@fg-models/fedora-model";
 import ViewerTemplate from "@fg-models/viewer-template";
 import FullscreenCaptionsTemplate from "@fg-models/fullscreen-captions-template";
 import ViewerCaptionsTemplate from "@fg-models/viewer-captions-template";
+import LoadImageLock from "@fg-models/load-image-lock";
 
 export default class OpenseadragonBasicViewModel {
 
@@ -18,7 +19,10 @@ export default class OpenseadragonBasicViewModel {
 
     setup() {
 
+        let loadImageLock = (ServiceLocator.get('load-image-lock') as LoadImageLock);
         let openseadragon = (ServiceLocator.get('openseadragon-basic') as OpenseadragonInstance);
+
+        loadImageLock.unlock();
 
         if (null == openseadragon) {
             return;
@@ -106,6 +110,14 @@ export default class OpenseadragonBasicViewModel {
     }
 
     create(image: Image) {
+
+        let loadImageLock = (ServiceLocator.get('load-image-lock') as LoadImageLock);
+
+        if (true === loadImageLock.isLocked()) {
+            return;
+        }
+
+        loadImageLock.lock();
 
         this.cleanBaseElement();
 
