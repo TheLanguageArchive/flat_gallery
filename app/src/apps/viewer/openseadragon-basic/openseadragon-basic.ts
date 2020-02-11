@@ -124,6 +124,7 @@ export default class OpenseadragonBasicViewModel {
         FetchLargeImage(image)
             .then((settings) => {
 
+                console.log(settings);
                 Drupal.IslandoraOpenSeadragonViewer[this.base] = new Drupal.IslandoraOpenSeadragonViewer(this.base, settings);
                 ServiceLocator.set('openseadragon-basic', Drupal.settings.islandora_open_seadragon_viewer);
 

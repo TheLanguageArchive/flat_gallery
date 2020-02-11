@@ -59,6 +59,7 @@ function flat_gallery_prepare_settings_js($object, $items, $current_image) {
 
             'delay'         => variable_get('flat_gallery_delay_fade_out'),
             'current_id'    => $current_image['id'],
+            'current_page'  => flat_gallery_get_current_page(),
             'images'        => $items,
             'openseadragon' => flat_gallery_setup_openseadragon($current_image),
             'fedora'        => [
@@ -69,6 +70,20 @@ function flat_gallery_prepare_settings_js($object, $items, $current_image) {
             ],
         ],
     ], 'setting');
+}
+
+/**
+ * Getting current active page
+ */
+function flat_gallery_get_current_page() {
+
+    $params = drupal_get_query_parameters();
+
+    if (isset($params['page']) && $params['page'] > 0) {
+        return (int)$params['page'];
+    }
+
+    return 0;
 }
 
 /**

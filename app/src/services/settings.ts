@@ -77,6 +77,11 @@ export interface DefaultSettings {
     current_id: number;
 
     /**
+     * Current page
+     */
+    current_page: number;
+
+    /**
      * Flat Gallery sends us either an array of images
      * or it sends us an empty array if no images are found.
      */

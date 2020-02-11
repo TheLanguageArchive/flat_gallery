@@ -209,7 +209,7 @@ class FlatGallerySolr
         if (null === $this->pagination) {
 
             $params   = drupal_get_query_parameters();
-            $per_page = 50;//variable_get('flat_gallery_pagination_limit', FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT);
+            $per_page = variable_get('flat_gallery_pagination_limit', FLAT_GALLERY_DEFAULT_PAGINATION_LIMIT);
             $start    = 0;
             $page     = 0;
 
