@@ -209,7 +209,7 @@ function flat_gallery_open_gallery_ajax($page_callback_result) {
  */
 function flat_gallery_preprocess_block(&$variables) {
 
-    if (isset($variables['block_html_id']) && $variables['block_html_id'] === 'block-islandora-compound-object-compound-navigation') {
+    if (isset($variables['block']) && $variables['block']->module === 'flat_compound_navigation' && $variables['block']->delta === 'flat_compound_navigation') {
 
         module_load_include('inc', 'flat_gallery', 'includes/FlatGallerySolr');
 
