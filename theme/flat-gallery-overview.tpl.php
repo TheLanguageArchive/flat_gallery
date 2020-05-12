@@ -35,7 +35,7 @@
             <?php foreach ($items as $item) : ?>
                 <a title="<?php echo $item['filename']; ?>" href="<?php echo $item['url']; ?>" class="flat-gallery-grid-item<?php echo $current['pid'] === $item['pid'] ? ' flat-gallery-grid-item-active' : ''; ?>" data-role="flat-gallery-thumbnail" data-flat-gallery-id="<?php echo $item['id']; ?>">
                     <div class="flat-gallery-grid-item-thumbnail">
-                        <img class="flat-gallery-grid-item-thumbnail-exif-<?php echo $item['exif']; ?>" data-load-image="<?php echo $item['id']; ?>" src="<?php echo $item['thumbnail']; ?>" />
+                        <img class="flat-gallery-grid-item-thumbnail-exif-<?php echo $item['exif']; ?>" data-load-image="<?php echo $item['id']; ?>" data-flat-lazy-load-image="true" data-src="<?php echo $item['thumbnail']; ?>" />
                     </div>
                     <small class="flat-gallery-grid-item-caption"><?php echo $item['filename']; ?></small>
                 </a>
