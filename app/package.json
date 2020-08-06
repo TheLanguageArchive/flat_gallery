@@ -19,6 +19,6 @@
     "build:dev": "webpack-cli -w --config webpack.dev.js",
     "build:prod": "webpack-cli --config webpack.prod.js"
   },
-  "author": "",
+  "author": "Ibrahim Abdullah <ibrahim.abdullah@mpi.nl>",
   "license": "ISC"
 }

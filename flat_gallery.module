@@ -31,7 +31,7 @@ function flat_gallery($object, $id = null) {
         ]);
     }
 
-    flat_gallery_prepare_settings_js($object, $items, $current);
+    flat_gallery_prepare_settings_js($object, $items, $current, $gallery->getTotalPages());
 
     return theme('flat_gallery_overview', [
 
@@ -44,15 +44,50 @@ function flat_gallery($object, $id = null) {
 }
 
 /**
+ * Returning items for a page as json
+ * used by the infinite scroll
+ *
+ *
+ */
+function flat_gallery_get_items($object) {
+
+    module_load_include('inc', 'flat_gallery', 'includes/FlatGallery');
+    module_load_include('inc', 'flat_gallery', 'includes/FlatGallerySolr');
+
+    $solr       = new FlatGallerySolr();
+    $gallery    = new FlatGallery($object, $solr);
+    $current    = $gallery->getCurrentItem();
+    $currentPid = false;
+
+    if (false !== $current) {
+        $currentPid = $current['pid'];
+    }
+
+    $items = $gallery->getItems();
+
+    if (count($items) === 0) {
+
+        return [
+            'error' => true,
+        ];
+    }
+
+    return [
+        'items' => flat_gallery_render_items($gallery->getItems(), $currentPid)
+    ];
+}
+
+/**
  * Setting up json that is going be sent to JS
  *
  * @param AbstractObject $object
  * @param array          $items
  * @param array          $current_image
+ * @param int            $total_pages
  *
  * @return array
  */
-function flat_gallery_prepare_settings_js($object, $items, $current_image) {
+function flat_gallery_prepare_settings_js($object, $items, $current_image, $total_pages) {
 
     drupal_add_js([
 
@@ -61,6 +96,7 @@ function flat_gallery_prepare_settings_js($object, $items, $current_image) {
             'delay'         => variable_get('flat_gallery_delay_fade_out'),
             'current_id'    => $current_image['id'],
             'current_page'  => flat_gallery_get_current_page(),
+            'total_pages'   => $total_pages,
             'images'        => $items,
             'openseadragon' => flat_gallery_setup_openseadragon($current_image),
             'fedora'        => [
@@ -240,6 +276,35 @@ function flat_gallery_preprocess_block(&$variables) {
     }
 }
 
+function flat_gallery_render_items($items, $currentPid) {
+
+    $thumbnails = [];
+    $theme      = theme('flat_gallery_item');
+
+    // getting last element to use as the trigger for the lazy load
+    // so we can fetch another page
+    $last = end($items);
+
+    // and resetting the internal array pointer back to the first item
+    reset($items);
+
+    foreach ($items as $item) {
+
+        $thumbnails[] = format_string($theme, [
+
+            '@filename' => $item['filename'],
+            '@url' => $item['url'],
+            '@active' => $currentPid === $item['pid'] ? ' flat-gallery-grid-item-active' : '',
+            '@intersected' => $last['pid'] === $item['pid'] ? '1' : '0',
+            '@id' => $item['id'],
+            '@exif' => $item['exif'],
+            '@thumbnail' => $item['thumbnail'],
+        ]);
+    }
+
+    return implode("\n", $thumbnails);
+}
+
 /**
  * FLAT Gallery Menu
  *
@@ -257,6 +322,16 @@ function flat_gallery_menu() {
         'page arguments'    => [2],
         'access callback'   => 'flat_gallery_menu_access',
         'delivery callback' => 'flat_gallery_open_gallery_ajax',
+    ];
+
+    $items['islandora/object/%islandora_object/ig/items'] = [
+
+        'title'             => 'FLAT Gallery',
+        'type'              => MENU_CALLBACK,
+        'page callback'     => 'flat_gallery_get_items',
+        'page arguments'    => [2],
+        'access callback'   => 'flat_gallery_menu_access',
+        'delivery callback' => 'drupal_json_output',
     ];
 
     $items['islandora/object/%islandora_object/ig/li/%'] = [
@@ -315,6 +390,10 @@ function flat_gallery_theme($existing, $type, $theme, $path) {
 
         'flat_gallery_overview' => [
             'template' => 'theme/flat-gallery-overview',
+        ],
+
+        'flat_gallery_item' => [
+            'template' => 'theme/flat-gallery-item',
         ],
 
         'flat_gallery_modal' => [

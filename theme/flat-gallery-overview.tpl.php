@@ -31,19 +31,12 @@
             <span data-role="flat-gallery-nav-textual"><?php echo implode(' | ', $navigationLinks); ?></span>
         </div>
         <hr />
-        <div class="flat-gallery-grid">
-            <?php foreach ($items as $item) : ?>
-                <a title="<?php echo $item['filename']; ?>" href="<?php echo $item['url']; ?>" class="flat-gallery-grid-item<?php echo $current['pid'] === $item['pid'] ? ' flat-gallery-grid-item-active' : ''; ?>" data-role="flat-gallery-thumbnail" data-flat-gallery-id="<?php echo $item['id']; ?>">
-                    <div class="flat-gallery-grid-item-thumbnail">
-                        <img class="flat-gallery-grid-item-thumbnail-exif-<?php echo $item['exif']; ?>" data-load-image="<?php echo $item['id']; ?>" data-flat-lazy-load-image="true" data-src="<?php echo $item['thumbnail']; ?>" />
-                    </div>
-                    <small class="flat-gallery-grid-item-caption"><?php echo $item['filename']; ?></small>
-                </a>
-            <?php endforeach; ?>
+        <div class="flat-gallery-grid" data-role="flat-gallery-grid">
+            <?php echo flat_gallery_render_items($items, $current['pid']); ?>
         </div>
         <hr />
-        <div class="center">
-            <span><?php echo implode(' | ', $paginationLinks); ?></span>
+        <div class="flat-gallery-grid-loading flat-gallery-grid-hidden" data-role="flat-gallery-grid-loading">
+            <span>Loading more images...</span>
         </div>
     </div>
 </div>
