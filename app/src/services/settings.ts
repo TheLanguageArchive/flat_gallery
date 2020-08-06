@@ -82,6 +82,11 @@ export interface DefaultSettings {
     current_page: number;
 
     /**
+     * Total pages
+     */
+    total_pages: number;
+
+    /**
      * Flat Gallery sends us either an array of images
      * or it sends us an empty array if no images are found.
      */

@@ -48,6 +48,10 @@ export class Application {
     ServiceLocator.set('openseadragon', settings.islandora_open_seadragon_viewer);
     ServiceLocator.set('load-image-lock', new LoadImageLock());
 
+    if (true === isDefaultSettings(settings.flat_gallery)) {
+      ServiceLocator.set('loaded-pages', [(settings.flat_gallery as DefaultSettings).current_page]);
+    }
+
     let default_settings = (settings.flat_gallery as DefaultSettings);
     let navigation       = new Navigation(default_settings.current_id, default_settings.images);
 

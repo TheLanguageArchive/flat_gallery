@@ -25,12 +25,15 @@
   max-width: 1800px;
   margin: 0 auto;
 }
-.center {
+.flat-gallery-grid-loading {
   display: block;
   text-align: center;
 }
-.center span {
+.flat-gallery-grid-loading span {
   display: inline-block;
+}
+.flat-gallery-grid-hidden {
+  display: none;
 }
 a.flat-gallery-thumbnail {
   height: 200px;

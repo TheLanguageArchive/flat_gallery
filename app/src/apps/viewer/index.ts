@@ -16,6 +16,9 @@ import NavTextualViewModel from "@fg-apps/viewer/nav-textual";
 import FixFullscreenCompatibility from "@fg-services/fullscreen";
 import ClickThumbnailEvent from "@fg-events/navigation/click-thumbnail";
 import PopStateEvent from "@fg-events/navigation/pop-state";
+import FetchPageEvent from "@fg-events/navigation/fetch-page";
+import FetchPageAction from "./actions/fetch-page";
+import LazyLoadIntersectedEvent from "@fg-events/lazy-load/intersected";
 
 export default class ViewerApp implements App {
 
@@ -40,6 +43,8 @@ export default class ViewerApp implements App {
         EventManager.add(new MouseMoveEvent());
         EventManager.add(new ClickThumbnailEvent());
         EventManager.add(new PopStateEvent());
+        EventManager.add(new FetchPageEvent());
+        EventManager.add(new LazyLoadIntersectedEvent());
 
         this.navTextual = new NavTextualViewModel(ServiceLocator.get('link-generator') as LinkGenerator);
     }
@@ -59,6 +64,10 @@ export default class ViewerApp implements App {
 
             window.scrollTo(0, 0);
             this.navTextual.render();
+        }
+
+        if (action instanceof FetchPageAction) {
+            action.fetchPage();
         }
 
         this.viewers.forEach((viewer: Viewer) => {
