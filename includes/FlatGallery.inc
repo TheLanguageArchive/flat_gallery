@@ -26,6 +26,11 @@ class FlatGallery
     private $total;
 
     /**
+     * @var int
+     */
+    private $pages;
+
+    /**
      * @var array
      */
     private $items;
@@ -57,6 +62,8 @@ class FlatGallery
         $this->object = $object;
         $this->solr   = $solr;
         $this->id     = (int)$id;
+        $this->total  = 0;
+        $this->pages  = 0;
     }
 
     /**
@@ -74,6 +81,7 @@ class FlatGallery
             $labels  = $this->getLabels();
 
             $this->total = $results['total'];
+            $this->pages = (int)ceil($this->total / $params['per_page']);
             $this->items = [];
 
             foreach ($results['results'] as $result) {
@@ -343,9 +351,8 @@ class FlatGallery
 
             // last item on the page, let's use the link to go the next page
             $pagination = $this->getPaginationLinks();
-            $pages      = (int)ceil($this->total / $params['per_page']);
 
-            if ($params['page'] < ($pages - 1)) {
+            if ($params['page'] < ($this->pages - 1)) {
 
                 // we have a next page
                 $links['next'] = $this->generateNavigationLink('Next', 0, ['page' => $params['page'] + 1], 'next');
@@ -401,11 +408,10 @@ class FlatGallery
         $currentItem = $this->getCurrentItem();
         $params      = $this->solr->paginationParams();
 
-        $pages = (int)ceil($this->total / $params['per_page']);
         $links = [];
 
-        if ($params['page'] > $pages) {
-            $params['page'] = $pages;
+        if ($params['page'] > $this->pages) {
+            $params['page'] = $this->pages;
         }
 
         // if current page is 0, disable previous link
@@ -413,7 +419,7 @@ class FlatGallery
         $previous          = $params['page'] === 0 ? false : 0;
         $links['previous'] = $this->generateNavigationLink('&laquo;', $previous, ['page' => ($params['page'] - 1)]);
 
-        for ($page = 0; $page < $pages; $page++) {
+        for ($page = 0; $page < $this->pages; $page++) {
 
             // if current page equals page selected
             // disable link or else link to first item on page selected
@@ -423,10 +429,20 @@ class FlatGallery
 
         // if current page equals total pages - 1 (start from 0)
         // disable link or else link to first item on next page
-        $next          = $params['page'] === ($pages - 1) ? false : 0;
+        $next          = $params['page'] === ($this->pages - 1) ? false : 0;
         $links['next'] = $this->generateNavigationLink('&raquo;', $next, ['page' => ($params['page'] + 1)]);
 
         return $links;
+    }
+
+    /**
+     * Getting total amount of pages
+     *
+     * @return int
+     */
+    public function getTotalPages()
+    {
+        return $this->pages;
     }
 
     /**
