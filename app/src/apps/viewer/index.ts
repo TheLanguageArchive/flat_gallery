@@ -11,8 +11,6 @@ import Action from "@fg-apps/viewer/actions/action";
 import MouseMoveEvent from "@fg-events/navigation/mouse-move";
 import LoadImageAction from "./actions/load-image";
 import ServiceLocator from "@fg-services/locator";
-import LinkGenerator from "@fg-services/link-generator";
-import NavTextualViewModel from "@fg-apps/viewer/nav-textual";
 import FixFullscreenCompatibility from "@fg-services/fullscreen";
 import ClickThumbnailEvent from "@fg-events/navigation/click-thumbnail";
 import PopStateEvent from "@fg-events/navigation/pop-state";
@@ -21,8 +19,6 @@ import FetchPageAction from "./actions/fetch-page";
 import LazyLoadIntersectedEvent from "@fg-events/lazy-load/intersected";
 
 export default class ViewerApp implements App {
-
-    private navTextual: NavTextualViewModel;
 
     private viewers: Viewer[] = [
 
@@ -45,8 +41,6 @@ export default class ViewerApp implements App {
         EventManager.add(new PopStateEvent());
         EventManager.add(new FetchPageEvent());
         EventManager.add(new LazyLoadIntersectedEvent());
-
-        this.navTextual = new NavTextualViewModel(ServiceLocator.get('link-generator') as LinkGenerator);
     }
 
     run() {
@@ -61,9 +55,7 @@ export default class ViewerApp implements App {
     action(action: Action) {
 
         if (action instanceof LoadImageAction) {
-
             window.scrollTo(0, 0);
-            this.navTextual.render();
         }
 
         if (action instanceof FetchPageAction) {
