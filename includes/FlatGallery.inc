@@ -75,9 +75,9 @@ class FlatGallery
     {
         if (null === $this->items) {
 
-            $id      = 0;
             $results = $this->solr->getItems($this->object->id);
             $params  = $this->solr->paginationParams();
+            $id      = 0 + ($params['per_page'] * $params['page']);
             $labels  = $this->getLabels();
 
             $this->total = $results['total'];

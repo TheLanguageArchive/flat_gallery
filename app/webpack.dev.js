@@ -1,5 +1,6 @@
-const { resolve }         = require('path');
-const resolvePathsToAlias = () => {
+const { resolve }            = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const resolvePathsToAlias    = () => {
 
     const { paths } = require('./tsconfig.json').compilerOptions;
     const aliases   = {};
@@ -43,6 +44,10 @@ module.exports = {
             { test: /\.js$/, loader: 'source-map-loader', enforce: 'pre' }
         ]
     },
+
+    plugins: [
+        new CleanWebpackPlugin()
+    ],
 
     // Other options...
 };

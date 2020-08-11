@@ -10,7 +10,7 @@ export default class FetchPageAction implements Action {
             let data = await FetchPage();
             let grid = document.querySelector('[data-role="flat-gallery-grid"]') as HTMLDivElement;
 
-            if (typeof data.page !== 'undefined') {
+            if (typeof data.page !== 'undefined' && null !== grid) {
                 grid.innerHTML += data.page.items;
             }
 
