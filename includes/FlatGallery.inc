@@ -111,6 +111,7 @@ class FlatGallery
 
                     'id'           => $id,
                     'pid'          => $result['pid'],
+                    'page'         => $params['page'],
                     'filename'     => $result['filename'],
                     'thumbnail'    => $thumbnail,
                     'exif'         => $this->getExif($object),
@@ -231,8 +232,9 @@ class FlatGallery
     {
         if ($this->current === null) {
 
-            $items = $this->getItems();
-            $id    = $this->getCurrentId();
+            $items  = $this->getItems();
+            $id     = $this->getCurrentId();
+            $params = $this->solr->paginationParams();
 
             if (!isset($items[$id])) {
 
@@ -249,6 +251,7 @@ class FlatGallery
 
                     'id'           => $currentItem['id'],
                     'pid'          => $current->id,
+                    'page'         => $params['page'],
                     'object'       => $current,
                     'filename'     => $currentItem['filename'],
                     'viewer_type'  => 'large',
@@ -264,6 +267,7 @@ class FlatGallery
 
                     'id'           => $currentItem['id'],
                     'pid'          => $currentItem['pid'],
+                    'page'         => $params['page'],
                     'object'       => $current,
                     'filename'     => $currentItem['filename'],
                     'url'          => $currentItem['object'],

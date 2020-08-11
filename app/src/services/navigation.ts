@@ -22,6 +22,10 @@ export default class Navigation {
         return this.images;
     }
 
+    addImages(images: Image[]) {
+        images.forEach(image => this.images[image.id] = image);
+    }
+
     current() {
         return this.images[this.id];
     }
@@ -169,11 +173,11 @@ export default class Navigation {
             this.animation.stop();
         }
 
-        clearTimeout(this.hideNavigationTimeout);
+        window.clearTimeout(this.hideNavigationTimeout);
 
         let delay = (ServiceLocator.get('settings') as DefaultSettings).delay * 1000;
 
-        this.hideNavigationTimeout = setTimeout(() => {
+        this.hideNavigationTimeout = window.setTimeout(() => {
             this.hideNavigation();
         }, delay);
     }

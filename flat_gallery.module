@@ -73,7 +73,9 @@ function flat_gallery_get_items($object) {
     }
 
     return [
-        'items' => flat_gallery_render_items($gallery->getItems(), $currentPid)
+
+        'html'  => flat_gallery_render_items($items, $currentPid),
+        'items' => $items,
     ];
 }
 
@@ -297,6 +299,7 @@ function flat_gallery_render_items($items, $currentPid) {
             '@active' => $currentPid === $item['pid'] ? ' flat-gallery-grid-item-active' : '',
             '@intersected' => $last['pid'] === $item['pid'] ? '1' : '0',
             '@id' => $item['id'],
+            '@page' => $item['page'],
             '@exif' => $item['exif'],
             '@thumbnail' => $item['thumbnail'],
         ]);

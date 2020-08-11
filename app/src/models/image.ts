@@ -22,6 +22,12 @@ export class Image {
   pid: string;
 
   /**
+   * The page refers to the page the image belongs to
+   * in solr pagination
+   */
+  page: number;
+
+  /**
    * This is the filename of the image
    */
   filename: string;
