@@ -21,7 +21,8 @@ module.exports = {
     mode: 'development',
     entry: "./src/index.ts",
     output: {
-        filename: "../../js/flat-gallery.js",
+        filename: 'flat-gallery.js',
+        path: resolve(__dirname, '..', 'js'),
     },
 
     // enable sourcemaps for debugging webpack's output.
