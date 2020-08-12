@@ -13,26 +13,29 @@ import Image from "@fg-models/image";
  */
 const ViewerCaptionsTemplate = (image: Image) : Node | false => {
 
-    if (image.descriptions.length > 0) {
+    let descriptions = [...image.descriptions];
 
-        let template = `
-            <div class="flat-gallery-caption">
-                <small class="flat-gallery-caption-filename">${image.filename}</small>
-        `;
+    if (image.descriptions.length === 0) {
 
-        image.descriptions.forEach((description) => {
-            template += `<h4>${description}</h4>`;
-        });
-
-        template += '</div>';
-
-        let element = document.createElement('div');
-        element.innerHTML = template.trim();
-
-        return element.firstChild;
+        // no caption found, use filename
+        descriptions.push(image.filename);
     }
 
-    return false;
+    let template = `
+        <div class="flat-gallery-caption">
+            <small class="flat-gallery-caption-filename">${image.filename}</small>
+    `;
+
+    image.descriptions.forEach((description) => {
+        template += `<h4>${description}</h4>`;
+    });
+
+    template += '</div>';
+
+    let element = document.createElement('div');
+    element.innerHTML = template.trim();
+
+    return element.firstChild;
 };
 
 export default ViewerCaptionsTemplate;

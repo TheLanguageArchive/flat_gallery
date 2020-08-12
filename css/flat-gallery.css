@@ -43,12 +43,14 @@ a.flat-gallery-thumbnail {
   padding: 4px;
   margin-bottom: 21px;
   line-height: 1.42857143;
-  background-color: black;
   border: 1px solid #ecf0f1;
   border-radius: 4px;
   -webkit-transition: border 0.2s ease-in-out;
   -o-transition: border 0.2s ease-in-out;
   transition: border 0.2s ease-in-out;
+}
+.flat-gallery-thumbnail .islandora-openseadragon {
+  background: black;
 }
 .flat-gallery-thumbnail > .flat-gallery-thumbnail-container > img,
 .flat-gallery-thumbnail a > .flat-gallery-thumbnail-container > img {
@@ -59,6 +61,9 @@ a.flat-gallery-thumbnail:hover,
 a.flat-gallery-thumbnail:focus,
 a.flat-gallery-thumbnail.active {
   border-color: #18bc9c;
+}
+.flat-gallery-caption {
+  background: white;
 }
 .flat-gallery-thumbnail .flat-gallery-caption {
   padding: 9px;
@@ -144,6 +149,7 @@ a.flat-gallery-thumbnail.active {
 }
 .flat-gallery-viewer {
   height: 510px;
+  background: black;
 }
 .flat-gallery-viewer-caption {
   color: white;
