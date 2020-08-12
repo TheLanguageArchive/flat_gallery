@@ -13,14 +13,6 @@ import Image from "@fg-models/image";
  */
 const ViewerCaptionsTemplate = (image: Image) : Node | false => {
 
-    let descriptions = [...image.descriptions];
-
-    if (image.descriptions.length === 0) {
-
-        // no caption found, use filename
-        descriptions.push(image.filename);
-    }
-
     let template = `
         <div class="flat-gallery-caption">
             <small class="flat-gallery-caption-filename">${image.filename}</small>

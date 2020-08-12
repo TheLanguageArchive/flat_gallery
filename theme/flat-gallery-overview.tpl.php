@@ -16,7 +16,7 @@
         <h1><?php echo $islandora_object->label; ?></h1>
         <div class="flat-gallery-thumbnail" data-role="flat-gallery-viewer">
             <?php if (false !== $current) : ?>
-                <div class="flat-gallery-viewer"><?php echo $current['viewer']; ?></div>
+                <?php echo $current['viewer']; ?>
                 <div class="flat-gallery-caption">
                     <small class="flat-gallery-caption-filename"><?php echo $current['filename']; ?></small>
                     <?php foreach ($current['descriptions'] as $description) : ?>
